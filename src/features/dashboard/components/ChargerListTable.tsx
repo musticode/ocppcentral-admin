@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -9,9 +9,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ConnectorStatusIndicator } from "@/components/ui/connector-status";
-import type { Location } from "@/types/ocpp";
-
+import {
+  ConnectorStatusBadge,
+  ConnectorStatusIndicator,
+} from "@/components/ui/connector-status";
+import type { ChargePoint, Connector, Location } from "@/types/ocpp";
+import { useState } from "react";
+import { ConnectorStatus } from "@/types/ocpp";
 interface ChargerListTableProps {
   location: Location;
 }
@@ -32,32 +36,33 @@ export const ChargerListTable = ({ location }: ChargerListTableProps) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {location.chargePoints.map((chargePoint) => (
-              <TableRow key={chargePoint.id}>
-                <TableCell>
-                  <Link
-                    to={`/chargers/${chargePoint.id}`}
-                    className="font-medium text-primary hover:underline"
-                  >
-                    {chargePoint.name}
-                  </Link>
-                </TableCell>
-                <TableCell className="font-mono text-sm">
-                  {chargePoint.chargePointId}
-                </TableCell>
-                <TableCell>
-                  <div className="flex gap-1">
-                    {chargePoint.connectors.map((connector) => (
-                      <ConnectorStatusIndicator
-                        key={connector.id}
-                        status={connector.status}
-                        size="sm"
-                      />
-                    ))}
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
+            {location.chargePoints.map(
+              (chargePoint: ChargePoint & { connectors: Connector[] }) => (
+                <TableRow key={chargePoint.id}>
+                  <TableCell>
+                    <Link
+                      to={`/chargers/${chargePoint.id}`}
+                      className="font-medium text-primary hover:underline"
+                    >
+                      {chargePoint.name}
+                    </Link>
+                  </TableCell>
+                  <TableCell className="font-mono text-sm">
+                    {chargePoint.chargePointId}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex gap-1">
+                      {chargePoint.connectors.map((connector: Connector) => (
+                        <ConnectorStatusBadge
+                          key={connector.id}
+                          status={connector.status as ConnectorStatus}
+                        />
+                      ))}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              )
+            )}
           </TableBody>
         </Table>
       </CardContent>

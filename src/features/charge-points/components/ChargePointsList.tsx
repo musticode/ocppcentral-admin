@@ -10,8 +10,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ConnectorStatusIndicator } from "@/components/ui/connector-status";
-import { ConnectorStatus } from "@/types/ocpp";
+import { ChargePoint, Connector, ConnectorStatus } from "@/types/ocpp";
 import { chargePointApi } from "@/api";
+import { useEffect, useState } from "react";
 
 export const ChargePointsList = () => {
   const { data, isLoading } = useQuery({
@@ -19,17 +20,52 @@ export const ChargePointsList = () => {
     queryFn: () => chargePointApi.getChargePoints(),
   });
 
-  if (isLoading) {
+  const [chargePointList, setChargePointList] = useState<any>([
+    {
+      id: "1",
+      name: "Charger 1",
+      chargePointId: "1234567890",
+      locationId: "1",
+      locationName: "Location 1",
+      status: ConnectorStatus.AVAILABLE,
+      connectors: [{ id: "1", status: ConnectorStatus.AVAILABLE }],
+    },
+    {
+      id: "2",
+      name: "Charger 2",
+      chargePointId: "1234567891",
+      locationId: "2",
+      locationName: "Location 2",
+      status: ConnectorStatus.AVAILABLE,
+      connectors: [{ id: "2", status: ConnectorStatus.AVAILABLE }],
+    },
+    {
+      id: "3",
+      name: "Charger 3",
+      chargePointId: "1234567892",
+      locationId: "3",
+      locationName: "Location 3",
+      status: ConnectorStatus.AVAILABLE,
+      connectors: [{ id: "3", status: ConnectorStatus.AVAILABLE }],
+    },
+  ]);
+
+  const [chargePoints, setChargePoints] = useState<
+    (ChargePoint & { connectors: Connector[] })[]
+  >([]);
+
+  useEffect(() => {
+    setChargePoints(chargePointList);
+  }, [chargePointList]);
+
+  if (isLoading || !chargePoints) {
     return <div className="p-6">Loading...</div>;
   }
 
   return (
     <div className="p-6">
-      <h1 className="mb-6 text-3xl font-bold text-gray-900">Chargers</h1>
+      <h1 className="mb-6 text-3xl font-bold text-gray-900">Charge Points</h1>
       <Card>
-        <CardHeader>
-          <CardTitle>All Charge Points</CardTitle>
-        </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
@@ -42,7 +78,7 @@ export const ChargePointsList = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data?.data.map((cp) => (
+              {chargePoints.map((cp) => (
                 <TableRow key={cp.id}>
                   <TableCell>
                     <Link
