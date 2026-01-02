@@ -7,6 +7,7 @@ import { ChargePointsList } from "@/features/charge-points/components/ChargePoin
 import { ChargePointDetail } from "@/features/charge-points/components/ChargePointDetail";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { RFIDOverview } from "@/features/rfidtags/RFIDOverview";
+import { TariffOverview } from "@/features/tariff/TariffOverview";
 
 export const router = createBrowserRouter([
   {
@@ -62,7 +63,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "tariff",
-            element: <div className="p-6">Tariff</div>,
+            element: <TariffOverview />,
           },
           {
             path: "reports",
