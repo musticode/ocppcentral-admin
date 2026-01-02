@@ -1,17 +1,19 @@
 import { ChevronUp, User, Upload } from "lucide-react";
 import { useAuthStore } from "@/store/auth.store";
+import { useState } from "react";
 
 export const Header = () => {
   const { user } = useAuthStore();
+  const [companyName, setCompanyName] = useState("Energy Management Company");
 
   return (
     <header className="flex h-16 items-center justify-between border-b bg-white px-6 shadow-sm">
       <div className="flex items-center gap-2">
-        <Upload className="h-5 w-5 text-gray-600" />
-        <span className="text-sm font-medium text-gray-700">Company Name</span>
+        {/* <Upload className="h-5 w-5 text-gray-600" /> */}
+        <span className="text-sm font-medium text-gray-700">{companyName}</span>
         <ChevronUp className="h-4 w-4 text-gray-500" />
       </div>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-">
         <span className="text-sm font-medium text-gray-700">
           {user?.name || "Geraldine"}
         </span>

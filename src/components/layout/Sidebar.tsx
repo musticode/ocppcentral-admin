@@ -33,7 +33,7 @@ export const Sidebar = () => {
     <div className="flex h-screen w-64 flex-col border-r bg-gray-100">
       <div className="flex h-16 items-center gap-3 border-b border-gray-200 px-6">
         <Grid3x3 className="h-6 w-6 text-gray-700" />
-        <span className="text-sm font-medium text-gray-700">Dashboard</span>
+        <span className="text-sm font-medium text-gray-700">ChargeOPS</span>
       </div>
       <nav className="flex-1 space-y-1 p-4">
         {menuItems.map((item) => {

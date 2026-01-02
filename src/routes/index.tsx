@@ -8,6 +8,8 @@ import { ChargePointDetail } from "@/features/charge-points/components/ChargePoi
 import { ProtectedRoute } from "./ProtectedRoute";
 import { RFIDOverview } from "@/features/rfidtags/RFIDOverview";
 import { TariffOverview } from "@/features/tariff/TariffOverview";
+import { SessionOverview } from "@/features/sessions/SessionOverview";
+import { UserOverview } from "@/features/user/UserOverview";
 
 export const router = createBrowserRouter([
   {
@@ -43,7 +45,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "sessions",
-            element: <div className="p-6">Sessions</div>,
+            element: <SessionOverview />,
           },
           {
             path: "reservation",
@@ -51,7 +53,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "users",
-            element: <div className="p-6">Users</div>,
+            element: <UserOverview />,
           },
           {
             path: "user-groups",
