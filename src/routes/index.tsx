@@ -10,6 +10,8 @@ import { RFIDOverview } from "@/features/rfidtags/RFIDOverview";
 import { TariffOverview } from "@/features/tariff/TariffOverview";
 import { SessionOverview } from "@/features/sessions/SessionOverview";
 import { UserOverview } from "@/features/user/UserOverview";
+import { NotificationsPage } from "@/features/notifications/NotificationsPage";
+import { CompanySettingsPage } from "@/features/settings/CompanySettingsPage";
 
 export const router = createBrowserRouter([
   {
@@ -70,6 +72,14 @@ export const router = createBrowserRouter([
           {
             path: "reports",
             element: <div className="p-6">Reports</div>,
+          },
+          {
+            path: "notifications",
+            element: <NotificationsPage />,
+          },
+          {
+            path: "settings",
+            element: <CompanySettingsPage />,
           },
           {
             index: true,

@@ -37,9 +37,6 @@ export const RFIDTagsList = () => {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>RFID Tags</CardTitle>
-      </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>

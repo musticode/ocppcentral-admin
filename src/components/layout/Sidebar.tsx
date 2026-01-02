@@ -10,6 +10,7 @@ import {
   FileText,
   TrendingUp,
   Grid3x3,
+  Settings,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 
@@ -24,6 +25,7 @@ const menuItems = [
   { path: "/rfid-tags", label: "RFID Tags", icon: CreditCard },
   { path: "/tariff", label: "Tariff", icon: FileText },
   { path: "/reports", label: "Reports", icon: TrendingUp },
+  { path: "/settings", label: "Settings", icon: Settings },
 ];
 
 export const Sidebar = () => {

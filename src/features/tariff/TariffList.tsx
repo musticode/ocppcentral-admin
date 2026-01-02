@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
   TableHeader,
@@ -22,9 +22,6 @@ export const TariffList = () => {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Tariff List</CardTitle>
-      </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>

@@ -110,9 +110,6 @@ export const SessionList = () => {
   }, []);
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Session List</CardTitle>
-      </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
