@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { Card } from "@/components/ui/card";
@@ -10,10 +11,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
+import { SessionDetails } from "./SessionDetails";
 
 export const SessionList = () => {
   const [sessions, setSessions] = useState<any[]>([]);
-
+  const [open, setOpen] = useState(false);
   useEffect(() => {
     setSessions([
       {
@@ -121,6 +123,7 @@ export const SessionList = () => {
               <TableHead>End Time</TableHead>
               <TableHead>Energy KWh</TableHead>
               <TableHead>Duration</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -133,6 +136,10 @@ export const SessionList = () => {
                 <TableCell>{session.endTime}</TableCell>
                 <TableCell>{session.energyKWh}</TableCell>
                 <TableCell>{session.duration}</TableCell>
+                <TableCell>
+                  <Button onClick={() => setOpen(true)}>View Details</Button>
+                  <SessionDetails open={open} onOpenChange={setOpen} />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

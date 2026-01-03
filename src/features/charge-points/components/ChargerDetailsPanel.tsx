@@ -8,6 +8,7 @@ import {
   Play,
   Square,
   Zap,
+  Plus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -103,6 +104,13 @@ export const ChargerDetailsPanel = ({ charger }: ChargerDetailsPanelProps) => {
         Reset Charger
       </Button>
 
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold">Connectors</h3>
+        {/* <Button variant="outline" size="sm">
+          <Plus className="mr-2 h-4 w-4" />
+          Add Connector
+        </Button> */}
+      </div>
       {/* Connectors List */}
       <div className="space-y-3">
         {charger.connectors.map((connector) => (
