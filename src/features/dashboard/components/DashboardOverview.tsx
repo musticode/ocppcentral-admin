@@ -84,18 +84,17 @@ export const DashboardOverview = () => {
         onPeriodChange={setPeriod}
       />
 
-      {/* Middle Row - Map and Last Events */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <MapCard />
-        <LastEventsCard events={events} />
-      </div>
-
       {/* Bottom Row - Sessions Chart and Connectors Status */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <SessionsChartCard data={sessionsData} />
         <ConnectorsStatusChartCard data={connectorStatusData} />
       </div>
+
+      {/* Middle Row - Map and Last Events */}
+      <div className="col-span-full">
+        {/* <MapCard /> */}
+        <LastEventsCard events={events} />
+      </div>
     </div>
   );
 };
-

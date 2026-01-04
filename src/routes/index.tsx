@@ -13,6 +13,7 @@ import { UserOverview } from "@/features/user/UserOverview";
 import { NotificationsPage } from "@/features/notifications/NotificationsPage";
 import { CompanySettingsPage } from "@/features/settings/CompanySettingsPage";
 import { ReservationOverview } from "@/features/reservations/ReservationOverview";
+import { ActivityOverview } from "@/features/activity/ActivityOverview";
 
 export const router = createBrowserRouter([
   {
@@ -44,7 +45,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "activity",
-            element: <div className="p-6">Activity</div>,
+            element: <ActivityOverview />,
           },
           {
             path: "sessions",

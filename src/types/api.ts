@@ -39,3 +39,20 @@ export interface User {
   companyId?: string;
   companyName?: string;
 }
+
+export interface Company {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  country: string;
+  website: string;
+  taxId: string;
+  registrationNumber: string;
+  createdAt: string;
+  updatedAt: string;
+}
