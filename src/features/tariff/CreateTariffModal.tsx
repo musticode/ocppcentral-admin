@@ -27,6 +27,8 @@ export const CreateTariffModal = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
+    chargePointId: "",
+    connector: "",
     description: "",
     currency: "USD",
     energyPrice: "",
@@ -37,6 +39,22 @@ export const CreateTariffModal = ({
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleClose = () => {
+    console.log("handleClose");
+    onOpenChange(false);
+    setFormData({
+      name: "",
+      chargePointId: "",
+      connector: "",
+      description: "",
+      currency: "USD",
+      energyPrice: "",
+      parkingPrice: "",
+      transactionPrice: "",
+      startFee: "",
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -52,10 +70,11 @@ export const CreateTariffModal = ({
       description: "The tariff has been created successfully.",
     });
     onSuccess?.();
-    onOpenChange(false);
     // Reset form
     setFormData({
       name: "",
+      chargePointId: "",
+      connector: "",
       description: "",
       currency: "USD",
       energyPrice: "",
@@ -88,6 +107,35 @@ export const CreateTariffModal = ({
                 value={formData.name}
                 onChange={(e) => handleInputChange("name", e.target.value)}
                 placeholder="e.g., Standard Tariff"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="chargePointId">
+                Charge Point ID <span className="text-red-500">*</span>
+              </Label>
+              <Input
+                id="chargePointId"
+                required
+                type="text"
+                value={formData.chargePointId}
+                onChange={(e) =>
+                  handleInputChange("chargePointId", e.target.value)
+                }
+                placeholder="e.g., CP123456789"
+              />
+            </div>
+
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="connector">
+                Connector <span className="text-red-500">*</span>
+              </Label>
+              <Input
+                id="connector"
+                type="number"
+                value={formData.connector}
+                onChange={(e) => handleInputChange("connector", e.target.value)}
+                placeholder="Connector ID..."
               />
             </div>
 
@@ -184,7 +232,7 @@ export const CreateTariffModal = ({
             <Button
               type="button"
               variant="outline"
-              onClick={() => onOpenChange(false)}
+              onClick={handleClose}
               disabled={isSubmitting}
             >
               Cancel

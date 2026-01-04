@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/utils/cn";
+import { ChargePointLogs } from "./ChargePointLogs";
 
 interface Connector {
   id: number;
@@ -103,6 +104,8 @@ export const ChargerDetailsPanel = ({ charger }: ChargerDetailsPanelProps) => {
         <RefreshCw className="mr-2 h-4 w-4" />
         Reset Charger
       </Button>
+
+      {/* <ChargePointLogs /> */}
 
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">Connectors</h3>
