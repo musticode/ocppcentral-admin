@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Table,
   TableBody,
@@ -9,6 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/utils/cn";
 import { ChargePointLogs } from "./ChargePointLogs";
 
@@ -105,93 +108,97 @@ export const SessionsPanel = ({ chargerId }: SessionsPanelProps) => {
   return (
     <Card className="h-full">
       <CardContent className="p-6">
-        {/* Tabs */}
-        <div className="mb-6 flex gap-6 border-b">
+        <Tabs
+          value={activeTab}
+          onValueChange={(v) => setActiveTab(v as (typeof tabs)[number])}
+          className="space-y-6"
+        >
+          <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent gap-6">
+            {tabs.map((tab) => (
+              <TabsTrigger
+                key={tab}
+                value={tab}
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+              >
+                {tab}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+
           {tabs.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={cn(
-                "border-b-2 pb-3 text-sm font-medium transition-colors",
-                activeTab === tab
-                  ? "border-primary text-primary"
-                  : "border-transparent text-gray-600 hover:text-gray-900"
-              )}
-            >
-              {tab}
-            </button>
+            <TabsContent key={tab} value={tab} className="space-y-6 mt-6">
+              <div className="flex gap-4">
+                <div className="flex-1 space-y-2">
+                  <Label htmlFor="start-date">Start Date</Label>
+                  <Input
+                    id="start-date"
+                    type="date"
+                    defaultValue="2021-07-24"
+                  />
+                </div>
+                <div className="flex-1 space-y-2">
+                  <Label htmlFor="end-date">End Date</Label>
+                  <Input id="end-date" type="date" defaultValue="2021-07-24" />
+                </div>
+              </div>
+
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>
+                        <div className="flex items-center gap-2">
+                          Timestamp
+                          <ChevronDown className="h-4 w-4 text-gray-400" />
+                        </div>
+                      </TableHead>
+                      <TableHead>Session ID</TableHead>
+                      <TableHead>User ID</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Duration</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {sessionsData.map((session) => (
+                      <TableRow
+                        key={session.id}
+                        className={cn(
+                          session.highlighted && "bg-purple-50 font-semibold",
+                        )}
+                      >
+                        <TableCell
+                          className={cn(session.highlighted && "text-base")}
+                        >
+                          {session.timestamp}
+                        </TableCell>
+                        <TableCell
+                          className={cn(session.highlighted && "text-base")}
+                        >
+                          {session.sessionId}
+                        </TableCell>
+                        <TableCell
+                          className={cn(session.highlighted && "text-base")}
+                        >
+                          {session.userId}
+                        </TableCell>
+                        <TableCell
+                          className={cn(session.highlighted && "text-base")}
+                        >
+                          {session.status}
+                        </TableCell>
+                        <TableCell
+                          className={cn(session.highlighted && "text-base")}
+                        >
+                          {session.duration}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </TabsContent>
           ))}
-        </div>
-
-        {/* Date Filters */}
-        <div className="mb-6 flex gap-4">
-          <div className="flex-1">
-            <label className="mb-2 block text-sm font-medium text-gray-700">
-              Start Date
-            </label>
-            <input
-              type="date"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-              defaultValue="2021-07-24"
-            />
-          </div>
-          <div className="flex-1">
-            <label className="mb-2 block text-sm font-medium text-gray-700">
-              End Date
-            </label>
-            <input
-              type="date"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-              defaultValue="2021-07-24"
-            />
-          </div>
-        </div>
-
-        {/* Sessions Table */}
-        <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>
-                  <div className="flex items-center gap-2">
-                    Timestamp
-                    <ChevronDown className="h-4 w-4 text-gray-400" />
-                  </div>
-                </TableHead>
-                <TableHead>Session ID</TableHead>
-                <TableHead>User ID</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Duration</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {sessionsData.map((session) => (
-                <TableRow
-                  key={session.id}
-                  className={cn(
-                    session.highlighted && "bg-purple-50 font-semibold"
-                  )}
-                >
-                  <TableCell className={cn(session.highlighted && "text-base")}>
-                    {session.timestamp}
-                  </TableCell>
-                  <TableCell className={cn(session.highlighted && "text-base")}>
-                    {session.sessionId}
-                  </TableCell>
-                  <TableCell className={cn(session.highlighted && "text-base")}>
-                    {session.userId}
-                  </TableCell>
-                  <TableCell className={cn(session.highlighted && "text-base")}>
-                    {session.status}
-                  </TableCell>
-                  <TableCell className={cn(session.highlighted && "text-base")}>
-                    {session.duration}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+        </Tabs>
       </CardContent>
     </Card>
   );

@@ -8,8 +8,10 @@ import {
   DialogFooter,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 
 interface CreateRFIDTagModalProps {
@@ -110,21 +112,23 @@ export const CreateRFIDTagModal = ({
                 id="expiryDate"
                 type="date"
                 value={formData.expiryDate}
-                onChange={(e) => handleInputChange("expiryDate", e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("expiryDate", e.target.value)
+                }
               />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="blocked">Status</Label>
               <div className="flex items-center gap-2">
-                <input
+                <Checkbox
                   id="blocked"
-                  type="checkbox"
                   checked={formData.blocked}
-                  onChange={(e) => handleInputChange("blocked", e.target.checked)}
-                  className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                  onCheckedChange={(checked) =>
+                    handleInputChange("blocked", checked === true)
+                  }
                 />
-                <Label htmlFor="blocked" className="cursor-pointer">
+                <Label htmlFor="blocked" className="cursor-pointer font-normal">
                   Blocked
                 </Label>
               </div>
@@ -132,9 +136,8 @@ export const CreateRFIDTagModal = ({
 
             <div className="space-y-2 md:col-span-2">
               <Label htmlFor="description">Description</Label>
-              <textarea
+              <Textarea
                 id="description"
-                className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 value={formData.description}
                 onChange={(e) =>
                   handleInputChange("description", e.target.value)
@@ -162,4 +165,3 @@ export const CreateRFIDTagModal = ({
     </Dialog>
   );
 };
-

@@ -10,6 +10,14 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 
 interface CreateTariffModalProps {
@@ -141,9 +149,8 @@ export const CreateTariffModal = ({
 
             <div className="space-y-2 md:col-span-2">
               <Label htmlFor="description">Description</Label>
-              <textarea
+              <Textarea
                 id="description"
-                className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 value={formData.description}
                 onChange={(e) =>
                   handleInputChange("description", e.target.value)
@@ -156,18 +163,20 @@ export const CreateTariffModal = ({
               <Label htmlFor="currency">
                 Currency <span className="text-red-500">*</span>
               </Label>
-              <select
-                id="currency"
-                required
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              <Select
                 value={formData.currency}
-                onChange={(e) => handleInputChange("currency", e.target.value)}
+                onValueChange={(v) => handleInputChange("currency", v)}
               >
-                <option value="USD">USD</option>
-                <option value="EUR">EUR</option>
-                <option value="GBP">GBP</option>
-                <option value="SEK">SEK</option>
-              </select>
+                <SelectTrigger id="currency">
+                  <SelectValue placeholder="Select currency" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="USD">USD</SelectItem>
+                  <SelectItem value="EUR">EUR</SelectItem>
+                  <SelectItem value="GBP">GBP</SelectItem>
+                  <SelectItem value="SEK">SEK</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">

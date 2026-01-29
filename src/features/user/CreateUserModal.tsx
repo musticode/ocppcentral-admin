@@ -10,6 +10,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 
 interface CreateUserModalProps {
@@ -129,18 +136,20 @@ export const CreateUserModal = ({
               <Label htmlFor="role">
                 Role <span className="text-red-500">*</span>
               </Label>
-              <select
-                id="role"
-                required
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              <Select
                 value={formData.role}
-                onChange={(e) => handleInputChange("role", e.target.value)}
+                onValueChange={(v) => handleInputChange("role", v)}
               >
-                <option value="User">User</option>
-                <option value="Admin">Admin</option>
-                <option value="Operator">Operator</option>
-                <option value="Manager">Manager</option>
-              </select>
+                <SelectTrigger id="role">
+                  <SelectValue placeholder="Select role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="User">User</SelectItem>
+                  <SelectItem value="Admin">Admin</SelectItem>
+                  <SelectItem value="Operator">Operator</SelectItem>
+                  <SelectItem value="Manager">Manager</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             {/* <div className="space-y-2 md:col-span-2">
