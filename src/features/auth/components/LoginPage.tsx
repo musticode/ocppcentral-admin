@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { authApi } from "@/api";
 import { useAuthStore } from "@/store/auth.store";
@@ -84,6 +84,15 @@ export const LoginPage = () => {
             >
               {loginMutation.isPending ? "Signing in..." : "Sign in"}
             </Button>
+            <p className="text-center text-sm text-muted-foreground">
+              Don't have an account?{" "}
+              <Link
+                to="/signup"
+                className="font-medium text-primary underline-offset-4 hover:underline"
+              >
+                Sign up
+              </Link>
+            </p>
           </form>
         </CardContent>
       </Card>

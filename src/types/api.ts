@@ -26,6 +26,27 @@ export interface LoginRequest {
   password: string;
 }
 
+export interface SignupRequest {
+  user: {
+    name: string;
+    email: string;
+    password: string;
+  };
+  company: {
+    name: string;
+    email: string;
+    phone: string;
+    address: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    country: string;
+    website?: string;
+    taxId?: string;
+    registrationNumber?: string;
+  };
+}
+
 export interface LoginResponse {
   token: string;
   user: User;

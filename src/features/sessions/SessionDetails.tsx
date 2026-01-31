@@ -1,4 +1,13 @@
-import { DetailModal } from "@/components/ui/DetailModal";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
 export const SessionDetails = ({
   open,
@@ -16,48 +25,52 @@ export const SessionDetails = ({
     energyKWh: 10,
     duration: "1 hour",
   };
+
   return (
-    <DetailModal
-      open={open}
-      onOpenChange={onOpenChange}
-      title="Session Details"
-      description="View session information"
-      size="md"
-    >
-      <div className="space-y-2">
-        <div>
-          <strong>Name:</strong> {session.name}
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Session Details</DialogTitle>
+          <DialogDescription>
+            View session information and charging data.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div className="space-y-2">
+              <Label className="text-muted-foreground">Session Name</Label>
+              <p className="text-sm font-medium">{session.name}</p>
+            </div>
+            <div className="space-y-2">
+              <Label className="text-muted-foreground">Status</Label>
+              <p className="text-sm font-medium">{session.status}</p>
+            </div>
+            <div className="space-y-2">
+              <Label className="text-muted-foreground">Start Time</Label>
+              <p className="text-sm font-medium">{session.startTime}</p>
+            </div>
+            <div className="space-y-2">
+              <Label className="text-muted-foreground">End Time</Label>
+              <p className="text-sm font-medium">{session.endTime}</p>
+            </div>
+            <div className="space-y-2">
+              <Label className="text-muted-foreground">Energy (kWh)</Label>
+              <p className="text-sm font-medium">{session.energyKWh}</p>
+            </div>
+            <div className="space-y-2">
+              <Label className="text-muted-foreground">Duration</Label>
+              <p className="text-sm font-medium">{session.duration}</p>
+            </div>
+          </div>
         </div>
-      </div>
-      <div className="space-y-2">
-        <div>
-          <strong>Start Time:</strong> {session.startTime}
-        </div>
-        <div>
-          <strong>End Time:</strong> {session.endTime}
-        </div>
-      </div>
-      <div className="space-y-2">
-        <div>
-          <strong>Energy KWh:</strong> {session.energyKWh}
-        </div>
-        <div>
-          <strong>Duration:</strong> {session.duration}
-        </div>
-      </div>
-      <div className="space-y-2">
-        <div>
-          <strong>Status:</strong> {session.status}
-        </div>
-      </div>
-      <div className="space-y-2">
-        <div>
-          <strong>Start Time:</strong> {session.startTime}
-        </div>
-        <div>
-          <strong>End Time:</strong> {session.endTime}
-        </div>
-      </div>
-    </DetailModal>
+
+        <DialogFooter>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+            Close
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };

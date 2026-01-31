@@ -1,6 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -13,8 +14,12 @@ import { ConnectorStatusIndicator } from "@/components/ui/connector-status";
 import { ChargePoint, Connector, ConnectorStatus } from "@/types/ocpp";
 import { chargePointApi } from "@/api";
 import { useEffect, useState } from "react";
+import { Plus } from "lucide-react";
+import { CreateChargePointModal } from "./CreateChargePointModal";
 
 export const ChargePointsList = () => {
+  const queryClient = useQueryClient();
+  const [createModalOpen, setCreateModalOpen] = useState(false);
   const { data, isLoading } = useQuery({
     queryKey: ["charge-points"],
     queryFn: () => chargePointApi.getChargePoints(),
@@ -64,7 +69,20 @@ export const ChargePointsList = () => {
 
   return (
     <div className="p-6">
-      <h1 className="mb-6 text-3xl font-bold text-gray-900">Charge Points</h1>
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-3xl font-bold text-gray-900">Charge Points</h1>
+        <Button onClick={() => setCreateModalOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" />
+          Create Charge Point
+        </Button>
+      </div>
+      <CreateChargePointModal
+        open={createModalOpen}
+        onOpenChange={setCreateModalOpen}
+        onSuccess={() =>
+          queryClient.invalidateQueries({ queryKey: ["charge-points"] })
+        }
+      />
       <Card>
         <CardContent>
           <Table>

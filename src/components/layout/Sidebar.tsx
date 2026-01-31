@@ -11,6 +11,7 @@ import {
   TrendingUp,
   Grid3x3,
   Settings,
+  MapPin,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 
@@ -20,6 +21,7 @@ const menuItems = [
   { path: "/sessions", label: "Sessions", icon: Zap },
   { path: "/reservation", label: "Reservation", icon: Calendar },
   { path: "/chargers", label: "Chargers", icon: Zap },
+  { path: "/locations", label: "Locations", icon: MapPin },
   { path: "/users", label: "Users", icon: Users },
   { path: "/user-groups", label: "User Groups", icon: UserCog },
   { path: "/rfid-tags", label: "RFID Tags", icon: CreditCard },

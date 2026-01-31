@@ -1,7 +1,8 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { LoginPage } from "@/features/auth/components/LoginPage";
-import { LocationDetail } from "@/features/dashboard/components/LocationDetail";
+import { SignupPage } from "@/features/auth/components/SignupPage";
+import { LocationDetail } from "@/features/locations/LocationDetail";
 import { DashboardOverview } from "@/features/dashboard/components/DashboardOverview";
 import { ChargePointsList } from "@/features/charge-points/components/ChargePointsList";
 import { ChargePointDetail } from "@/features/charge-points/components/ChargePointDetail";
@@ -14,11 +15,17 @@ import { NotificationsPage } from "@/features/notifications/NotificationsPage";
 import { CompanySettingsPage } from "@/features/settings/CompanySettingsPage";
 import { ReservationOverview } from "@/features/reservations/ReservationOverview";
 import { ActivityOverview } from "@/features/activity/ActivityOverview";
+import { ReportsOverview } from "@/features/reports/ReportsOverview";
+import { LocationsOverview } from "@/features/locations/LocationsOverview";
 
 export const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/signup",
+    element: <SignupPage />,
   },
   {
     path: "/",
@@ -38,6 +45,10 @@ export const router = createBrowserRouter([
           {
             path: "chargers/:chargerId",
             element: <ChargePointDetail />,
+          },
+          {
+            path: "locations",
+            element: <LocationsOverview />,
           },
           {
             path: "locations/:locationId",
@@ -73,7 +84,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "reports",
-            element: <div className="p-6">Reports</div>,
+            element: <ReportsOverview />,
           },
           {
             path: "notifications",
