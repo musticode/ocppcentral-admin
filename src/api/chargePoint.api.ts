@@ -4,20 +4,39 @@ import type {
   Location,
   Connector,
   RemoteCommand,
+  ResetType,
 } from "@/types/ocpp";
 import type { PaginatedResponse } from "@/types/api";
 
 export const chargePointApi = {
   getLocations: async (): Promise<Location[]> => {
     const response = await apiClient.get<Location[]>(
-      "/charge-points/locations",
+      "/charge-points/locations"
     );
     return response.data;
   },
 
   getLocation: async (locationId: string): Promise<Location> => {
     const response = await apiClient.get<Location>(
-      `/charge-points/locations/${locationId}`,
+      `/charge-points/locations/${locationId}`
+    );
+    return response.data;
+  },
+
+  resetChargePoint: async (
+    chargePointId: string,
+    type: ResetType
+  ): Promise<RemoteCommand> => {
+    const response = await apiClient.post<RemoteCommand>(
+      `/charge-points/${chargePointId}/reset`,
+      { type }
+    );
+    return response.data;
+  },
+
+  getChargePointById: async (chargePointId: string): Promise<ChargePoint> => {
+    const response = await apiClient.get<ChargePoint>(
+      `/charge-points/${chargePointId}`
     );
     return response.data;
   },
@@ -42,14 +61,14 @@ export const chargePointApi = {
   }): Promise<PaginatedResponse<ChargePoint>> => {
     const response = await apiClient.get<PaginatedResponse<ChargePoint>>(
       "/charge-points",
-      { params },
+      { params }
     );
     return response.data;
   },
 
   getChargePoint: async (chargePointId: string): Promise<ChargePoint> => {
     const response = await apiClient.get<ChargePoint>(
-      `/charge-points/${chargePointId}`,
+      `/charge-points/${chargePointId}`
     );
     return response.data;
   },
@@ -62,21 +81,21 @@ export const chargePointApi = {
       model: string;
       vendor: string;
       ocppVersion: string;
-    }>,
+    }>
   ): Promise<ChargePoint> => {
     const response = await apiClient.patch<ChargePoint>(
       `/charge-points/${chargePointId}`,
-      data,
+      data
     );
     return response.data;
   },
 
   getConnector: async (
     chargePointId: string,
-    connectorId: number,
+    connectorId: number
   ): Promise<Connector> => {
     const response = await apiClient.get<Connector>(
-      `/charge-points/${chargePointId}/connectors/${connectorId}`,
+      `/charge-points/${chargePointId}/connectors/${connectorId}`
     );
     return response.data;
   },
@@ -84,33 +103,33 @@ export const chargePointApi = {
   remoteStartTransaction: async (
     chargePointId: string,
     connectorId: number,
-    idTag: string,
+    idTag: string
   ): Promise<RemoteCommand> => {
     const response = await apiClient.post<RemoteCommand>(
       `/charge-points/${chargePointId}/remote-start`,
-      { connectorId, idTag },
+      { connectorId, idTag }
     );
     return response.data;
   },
 
   remoteStopTransaction: async (
     chargePointId: string,
-    transactionId: number,
+    transactionId: number
   ): Promise<RemoteCommand> => {
     const response = await apiClient.post<RemoteCommand>(
       `/charge-points/${chargePointId}/remote-stop`,
-      { transactionId },
+      { transactionId }
     );
     return response.data;
   },
 
   reset: async (
     chargePointId: string,
-    type: "Hard" | "Soft",
+    type: "Hard" | "Soft"
   ): Promise<RemoteCommand> => {
     const response = await apiClient.post<RemoteCommand>(
       `/charge-points/${chargePointId}/reset`,
-      { type },
+      { type }
     );
     return response.data;
   },
@@ -118,11 +137,11 @@ export const chargePointApi = {
   changeAvailability: async (
     chargePointId: string,
     connectorId: number,
-    type: "Inoperative" | "Operative",
+    type: "Inoperative" | "Operative"
   ): Promise<RemoteCommand> => {
     const response = await apiClient.post<RemoteCommand>(
       `/charge-points/${chargePointId}/availability`,
-      { connectorId, type },
+      { connectorId, type }
     );
     return response.data;
   },

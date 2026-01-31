@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/utils/cn";
 import { ChargePointLogs } from "./ChargePointLogs";
+import { chargePointApi } from "@/api";
+import { ResetType } from "@/types/ocpp";
 
 interface Connector {
   id: number;
@@ -100,7 +102,16 @@ export const ChargerDetailsPanel = ({ charger }: ChargerDetailsPanelProps) => {
       </Card>
 
       {/* Reset Charger Button */}
-      <Button variant="outline" className="w-full">
+      <Button
+        variant="outline"
+        className="w-full"
+        onClick={() => {
+          chargePointApi.resetChargePoint(
+            charger.chargePointId,
+            ResetType.HARD as ResetType
+          );
+        }}
+      >
         <RefreshCw className="mr-2 h-4 w-4" />
         Reset Charger
       </Button>
