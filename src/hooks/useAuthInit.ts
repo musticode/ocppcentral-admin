@@ -7,22 +7,27 @@ import { authApi } from "@/api";
  * Initialize auth state from localStorage and validate token
  */
 export const useAuthInit = () => {
-  const { setAuth, clearAuth } = useAuthStore();
-  const token = localStorage.getItem("auth_token");
+  const { setAuth, clearAuth, initializeFromStorage, token } = useAuthStore();
 
-  const { data: user } = useQuery({
+  // Immediately hydrate from localStorage for faster initial render
+  useEffect(() => {
+    initializeFromStorage();
+  }, [initializeFromStorage]);
+
+  // Validate token with server and refresh user data
+  const { data: user, isError } = useQuery({
     queryKey: ["current-user"],
     queryFn: authApi.getCurrentUser,
     enabled: !!token,
     retry: false,
-    onError: () => {
-      clearAuth();
-    },
   });
 
   useEffect(() => {
-    if (token && user) {
+    if (isError) {
+      clearAuth();
+    } else if (token && user) {
+      // Update with fresh user data from server
       setAuth(user, token);
     }
-  }, [token, user, setAuth]);
+  }, [token, user, isError, setAuth, clearAuth]);
 };
