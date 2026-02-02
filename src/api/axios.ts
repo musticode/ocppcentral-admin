@@ -15,12 +15,16 @@ export const apiClient = axios.create({
   },
 });
 
-// Request interceptor to add auth token
+// Request interceptor to add auth token and companyId
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = localStorage.getItem(AUTH_TOKEN_KEY);
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
+    }
+    const companyId = localStorage.getItem(COMPANY_ID_KEY);
+    if (companyId && config.headers) {
+      config.headers["X-Company-Id"] = companyId;
     }
     return config;
   },

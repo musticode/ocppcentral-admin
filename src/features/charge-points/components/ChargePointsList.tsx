@@ -1,4 +1,3 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -11,59 +10,35 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ConnectorStatusIndicator } from "@/components/ui/connector-status";
-import { ChargePoint, Connector, ConnectorStatus } from "@/types/ocpp";
+import { ChargePoint, ConnectorStatus } from "@/types/ocpp";
 import { chargePointApi } from "@/api";
-import { useEffect, useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Plus } from "lucide-react";
 import { CreateChargePointModal } from "./CreateChargePointModal";
+import { useCompanyStore } from "@/store/company.store";
 
 export const ChargePointsList = () => {
-  const queryClient = useQueryClient();
+  const companyId = useCompanyStore((state) => state.companyId);
   const [createModalOpen, setCreateModalOpen] = useState(false);
-  const { data, isLoading } = useQuery({
-    queryKey: ["charge-points"],
-    queryFn: () => chargePointApi.getChargePoints(),
-  });
-
-  const [chargePointList, setChargePointList] = useState<any>([
-    {
-      id: "1",
-      name: "Charger 1",
-      chargePointId: "1234567890",
-      locationId: "1",
-      locationName: "Location 1",
-      status: ConnectorStatus.AVAILABLE,
-      connectors: [{ id: "1", status: ConnectorStatus.AVAILABLE }],
-    },
-    {
-      id: "2",
-      name: "Charger 2",
-      chargePointId: "1234567891",
-      locationId: "2",
-      locationName: "Location 2",
-      status: ConnectorStatus.AVAILABLE,
-      connectors: [{ id: "2", status: ConnectorStatus.AVAILABLE }],
-    },
-    {
-      id: "3",
-      name: "Charger 3",
-      chargePointId: "1234567892",
-      locationId: "3",
-      locationName: "Location 3",
-      status: ConnectorStatus.AVAILABLE,
-      connectors: [{ id: "3", status: ConnectorStatus.AVAILABLE }],
-    },
-  ]);
-
-  const [chargePoints, setChargePoints] = useState<
-    (ChargePoint & { connectors: Connector[] })[]
-  >([]);
+  const [chargePoints, setChargePoints] = useState<ChargePoint[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setChargePoints(chargePointList);
-  }, [chargePointList]);
+    console.log("companyId", companyId);
+    const chargePoints = chargePointApi.getChargePoints({
+      companyId: companyId ?? "",
+    });
 
-  if (isLoading || !chargePoints) {
+    setChargePoints(chargePoints.data ?? []);
+  }, [companyId]);
+
+  // if (!companyId) {
+  //   return (
+  //     <div className="p-6">Please sign in to view charge points.</div>
+  //   );
+  // }
+
+  if (isLoading) {
     return <div className="p-6">Loading...</div>;
   }
 
@@ -79,9 +54,7 @@ export const ChargePointsList = () => {
       <CreateChargePointModal
         open={createModalOpen}
         onOpenChange={setCreateModalOpen}
-        onSuccess={() =>
-          queryClient.invalidateQueries({ queryKey: ["charge-points"] })
-        }
+        //onSuccess={fetchChargePoints}
       />
       <Card>
         <CardContent>
@@ -124,7 +97,7 @@ export const ChargePointsList = () => {
                   </TableCell>
                   <TableCell>
                     <div className="flex gap-1">
-                      {cp.connectors.map((connector) => (
+                      {(cp.connectors ?? []).map((connector) => (
                         <ConnectorStatusIndicator
                           key={connector.id}
                           status={connector.status}

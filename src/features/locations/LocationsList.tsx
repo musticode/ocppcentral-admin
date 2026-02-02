@@ -55,25 +55,30 @@ export const LocationsList = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {locations.map((loc: Location) => (
-              <TableRow key={loc.id}>
-                <TableCell>
-                  <Link
-                    to={`/locations/${loc.id}`}
-                    className="font-medium text-primary hover:underline"
-                  >
-                    {loc.name}
-                  </Link>
-                </TableCell>
-                <TableCell className="max-w-[200px] truncate text-gray-600">
-                  {loc.address}
-                </TableCell>
-                <TableCell>{loc.city}</TableCell>
-                <TableCell>{loc.country}</TableCell>
-                <TableCell className="text-right">{loc.totalStations}</TableCell>
-                <TableCell className="text-right">{loc.totalConnectors}</TableCell>
-              </TableRow>
-            ))}
+            {locations.length > 0 &&
+              locations.map((loc: Location) => (
+                <TableRow key={loc.id}>
+                  <TableCell>
+                    <Link
+                      to={`/locations/${loc.id}`}
+                      className="font-medium text-primary hover:underline"
+                    >
+                      {loc.name}
+                    </Link>
+                  </TableCell>
+                  <TableCell className="max-w-[200px] truncate text-gray-600">
+                    {loc.address}
+                  </TableCell>
+                  <TableCell>{loc.city}</TableCell>
+                  <TableCell>{loc.country}</TableCell>
+                  <TableCell className="text-right">
+                    {loc.totalStations}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {loc.totalConnectors}
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </CardContent>

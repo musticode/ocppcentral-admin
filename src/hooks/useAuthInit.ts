@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "@/store/auth.store";
+import { useCompanyStore } from "@/store/company.store";
 import { authApi } from "@/api";
 
 /**
@@ -8,11 +9,15 @@ import { authApi } from "@/api";
  */
 export const useAuthInit = () => {
   const { setAuth, clearAuth, initializeFromStorage, token } = useAuthStore();
+  const initializeCompanyFromStorage = useCompanyStore(
+    (state) => state.initializeFromStorage
+  );
 
   // Immediately hydrate from localStorage for faster initial render
   useEffect(() => {
     initializeFromStorage();
-  }, [initializeFromStorage]);
+    initializeCompanyFromStorage();
+  }, [initializeFromStorage, initializeCompanyFromStorage]);
 
   // Validate token with server and refresh user data
   const { data: user, isError } = useQuery({

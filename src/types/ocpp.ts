@@ -146,14 +146,15 @@ export interface Session {
   id: string;
   transactionId: number;
   chargePointId: string;
-  chargePointName: string;
   connectorId: number;
   idTag: string;
-  startTime: string;
-  endTime?: string;
-  energyKwh: number;
-  duration?: number;
+  startTimestamp: string;
+  stopTimestamp?: string;
+  meterStart: number;
+  meterStop?: number;
   status: TransactionStatus;
+  userId?: string;
+  userName?: string;
 }
 
 export interface Event {

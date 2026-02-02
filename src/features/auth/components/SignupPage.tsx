@@ -60,10 +60,15 @@ export const SignupPage = () => {
   const signupMutation = useMutation({
     mutationFn: authApi.signup,
     onSuccess: (data) => {
+      console.log("Signup response data:", data);
+      console.log("Token:", data.token);
+      console.log("User:", data.user);
+      
       setAuth(data.user, data.token);
+      
       toast({
         title: "Success",
-        description: "Account created successfully. Welcome!",
+        description: data.message || "Account created successfully. Welcome!",
       });
       navigate("/dashboard");
     },

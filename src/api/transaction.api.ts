@@ -25,6 +25,17 @@ export const transactionApi = {
     return response.data;
   },
 
+  getSessionsByCompany: async (
+    companyId: string,
+    signal?: AbortSignal
+  ): Promise<PaginatedResponse<Transaction>> => {
+    const response = await apiClient.get<PaginatedResponse<Transaction>>(
+      `/transactions/listAllSessions`,
+      { params: { companyId }, signal }
+    );
+    return response.data;
+  },
+
   getSessions: async (params?: {
     locationId?: string;
     chargePointId?: string;

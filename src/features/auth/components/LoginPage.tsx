@@ -14,7 +14,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
-
 export const LoginPage = () => {
   const navigate = useNavigate();
   const { setAuth } = useAuthStore();
@@ -25,10 +24,15 @@ export const LoginPage = () => {
   const loginMutation = useMutation({
     mutationFn: authApi.login,
     onSuccess: (data) => {
+      console.log("Login response data:", data);
+      console.log("Token:", data.token);
+      console.log("User:", data.user);
+      
       setAuth(data.user, data.token);
+      
       toast({
         title: "Success",
-        description: "Logged in successfully",
+        description: data.message || "Logged in successfully",
       });
       navigate("/dashboard");
     },

@@ -55,14 +55,16 @@ export const chargePointApi = {
   },
 
   getChargePoints: async (params?: {
+    companyId?: string;
     locationId?: string;
     page?: number;
     limit?: number;
   }): Promise<PaginatedResponse<ChargePoint>> => {
     const response = await apiClient.get<PaginatedResponse<ChargePoint>>(
-      "/charge-points",
-      { params }
+      `/charge-points/listAllChargePoints?companyId=${params?.companyId}`,
+      { params: { companyId: params?.companyId } }
     );
+    console.log(response.data);
     return response.data;
   },
 

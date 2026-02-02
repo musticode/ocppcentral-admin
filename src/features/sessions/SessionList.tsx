@@ -12,104 +12,43 @@ import {
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
 import { SessionDetails } from "./SessionDetails";
+import { Transaction } from "@/types/api";
+import { transactionApi } from "@/api";
+import { useCompanyStore } from "@/store/company.store";
+import { Session, TransactionStatus } from "@/types/ocpp";
 
 export const SessionList = () => {
-  const [sessions, setSessions] = useState<any[]>([]);
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const companyId = useCompanyStore((state) => state.companyId);
   const [open, setOpen] = useState(false);
+  const [selectedSession, setSelectedSession] = useState<Transaction | null>(
+    null
+  );
+
   useEffect(() => {
-    setSessions([
-      {
-        id: 1,
-        name: "Session 1",
-        status: "Active",
-        startTime: "2021-01-01 10:00:00",
-        endTime: "2021-01-01 11:00:00",
-        energyKWh: 10,
-        duration: "1 hour",
-      },
-      {
-        id: 2,
-        name: "Session 2",
-        status: "Inactive",
-        startTime: "2021-01-01 11:00:00",
-        endTime: "2021-01-01 12:00:00",
-        energyKWh: 20,
-        duration: "1 hour",
-      },
-      {
-        id: 3,
-        name: "Session 3",
-        status: "Active",
-        startTime: "2021-01-01 12:00:00",
-        endTime: "2021-01-01 13:00:00",
-        energyKWh: 30,
-        duration: "1 hour",
-      },
-      {
-        id: 4,
-        name: "Session 4",
-        status: "Inactive",
-        startTime: "2021-01-01 13:00:00",
-        endTime: "2021-01-01 14:00:00",
-        energyKWh: 40,
-        duration: "1 hour",
-      },
-      {
-        id: 5,
-        name: "Session 5",
-        status: "Active",
-        startTime: "2021-01-01 14:00:00",
-        endTime: "2021-01-01 15:00:00",
-        energyKWh: 50,
-        duration: "1 hour",
-      },
-      {
-        id: 6,
-        name: "Session 6",
-        status: "Inactive",
-        startTime: "2021-01-01 15:00:00",
-        endTime: "2021-01-01 16:00:00",
-        energyKWh: 60,
-        duration: "1 hour",
-      },
-      {
-        id: 7,
-        name: "Session 7",
-        status: "Active",
-        startTime: "2021-01-01 16:00:00",
-        endTime: "2021-01-01 17:00:00",
-        energyKWh: 70,
-        duration: "1 hour",
-      },
-      {
-        id: 8,
-        name: "Session 8",
-        status: "Inactive",
-        startTime: "2021-01-01 17:00:00",
-        endTime: "2021-01-01 18:00:00",
-        energyKWh: 80,
-        duration: "1 hour",
-      },
-      {
-        id: 9,
-        name: "Session 9",
-        status: "Active",
-        startTime: "2021-01-01 18:00:00",
-        endTime: "2021-01-01 19:00:00",
-        energyKWh: 90,
-        duration: "1 hour",
-      },
-      {
-        id: 10,
-        name: "Session 10",
-        status: "Inactive",
-        startTime: "2021-01-01 19:00:00",
-        endTime: "2021-01-01 20:00:00",
-        energyKWh: 100,
-        duration: "1 hour",
-      },
-    ]);
-  }, []);
+    //if (!companyId) return;
+
+    const controller = new AbortController();
+
+    const fetchCompanySessions = async () => {
+      try {
+        const response = await transactionApi.getSessionsByCompany(
+          companyId ?? "",
+          controller.signal
+        );
+        console.log(response);
+        setSessions((response.data as unknown as Session[]) ?? []);
+      } catch (err) {
+        if (err instanceof Error && err.name === "CanceledError") return;
+        throw err;
+      }
+    };
+
+    fetchCompanySessions();
+
+    return () => controller.abort();
+  }, [companyId]);
+
   return (
     <Card>
       <CardContent>
@@ -117,33 +56,53 @@ export const SessionList = () => {
           <TableHeader>
             <TableRow>
               <TableHead>ID</TableHead>
-              <TableHead>Name</TableHead>
+              <TableHead>Charge Point ID</TableHead>
+              <TableHead>Connector ID</TableHead>
+              <TableHead>ID Tag</TableHead>
+              <TableHead>Meter Start</TableHead>
+              <TableHead>Reservation ID</TableHead>
+              <TableHead>Timestamp</TableHead>
+              <TableHead>Started At</TableHead>
+              <TableHead>Stopped At</TableHead>
+              <TableHead>Meter Stop</TableHead>
+              <TableHead>Energy Consumed</TableHead>
+              <TableHead>Meter Values</TableHead>
+              <TableHead>Stop Reason</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead>Start Time</TableHead>
-              <TableHead>End Time</TableHead>
-              <TableHead>Energy KWh</TableHead>
-              <TableHead>Duration</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {sessions.map((session) => (
-              <TableRow key={session.id}>
-                <TableCell>{session.id}</TableCell>
-                <TableCell>{session.name}</TableCell>
+              <TableRow key={session.transactionId}>
+                <TableCell>{session.transactionId}</TableCell>
+                <TableCell>{session.chargePointId}</TableCell>
+                <TableCell>{session.connectorId}</TableCell>
+                <TableCell>{session.idTag}</TableCell>
+                <TableCell>{session.meterStart}</TableCell>
+                <TableCell>{session.startTimestamp}</TableCell>
+                <TableCell>{session.stopTimestamp}</TableCell>
+                <TableCell>{session.meterStop}</TableCell>
                 <TableCell>{session.status}</TableCell>
-                <TableCell>{session.startTime}</TableCell>
-                <TableCell>{session.endTime}</TableCell>
-                <TableCell>{session.energyKWh}</TableCell>
-                <TableCell>{session.duration}</TableCell>
                 <TableCell>
-                  <Button onClick={() => setOpen(true)}>View Details</Button>
-                  <SessionDetails open={open} onOpenChange={setOpen} />
+                  <Button
+                    onClick={() => {
+                      setSelectedSession(session as unknown as Transaction);
+                      setOpen(true);
+                    }}
+                  >
+                    View Details
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
+        <SessionDetails
+          open={open}
+          onOpenChange={setOpen}
+          session={selectedSession}
+        />
       </CardContent>
     </Card>
   );

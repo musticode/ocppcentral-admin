@@ -24,35 +24,33 @@ export interface UpdateLocationInput {
 export const locationApi = {
   getLocations: async (): Promise<Location[]> => {
     const response = await apiClient.get<Location[]>(
-      "/charge-points/locations",
+      "/locations/listAllLocations"
     );
     return response.data;
   },
 
   getLocation: async (locationId: string): Promise<Location> => {
     const response = await apiClient.get<Location>(
-      `/charge-points/locations/${locationId}`,
+      `/charge-points/locations/${locationId}`
     );
     return response.data;
   },
 
-  createLocation: async (
-    data: CreateLocationInput,
-  ): Promise<Location> => {
+  createLocation: async (data: CreateLocationInput): Promise<Location> => {
     const response = await apiClient.post<Location>(
       "/charge-points/locations",
-      data,
+      data
     );
     return response.data;
   },
 
   updateLocation: async (
     locationId: string,
-    data: UpdateLocationInput,
+    data: UpdateLocationInput
   ): Promise<Location> => {
     const response = await apiClient.patch<Location>(
       `/charge-points/locations/${locationId}`,
-      data,
+      data
     );
     return response.data;
   },

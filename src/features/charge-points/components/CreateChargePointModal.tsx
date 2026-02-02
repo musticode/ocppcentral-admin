@@ -153,11 +153,12 @@ export const CreateChargePointModal = ({
                   <SelectValue placeholder="Select location" />
                 </SelectTrigger>
                 <SelectContent>
-                  {locations.map((loc) => (
-                    <SelectItem key={loc.id} value={loc.id}>
-                      {loc.name}
-                    </SelectItem>
-                  ))}
+                  {locations.length > 0 &&
+                    locations.map((loc) => (
+                      <SelectItem key={loc.id} value={loc.id}>
+                        {loc.name}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
             </div>
