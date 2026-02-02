@@ -61,7 +61,7 @@ export const chargePointApi = {
     limit?: number;
   }): Promise<PaginatedResponse<ChargePoint>> => {
     const response = await apiClient.get<PaginatedResponse<ChargePoint>>(
-      `/charge-points/listAllChargePoints?companyId=${params?.companyId}`,
+      `/charge-points/listAllChargePoints${params?.companyId}`,
       { params: { companyId: params?.companyId } }
     );
     console.log(response.data);
