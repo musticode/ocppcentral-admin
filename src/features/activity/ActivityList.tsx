@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -8,8 +7,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { EyeIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+
+import { Button } from "@/components/ui/button";
+import { EyeIcon } from "lucide-react";
 
 export const ActivityList = () => {
   const [activityList, setActivityList] = useState<any[]>([]);
@@ -34,9 +35,9 @@ export const ActivityList = () => {
 
   return (
     <Card>
-      <CardHeader>
+      {/* <CardHeader>
         <CardTitle>Activity List</CardTitle>
-      </CardHeader>
+      </CardHeader> */}
       <CardContent>
         <Table>
           <TableHeader>

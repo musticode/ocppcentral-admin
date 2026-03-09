@@ -1,4 +1,5 @@
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 import { ActivityList } from "./ActivityList";
 
 export const ActivityOverview = () => {
@@ -6,7 +7,7 @@ export const ActivityOverview = () => {
     <div className="p-6">
       <Card>
         <CardHeader>
-          <CardTitle>Activity Overview</CardTitle>
+          <CardTitle>Recent Activity</CardTitle>
         </CardHeader>
         <CardContent>
           <ActivityList />

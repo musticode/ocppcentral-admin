@@ -1,25 +1,7 @@
+import type { CreateLocationRequest, Location, UpdateLocationRequest } from "@/types/api";
+
+import type { ChargePoint } from "@/types/ocpp";
 import { apiClient } from "./axios";
-import type { Location } from "@/types/ocpp";
-
-export interface CreateLocationInput {
-  name: string;
-  address: string;
-  city: string;
-  country: string;
-  zipCode: string;
-  latitude?: number;
-  longitude?: number;
-}
-
-export interface UpdateLocationInput {
-  name?: string;
-  address?: string;
-  city?: string;
-  country?: string;
-  zipCode?: string;
-  latitude?: number;
-  longitude?: number;
-}
 
 export const locationApi = {
   getLocations: async (): Promise<Location[]> => {
@@ -31,14 +13,21 @@ export const locationApi = {
 
   getLocation: async (locationId: string): Promise<Location> => {
     const response = await apiClient.get<Location>(
-      `/charge-points/locations/${locationId}`
+      `/locations/${locationId}`
     );
     return response.data;
   },
 
-  createLocation: async (data: CreateLocationInput): Promise<Location> => {
+  getChargePointsForLocation: async (locationId: string): Promise<ChargePoint[]> => {
+    const response = await apiClient.get<ChargePoint[]>(
+      `/locations/${locationId}/charge-points`
+    );
+    return response.data;
+  },
+
+  createLocation: async (data: CreateLocationRequest): Promise<Location> => {
     const response = await apiClient.post<Location>(
-      "/charge-points/locations",
+      "/locations/createLocation",
       data
     );
     return response.data;
@@ -46,12 +35,16 @@ export const locationApi = {
 
   updateLocation: async (
     locationId: string,
-    data: UpdateLocationInput
+    data: UpdateLocationRequest
   ): Promise<Location> => {
-    const response = await apiClient.patch<Location>(
-      `/charge-points/locations/${locationId}`,
+    const response = await apiClient.put<Location>(
+      `/locations/${locationId}`,
       data
     );
     return response.data;
+  },
+
+  deleteLocation: async (locationId: string): Promise<void> => {
+    await apiClient.delete(`/locations/${locationId}`);
   },
 };

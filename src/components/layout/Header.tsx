@@ -1,9 +1,10 @@
-import { ChevronUp, User, Bell } from "lucide-react";
+import { Bell, ChevronUp, User } from "lucide-react";
+
+import { Button } from "../ui/button";
+import { Link } from "react-router-dom";
+import { UserDetail } from "@/features/user/UserDetail";
 import { useAuthStore } from "@/store/auth.store";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Button } from "../ui/button";
-import { UserDetail } from "@/features/user/UserDetail";
 
 export const Header = () => {
   const { user } = useAuthStore();
@@ -14,7 +15,6 @@ export const Header = () => {
     <header className="flex h-16 items-center justify-between border-b bg-white px-6 shadow-sm">
       <div className="flex items-center gap-2">
         <span className="text-sm font-medium text-gray-700">{companyName}</span>
-        <ChevronUp className="h-4 w-4 text-gray-500" />
       </div>
       <div className="flex items-center gap-4">
         <Link to="/notifications">

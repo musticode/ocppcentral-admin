@@ -1,18 +1,19 @@
-import { Link, useLocation } from "react-router-dom";
 import {
-  LayoutDashboard,
   Activity,
-  Zap,
   Calendar,
-  Users,
-  UserCog,
   CreditCard,
   FileText,
-  TrendingUp,
   Grid3x3,
-  Settings,
+  LayoutDashboard,
   MapPin,
+  Settings,
+  TrendingUp,
+  UserCog,
+  Users,
+  Zap,
 } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+
 import { cn } from "@/utils/cn";
 
 const menuItems = [
@@ -23,7 +24,7 @@ const menuItems = [
   { path: "/chargers", label: "Chargers", icon: Zap },
   { path: "/locations", label: "Locations", icon: MapPin },
   { path: "/users", label: "Users", icon: Users },
-  { path: "/user-groups", label: "User Groups", icon: UserCog },
+  //{ path: "/user-groups", label: "User Groups", icon: UserCog },
   { path: "/rfid-tags", label: "RFID Tags", icon: CreditCard },
   { path: "/tariff", label: "Tariff", icon: FileText },
   { path: "/reports", label: "Reports", icon: TrendingUp },

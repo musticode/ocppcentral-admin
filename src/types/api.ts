@@ -224,3 +224,274 @@ export interface Company {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface Reservation {
+  reservationId: number;
+  chargePointId: string;
+  connectorId: number;
+  idTag: string;
+  expiryDate: string;
+  status: "Active" | "Used" | "Cancelled" | "Expired";
+  transactionId?: number;
+  createdAt: string;
+  updatedAt: string;
+  cancelledAt?: string;
+  cancelledBy?: string;
+  chargePointName?: string;
+  locationName?: string;
+}
+
+export interface CreateReservationRequest {
+  chargePointId: string;
+  connectorId: number;
+  idTag: string;
+  expiryDate: string;
+}
+
+export interface ReservationFilters {
+  chargePointId?: string;
+  idTag?: string;
+  status?: "Active" | "Used" | "Cancelled" | "Expired";
+  page?: number;
+  limit?: number;
+  startDate?: string;
+  endDate?: string;
+}
+
+export interface ValidateReservationRequest {
+  chargePointId: string;
+  connectorId: number;
+  expiryDate: string;
+}
+
+export interface ValidateReservationResponse {
+  valid: boolean;
+  message?: string;
+  conflicts?: Reservation[];
+}
+
+export interface Tariff {
+  id: string;
+  companyId?: string;
+  chargePointId?: string;
+  connectorId?: number;
+  name: string;
+  description?: string;
+  currency: string;
+  pricePerKwh?: number;
+  pricePerMinute?: number;
+  pricePerSession?: number;
+  taxRate?: number;
+  validFrom: string;
+  validTo?: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateTariffRequest {
+  companyId?: string;
+  chargePointId?: string;
+  connectorId?: number;
+  name: string;
+  description?: string;
+  currency: string;
+  pricePerKwh?: number;
+  pricePerMinute?: number;
+  pricePerSession?: number;
+  taxRate?: number;
+  validFrom: string;
+  validTo?: string;
+}
+
+export interface TariffFilters {
+  companyId?: string;
+  chargePointId?: string;
+  connectorId?: number;
+  isActive?: boolean;
+}
+
+export interface Consumption {
+  id: string;
+  transactionId: number;
+  chargePointId: string;
+  connectorId: number;
+  idTag: string;
+  energyConsumed: number;
+  duration: number;
+  cost?: number;
+  startTime: string;
+  endTime: string;
+  createdAt: string;
+}
+
+export interface Car {
+  id: string;
+  userId: string;
+  companyId?: string;
+  make: string;
+  model: string;
+  year: number;
+  color?: string;
+  licensePlate: string;
+  vin?: string;
+  batteryCapacity?: number;
+  range?: number;
+  chargingPort?: "Type 1" | "Type 2" | "CCS" | "CHAdeMO" | "Tesla" | "Other";
+  notes?: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateCarRequest {
+  userId?: string;
+  companyId?: string;
+  make: string;
+  model: string;
+  year: number;
+  color?: string;
+  licensePlate: string;
+  vin?: string;
+  batteryCapacity?: number;
+  range?: number;
+  chargingPort?: "Type 1" | "Type 2" | "CCS" | "CHAdeMO" | "Tesla" | "Other";
+  notes?: string;
+}
+
+export interface UpdateCarRequest {
+  make?: string;
+  model?: string;
+  year?: number;
+  color?: string;
+  licensePlate?: string;
+  vin?: string;
+  batteryCapacity?: number;
+  range?: number;
+  chargingPort?: string;
+  notes?: string;
+  isActive?: boolean;
+}
+
+export interface CarFilters {
+  userId?: string;
+  companyId?: string;
+  isActive?: boolean;
+  make?: string;
+  model?: string;
+  year?: number;
+}
+
+export interface CarStats {
+  totalCars: number;
+  activeCars: number;
+  inactiveCars: number;
+  byMake: Record<string, number>;
+  byChargingPort: Record<string, number>;
+}
+
+export interface ChangeAvailabilityRequest {
+  connectorId: number;
+  type: "Operative" | "Inoperative";
+}
+
+export interface ChangeConfigurationRequest {
+  key: string;
+  value: string;
+}
+
+export interface RemoteStartTransactionRequest {
+  idTag: string;
+  connectorId?: number;
+}
+
+export interface RemoteStopTransactionRequest {
+  transactionId: number;
+}
+
+export interface ResetRequest {
+  type: "Hard" | "Soft";
+}
+
+export interface UnlockConnectorRequest {
+  connectorId: number;
+}
+
+export interface GetDiagnosticsRequest {
+  location: string;
+  startTime?: string;
+  stopTime?: string;
+  retries?: number;
+  retryInterval?: number;
+}
+
+export interface UpdateFirmwareRequest {
+  retries?: number;
+  retryInterval?: number;
+}
+
+export interface SendLocalListRequest {
+  listVersion: number;
+  localAuthorizationList: any[];
+  updateType: "Full" | "Differential";
+}
+
+export interface ReserveNowRequest {
+  connectorId: number;
+  expiryDate: string;
+  idTag: string;
+  reservationId?: number;
+  parentIdTag?: string;
+}
+
+export interface CancelReservationRequest {
+  reservationId: number;
+}
+
+export interface TriggerMessageRequest {
+  requestedMessage: string;
+  connectorId?: number;
+}
+
+export interface OCPPResponse {
+  status: string;
+  message?: string;
+  data?: any;
+}
+
+export interface CreateUserRequest {
+  name: string;
+  email: string;
+  password: string;
+  role?: string;
+  companyId?: string;
+  companyName?: string;
+}
+
+export interface Location {
+  id: string;
+  name: string;
+  address: string;
+  latitude?: number;
+  longitude?: number;
+  description?: string;
+  companyId?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateLocationRequest {
+  name: string;
+  address: string;
+  latitude?: number;
+  longitude?: number;
+  description?: string;
+}
+
+export interface UpdateLocationRequest {
+  name?: string;
+  address?: string;
+  latitude?: number;
+  longitude?: number;
+  description?: string;
+}
