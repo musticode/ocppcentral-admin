@@ -11,8 +11,17 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
+import { useQuery } from "@tanstack/react-query";
+import { usersApi } from "@/api";
 
 interface CreateRFIDTagModalProps {
   open: boolean;
@@ -29,10 +38,17 @@ export const CreateRFIDTagModal = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     idTag: "",
+    userId: "",
     parentIdTag: "",
     expiryDate: "",
     blocked: false,
     description: "",
+  });
+
+  const { data: users = [] } = useQuery({
+    queryKey: ["users"],
+    queryFn: () => usersApi.getAllUsers(),
+    enabled: open,
   });
 
   const handleInputChange = (field: string, value: string | boolean) => {
@@ -56,6 +72,7 @@ export const CreateRFIDTagModal = ({
     // Reset form
     setFormData({
       idTag: "",
+      userId: "",
       parentIdTag: "",
       expiryDate: "",
       blocked: false,
@@ -92,6 +109,31 @@ export const CreateRFIDTagModal = ({
               <p className="text-xs text-gray-500">
                 Alphanumeric characters only (uppercase)
               </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="userId">Assign to User</Label>
+              <Select
+                value={formData.userId}
+                onValueChange={(v) =>
+                  handleInputChange(
+                    "userId",
+                    v === "__unassigned__" ? "" : v
+                  )
+                }
+              >
+                <SelectTrigger id="userId">
+                  <SelectValue placeholder="Select a user (optional)" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__unassigned__">Unassigned</SelectItem>
+                  {users.map((u) => (
+                    <SelectItem key={u.id} value={u.id}>
+                      {u.name} ({u.email})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">

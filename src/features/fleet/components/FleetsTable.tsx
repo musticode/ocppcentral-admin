@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { fleetApi } from "@/api";
+import { isDemoMode } from "@/demo/demoMode";
 import { useCompanyStore } from "@/store/company.store";
 import {
   Table,
@@ -21,7 +22,7 @@ export const FleetsTable = () => {
   const { data: fleets, isLoading } = useQuery({
     queryKey: ["fleets", companyId],
     queryFn: () => fleetApi.getAllFleets(companyId ?? ""),
-    enabled: !!companyId,
+    enabled: isDemoMode || !!companyId,
   });
 
   if (isLoading) {

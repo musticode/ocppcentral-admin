@@ -56,6 +56,7 @@ export enum AvailabilityType {
 export enum TransactionStatus {
   ACTIVE = "Active",
   COMPLETED = "Completed",
+  FAILED = "Failed",
 }
 
 export interface ChargePoint {
@@ -131,11 +132,11 @@ export interface RemoteCommand {
   id: string;
   chargePointId: string;
   command:
-    | "RemoteStartTransaction"
-    | "RemoteStopTransaction"
-    | "Reset"
-    | "ChangeAvailability"
-    | "UnlockConnector";
+  | "RemoteStartTransaction"
+  | "RemoteStopTransaction"
+  | "Reset"
+  | "ChangeAvailability"
+  | "UnlockConnector";
   status: "Pending" | "Accepted" | "Rejected" | "Timeout";
   payload: Record<string, unknown>;
   createdAt: string;
@@ -155,6 +156,13 @@ export interface Session {
   status: TransactionStatus;
   userId?: string;
   userName?: string;
+  stopReason?: string;
+  totalCost?: number;
+  energyCost?: number;
+  timeCost?: number;
+  sessionFee?: number;
+  location?: string;
+  reservationId?: string;
 }
 
 export interface Event {
@@ -162,12 +170,12 @@ export interface Event {
   chargePointId: string;
   connectorId?: number;
   type:
-    | "StatusNotification"
-    | "MeterValues"
-    | "StartTransaction"
-    | "StopTransaction"
-    | "Heartbeat"
-    | "Error";
+  | "StatusNotification"
+  | "MeterValues"
+  | "StartTransaction"
+  | "StopTransaction"
+  | "Heartbeat"
+  | "Error";
   message: string;
   timestamp: string;
   severity?: "info" | "warning" | "error";

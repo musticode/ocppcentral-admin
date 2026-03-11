@@ -4,6 +4,7 @@ import { MapPin, Plus } from "lucide-react";
 import { LocationsList } from "./LocationsList";
 import { CreateLocationModal } from "./CreateLocationModal";
 import { useQueryClient } from "@tanstack/react-query";
+import { LocationsStatsCards } from "./components/LocationsStatsCards";
 
 export const LocationsOverview = () => {
   const queryClient = useQueryClient();
@@ -35,7 +36,11 @@ export const LocationsOverview = () => {
         }
       />
 
-      <LocationsList />
+      <LocationsStatsCards />
+
+      <div className="mt-6">
+        <LocationsList />
+      </div>
     </div>
   );
 };
