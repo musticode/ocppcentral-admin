@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { VehiclesTable } from "@/features/vehicles/VehiclesTable";
-import { CreateVehicleModal } from "@/features/vehicles/CreateVehicleModal";
+import { VehiclesTable } from "./VehiclesTable";
+import { CreateVehicleModal } from "./CreateVehicleModal";
 
 export const VehiclesOverview = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);

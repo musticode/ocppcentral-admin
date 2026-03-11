@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { useCompanyStore } from "@/store/company.store";
-import { companyApi } from "@/api/company.api";
+import { companyApi } from "@/api";
 import type { Company } from "@/types/api";
 
 export const CompanySettingsPage = () => {
