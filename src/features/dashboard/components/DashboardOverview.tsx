@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { ChargersSummaryCard } from "./ChargersSummaryCard";
-import { MapCard } from "./MapCard";
 import { LastEventsCard } from "./LastEventsCard";
 import { SessionsChartCard } from "./SessionsChartCard";
 import { ConnectorsStatusChartCard } from "./ConnectorsStatusChartCard";

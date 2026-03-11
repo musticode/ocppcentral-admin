@@ -8,12 +8,10 @@ import {
   Play,
   Square,
   Zap,
-  Plus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/utils/cn";
-import { ChargePointLogs } from "./ChargePointLogs";
 import { chargePointApi } from "@/api";
 import { ResetType } from "@/types/ocpp";
 
@@ -133,7 +131,7 @@ export const ChargerDetailsPanel = ({ charger }: ChargerDetailsPanelProps) => {
             className={cn(
               "cursor-pointer transition-all",
               selectedConnector === connector.connectorId &&
-                "ring-2 ring-primary shadow-lg"
+              "ring-2 ring-primary shadow-lg"
             )}
             onClick={() => setSelectedConnector(connector.connectorId)}
           >

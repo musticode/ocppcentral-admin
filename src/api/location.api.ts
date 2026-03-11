@@ -1,18 +1,22 @@
-import type { CreateLocationRequest, Location, UpdateLocationRequest } from "@/types/api";
+import type {
+  CreateLocationRequest,
+  Location as ApiLocation,
+  UpdateLocationRequest,
+} from "@/types/api";
 
-import type { ChargePoint } from "@/types/ocpp";
+import type { ChargePoint, Location as OcppLocation } from "@/types/ocpp";
 import { apiClient } from "./axios";
 
 export const locationApi = {
-  getLocations: async (): Promise<Location[]> => {
-    const response = await apiClient.get<Location[]>(
+  getLocations: async (): Promise<ApiLocation[]> => {
+    const response = await apiClient.get<ApiLocation[]>(
       "/locations/listAllLocations"
     );
     return response.data;
   },
 
-  getLocation: async (locationId: string): Promise<Location> => {
-    const response = await apiClient.get<Location>(
+  getLocation: async (locationId: string): Promise<OcppLocation> => {
+    const response = await apiClient.get<OcppLocation>(
       `/locations/${locationId}`
     );
     return response.data;
@@ -25,8 +29,8 @@ export const locationApi = {
     return response.data;
   },
 
-  createLocation: async (data: CreateLocationRequest): Promise<Location> => {
-    const response = await apiClient.post<Location>(
+  createLocation: async (data: CreateLocationRequest): Promise<OcppLocation> => {
+    const response = await apiClient.post<OcppLocation>(
       "/locations/createLocation",
       data
     );
@@ -36,8 +40,8 @@ export const locationApi = {
   updateLocation: async (
     locationId: string,
     data: UpdateLocationRequest
-  ): Promise<Location> => {
-    const response = await apiClient.put<Location>(
+  ): Promise<OcppLocation> => {
+    const response = await apiClient.put<OcppLocation>(
       `/locations/${locationId}`,
       data
     );

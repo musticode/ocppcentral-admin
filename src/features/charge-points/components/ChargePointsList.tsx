@@ -12,7 +12,7 @@ import {
 import { ConnectorStatusIndicator } from "@/components/ui/connector-status";
 import { ChargePoint, ConnectorStatus } from "@/types/ocpp";
 import { chargePointApi } from "@/api";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { Plus } from "lucide-react";
 import { CreateChargePointModal } from "./CreateChargePointModal";
 import { useCompanyStore } from "@/store/company.store";
@@ -24,12 +24,26 @@ export const ChargePointsList = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    console.log("companyId", companyId);
-    const chargePoints = chargePointApi.getChargePoints({
-      companyId: companyId ?? "",
-    });
+    let cancelled = false;
 
-    setChargePoints(chargePoints.data ?? []);
+    const fetchChargePoints = async () => {
+      setIsLoading(true);
+      try {
+        const res = await chargePointApi.getChargePoints({
+          companyId: companyId ?? "",
+        });
+        if (!cancelled) {
+          setChargePoints(res.data ?? []);
+        }
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    };
+
+    fetchChargePoints();
+    return () => {
+      cancelled = true;
+    };
   }, [companyId]);
 
   // if (!companyId) {
@@ -54,7 +68,7 @@ export const ChargePointsList = () => {
       <CreateChargePointModal
         open={createModalOpen}
         onOpenChange={setCreateModalOpen}
-        //onSuccess={fetchChargePoints}
+      //onSuccess={fetchChargePoints}
       />
       <Card>
         <CardContent>

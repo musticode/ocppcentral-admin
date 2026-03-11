@@ -48,9 +48,6 @@ export const CreateLocationModal = ({
       await locationApi.createLocation({
         name: formData.name,
         address: formData.address,
-        city: formData.city,
-        country: formData.country,
-        zipCode: formData.zipCode,
         latitude: formData.latitude
           ? parseFloat(formData.latitude)
           : undefined,
