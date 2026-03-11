@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { fleetApi } from "@/api";
+import { isDemoMode } from "@/demo/demoMode";
 import { useCompanyStore } from "@/store/company.store";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Truck, Users, Battery, Activity } from "lucide-react";
@@ -10,7 +11,7 @@ export const FleetStatsCards = () => {
   const { data: stats, isLoading } = useQuery({
     queryKey: ["fleet-stats", companyId],
     queryFn: () => fleetApi.getFleetStats(companyId ?? ""),
-    enabled: !!companyId,
+    enabled: isDemoMode || !!companyId,
   });
 
   if (isLoading) {

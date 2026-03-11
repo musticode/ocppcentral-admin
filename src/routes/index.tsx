@@ -9,8 +9,10 @@ import { ChargePointDetail } from "@/features/charge-points/components/ChargePoi
 import { ProtectedRoute } from "./ProtectedRoute";
 import { RFIDOverview } from "@/features/rfidtags/RFIDOverview";
 import { TariffOverview } from "@/features/tariff/TariffOverview";
+import { TariffDetailPage } from "@/features/tariff/TariffDetailPage";
 import { SessionOverview } from "@/features/sessions/SessionOverview";
 import { UserOverview } from "@/features/user/UserOverview";
+import { UserProfile } from "@/features/user/UserProfile";
 import { NotificationsPage } from "@/features/notifications/NotificationsPage";
 import { CompanySettingsPage } from "@/features/settings/CompanySettingsPage";
 import { ReservationOverview } from "@/features/reservations/ReservationOverview";
@@ -91,6 +93,10 @@ export const router = createBrowserRouter([
             element: <UserOverview />,
           },
           {
+            path: "users/:userId",
+            element: <UserProfile />,
+          },
+          {
             path: "user-groups",
             element: <div className="p-6">User Groups</div>,
           },
@@ -101,6 +107,10 @@ export const router = createBrowserRouter([
           {
             path: "tariff",
             element: <TariffOverview />,
+          },
+          {
+            path: "tariff/:tariffId",
+            element: <TariffDetailPage />,
           },
           {
             path: "reports",

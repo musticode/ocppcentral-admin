@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { tariffApi } from "@/api";
+import { isDemoMode } from "@/demo/demoMode";
 import { useCompanyStore } from "@/store/company.store";
 import {
   Table,
@@ -22,22 +23,21 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Eye, Edit, Trash2, Search } from "lucide-react";
-import { TariffDetailModal } from "./TariffDetailModal";
 import { EditTariffModal } from "./EditTariffModal";
 import type { Tariff } from "@/types/api";
+import { Link } from "react-router-dom";
 
 export const TariffList = () => {
   const companyId = useCompanyStore((state) => state.companyId);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all");
   const [selectedTariff, setSelectedTariff] = useState<Tariff | null>(null);
-  const [detailModalOpen, setDetailModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
 
   const { data: tariffs, isLoading } = useQuery({
     queryKey: ["tariffs", companyId],
     queryFn: () => tariffApi.getTariffsByCompany(companyId ?? ""),
-    enabled: !!companyId,
+    enabled: isDemoMode || !!companyId,
   });
 
   const filteredTariffs = tariffs?.filter((tariff) => {
@@ -49,11 +49,6 @@ export const TariffList = () => {
       (statusFilter === "inactive" && !tariff.isActive);
     return matchesSearch && matchesStatus;
   });
-
-  const handleViewDetails = (tariff: Tariff) => {
-    setSelectedTariff(tariff);
-    setDetailModalOpen(true);
-  };
 
   const handleEdit = (tariff: Tariff) => {
     setSelectedTariff(tariff);
@@ -190,12 +185,10 @@ export const TariffList = () => {
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleViewDetails(tariff)}
-                          >
-                            <Eye className="h-4 w-4" />
+                          <Button asChild variant="ghost" size="sm">
+                            <Link to={`/tariff/${tariff.id}`}>
+                              <Eye className="h-4 w-4" />
+                            </Link>
                           </Button>
                           <Button
                             variant="ghost"
@@ -220,11 +213,6 @@ export const TariffList = () => {
 
       {selectedTariff && (
         <>
-          <TariffDetailModal
-            tariff={selectedTariff}
-            open={detailModalOpen}
-            onOpenChange={setDetailModalOpen}
-          />
           <EditTariffModal
             tariff={selectedTariff}
             open={editModalOpen}

@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { tariffApi } from "@/api";
+import { isDemoMode } from "@/demo/demoMode";
 import { useCompanyStore } from "@/store/company.store";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DollarSign, FileText, TrendingUp, Calendar } from "lucide-react";
@@ -10,7 +11,7 @@ export const TariffStatsCards = () => {
   const { data: tariffs, isLoading } = useQuery({
     queryKey: ["tariffs", companyId],
     queryFn: () => tariffApi.getTariffsByCompany(companyId ?? ""),
-    enabled: !!companyId,
+    enabled: isDemoMode || !!companyId,
   });
 
   const activeTariffs = tariffs?.filter((t) => t.isActive) ?? [];

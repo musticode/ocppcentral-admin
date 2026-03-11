@@ -1,37 +1,40 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import RFIDTagsList from "./RFIDTagsList";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { CreateRFIDTagModal } from "./CreateRFIDTagModal";
+import { RFIDTagsList } from "./RFIDTagsList";
+import { RFIDStatsCards } from "./components/RFIDStatsCards";
 
 export const RFIDOverview = () => {
   const [createRFIDTagModalOpen, setCreateRFIDTagModalOpen] = useState(false);
   return (
     <div className="p-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>RFID Tags Overview</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Button onClick={() => setCreateRFIDTagModalOpen(true)}>
-            <Plus className="mr-2 h-4 w-4" />
-            Add RFID Tag
-          </Button>
-        </CardContent>
-        <CreateRFIDTagModal
-          open={createRFIDTagModalOpen}
-          onOpenChange={setCreateRFIDTagModalOpen}
-          onSuccess={() => {
-            // Refresh RFID tag list
-            console.log("RFID Tag created!");
-            setCreateRFIDTagModalOpen(false);
-          }}
-        />
-        <CardContent>
-          <RFIDTagsList />
-        </CardContent>
-      </Card>
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">RFID Tags</h1>
+          <p className="mt-1 text-sm text-gray-500">
+            Manage RFID cards and review usage across charging sessions
+          </p>
+        </div>
+        <Button onClick={() => setCreateRFIDTagModalOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" />
+          Add RFID Tag
+        </Button>
+      </div>
+
+      <RFIDStatsCards />
+
+      <div className="mt-6">
+        <RFIDTagsList />
+      </div>
+
+      <CreateRFIDTagModal
+        open={createRFIDTagModalOpen}
+        onOpenChange={setCreateRFIDTagModalOpen}
+        onSuccess={() => {
+          setCreateRFIDTagModalOpen(false);
+        }}
+      />
     </div>
   );
 };

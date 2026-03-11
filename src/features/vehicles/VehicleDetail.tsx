@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Pencil, Power, Trash2 } from "lucide-react";
+import { ArrowLeft, Battery, Gauge, Pencil, PlugZap, Power, Ticket, Trash2 } from "lucide-react";
 import { carsApi } from "@/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -163,6 +163,56 @@ export const VehicleDetail = () => {
         onSuccess={invalidate}
       />
 
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">License Plate</CardTitle>
+            <Ticket className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold font-mono">{vehicle.licensePlate}</div>
+            <p className="text-xs text-muted-foreground">Vehicle identifier</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Battery Capacity</CardTitle>
+            <Battery className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {vehicle.batteryCapacity != null ? `${vehicle.batteryCapacity} kWh` : "-"}
+            </div>
+            <p className="text-xs text-muted-foreground">Rated capacity</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Range</CardTitle>
+            <Gauge className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {vehicle.range != null ? `${vehicle.range} km` : "-"}
+            </div>
+            <p className="text-xs text-muted-foreground">Estimated range</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Charging Port</CardTitle>
+            <PlugZap className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{vehicle.chargingPort ?? "-"}</div>
+            <p className="text-xs text-muted-foreground">Connector type</p>
+          </CardContent>
+        </Card>
+      </div>
+
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader>
@@ -206,6 +256,18 @@ export const VehicleDetail = () => {
             <div className="flex justify-between gap-6">
               <span className="text-gray-500">VIN</span>
               <span className="font-mono text-gray-900">{vehicle.vin ?? "-"}</span>
+            </div>
+            <div className="flex justify-between gap-6">
+              <span className="text-gray-500">Created</span>
+              <span className="font-medium text-gray-900">
+                {vehicle.createdAt ? new Date(vehicle.createdAt).toLocaleString() : "-"}
+              </span>
+            </div>
+            <div className="flex justify-between gap-6">
+              <span className="text-gray-500">Last Updated</span>
+              <span className="font-medium text-gray-900">
+                {vehicle.updatedAt ? new Date(vehicle.updatedAt).toLocaleString() : "-"}
+              </span>
             </div>
           </CardContent>
         </Card>

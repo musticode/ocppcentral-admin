@@ -3,6 +3,7 @@ import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { VehiclesTable } from "./VehiclesTable";
 import { CreateVehicleModal } from "./CreateVehicleModal";
+import { VehiclesStatsCards } from "./VehiclesStatsCards";
 
 export const VehiclesOverview = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -24,7 +25,11 @@ export const VehiclesOverview = () => {
 
       <CreateVehicleModal open={createModalOpen} onOpenChange={setCreateModalOpen} />
 
-      <VehiclesTable />
+      <VehiclesStatsCards />
+
+      <div className="mt-6">
+        <VehiclesTable />
+      </div>
     </div>
   );
 };
