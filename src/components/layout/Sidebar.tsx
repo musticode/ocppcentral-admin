@@ -1,6 +1,7 @@
 import {
   Activity,
   Calendar,
+  Car,
   CreditCard,
   FileText,
   Grid3x3,
@@ -8,7 +9,6 @@ import {
   MapPin,
   Settings,
   TrendingUp,
-  UserCog,
   Users,
   Zap,
 } from "lucide-react";
@@ -22,6 +22,7 @@ const menuItems = [
   { path: "/sessions", label: "Sessions", icon: Zap },
   { path: "/reservation", label: "Reservation", icon: Calendar },
   { path: "/chargers", label: "Chargers", icon: Zap },
+  { path: "/vehicles", label: "Vehicles", icon: Car },
   { path: "/locations", label: "Locations", icon: MapPin },
   { path: "/users", label: "Users", icon: Users },
   //{ path: "/user-groups", label: "User Groups", icon: UserCog },

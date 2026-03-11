@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardContent } from "@/components/ui/card";
 import {
   Table,
   TableRow,
@@ -14,20 +14,8 @@ import { EllipsisVerticalIcon } from "lucide-react";
 
 export const UserList = () => {
   const [users, setUsers] = useState<any[]>([]);
-  const [actionModalOpen, setActionModalOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<any>(null);
-
   const handleActionModalOpen = (user: any) => {
-    setSelectedUser(user);
-    setActionModalOpen(true);
-  };
-
-  const handleActionModalClose = () => {
-    setActionModalOpen(false);
-  };
-
-  const handleAction = (action: string) => {
-    console.log(action, selectedUser);
+    console.log("User actions clicked", user);
   };
 
   useEffect(() => {

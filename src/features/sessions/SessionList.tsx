@@ -1,7 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -15,7 +13,7 @@ import { SessionDetails } from "./SessionDetails";
 import { Transaction } from "@/types/api";
 import { transactionApi } from "@/api";
 import { useCompanyStore } from "@/store/company.store";
-import { Session, TransactionStatus } from "@/types/ocpp";
+import { Session } from "@/types/ocpp";
 
 export const SessionList = () => {
   const [sessions, setSessions] = useState<Session[]>([]);

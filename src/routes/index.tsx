@@ -17,6 +17,8 @@ import { ReservationOverview } from "@/features/reservations/ReservationOverview
 import { ActivityOverview } from "@/features/activity/ActivityOverview";
 import { ReportsOverview } from "@/features/reports/ReportsOverview";
 import { LocationsOverview } from "@/features/locations/LocationsOverview";
+import { VehiclesOverview } from "@/features/vehicles/VehiclesOverview";
+import { VehicleDetail } from "@/features/vehicles/VehicleDetail";
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +43,14 @@ export const router = createBrowserRouter([
           {
             path: "chargers",
             element: <ChargePointsList />,
+          },
+          {
+            path: "vehicles",
+            element: <VehiclesOverview />,
+          },
+          {
+            path: "vehicles/:vehicleId",
+            element: <VehicleDetail />,
           },
           {
             path: "chargers/:chargerId",

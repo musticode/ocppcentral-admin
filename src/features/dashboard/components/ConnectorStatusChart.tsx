@@ -1,10 +1,8 @@
-import React from "react";
 import {
   PieChart,
   Pie,
   Cell,
   ResponsiveContainer,
-  Legend,
   Tooltip,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -63,7 +61,7 @@ export const ConnectorStatusChart = ({
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ name, value }) => `${value}`}
+                label={({ value }: { value: number }) => `${value}`}
                 outerRadius={80}
                 fill="#8884d8"
                 dataKey="value"

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,41 +13,12 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/utils/cn";
-import { ChargePointLogs } from "./ChargePointLogs";
 
 interface SessionsPanelProps {
   chargerId: string;
 }
 
 const tabs = ["Sessions", "Transactions", "Reservations", "Logs"] as const;
-
-const logsData = [
-  {
-    timestamp: "2021-01-01 10:00:00",
-    message: "Message 1",
-    severity: "Info",
-  },
-  {
-    timestamp: "2021-01-01 10:00:01",
-    message: "Message 2",
-    severity: "Warning",
-  },
-  {
-    timestamp: "2021-01-01 10:00:02",
-    message: "Message 3",
-    severity: "Error",
-  },
-  {
-    timestamp: "2021-01-01 10:00:03",
-    message: "Message 4",
-    severity: "Info",
-  },
-  {
-    timestamp: "2021-01-01 10:00:04",
-    message: "Message 5",
-    severity: "Warning",
-  },
-];
 // Dummy session data matching the image
 const sessionsData = [
   {
@@ -97,13 +68,8 @@ const sessionsData = [
   },
 ];
 
-export const SessionsPanel = ({ chargerId }: SessionsPanelProps) => {
+export const SessionsPanel = ({ chargerId: _chargerId }: SessionsPanelProps) => {
   const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("Sessions");
-  const [logs, setLogs] = useState<any[]>(logsData);
-
-  useEffect(() => {
-    setLogs(logsData);
-  }, []);
 
   return (
     <Card className="h-full">

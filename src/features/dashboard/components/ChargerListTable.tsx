@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -11,11 +10,8 @@ import {
 } from "@/components/ui/table";
 import {
   ConnectorStatusBadge,
-  ConnectorStatusIndicator,
 } from "@/components/ui/connector-status";
 import type { ChargePoint, Connector, Location } from "@/types/ocpp";
-import { useState } from "react";
-import { ConnectorStatus } from "@/types/ocpp";
 interface ChargerListTableProps {
   location: Location;
 }
@@ -55,7 +51,7 @@ export const ChargerListTable = ({ location }: ChargerListTableProps) => {
                       {chargePoint.connectors.map((connector: Connector) => (
                         <ConnectorStatusBadge
                           key={connector.id}
-                          status={connector.status as ConnectorStatus}
+                          status={connector.status}
                         />
                       ))}
                     </div>

@@ -66,9 +66,6 @@ export const EditLocationModal = ({
       await locationApi.updateLocation(location.id, {
         name: formData.name,
         address: formData.address,
-        city: formData.city,
-        country: formData.country,
-        zipCode: formData.zipCode,
         latitude: formData.latitude
           ? parseFloat(formData.latitude)
           : undefined,

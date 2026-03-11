@@ -1,13 +1,12 @@
-import { Bell, ChevronUp, User } from "lucide-react";
+import { Bell, User } from "lucide-react";
 
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
-import { UserDetail } from "@/features/user/UserDetail";
 import { useAuthStore } from "@/store/auth.store";
 import { useState } from "react";
 
 export const Header = () => {
-  const { user } = useAuthStore();
+  useAuthStore();
   const [companyName] = useState("Energy Management Company");
   const [unreadCount] = useState(3); // Dummy unread count
 

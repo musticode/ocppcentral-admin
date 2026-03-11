@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { locationApi } from "@/api";
-import type { Location } from "@/types/ocpp";
+import type { Location } from "@/types/api";
 
 export const LocationsList = () => {
   const { data: locations = [], isLoading } = useQuery({
@@ -48,10 +48,8 @@ export const LocationsList = () => {
             <TableRow>
               <TableHead>Name</TableHead>
               <TableHead>Address</TableHead>
-              <TableHead>City</TableHead>
-              <TableHead>Country</TableHead>
-              <TableHead className="text-right">Stations</TableHead>
-              <TableHead className="text-right">Connectors</TableHead>
+              <TableHead>Description</TableHead>
+              <TableHead className="text-right">Created</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -69,13 +67,11 @@ export const LocationsList = () => {
                   <TableCell className="max-w-[200px] truncate text-gray-600">
                     {loc.address}
                   </TableCell>
-                  <TableCell>{loc.city}</TableCell>
-                  <TableCell>{loc.country}</TableCell>
-                  <TableCell className="text-right">
-                    {loc.totalStations}
+                  <TableCell className="max-w-[240px] truncate text-gray-600">
+                    {loc.description ?? "-"}
                   </TableCell>
-                  <TableCell className="text-right">
-                    {loc.totalConnectors}
+                  <TableCell className="text-right text-gray-600">
+                    {loc.createdAt ? new Date(loc.createdAt).toLocaleDateString() : "-"}
                   </TableCell>
                 </TableRow>
               ))}
