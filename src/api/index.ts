@@ -10,7 +10,6 @@ import { consumptionApi as realConsumptionApi } from "./consumption.api";
 import { centralSystemApi as realCentralSystemApi } from "./centralSystem.api";
 import { carsApi as realCarsApi } from "./cars.api";
 import { usersApi as realUsersApi } from "./users.api";
-import { fleetApi as realFleetApi } from "./fleet.api";
 
 import { isDemoMode } from "@/demo/demoMode";
 import {
@@ -25,7 +24,6 @@ import {
     demoTariffApi,
     demoTransactionApi,
     demoUsersApi,
-    demoFleetApi,
 } from "@/demo/demoApi";
 
 export const authApi = isDemoMode ? demoAuthApi : realAuthApi;
@@ -39,6 +37,5 @@ export const consumptionApi = isDemoMode ? demoConsumptionApi : realConsumptionA
 export const centralSystemApi = isDemoMode ? demoCentralSystemApi : realCentralSystemApi;
 export const carsApi = isDemoMode ? demoCarsApi : realCarsApi;
 export const usersApi = isDemoMode ? demoUsersApi : realUsersApi;
-export const fleetApi = isDemoMode ? demoFleetApi : realFleetApi;
 
 export { reportApi };
