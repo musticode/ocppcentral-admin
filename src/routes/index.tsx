@@ -19,6 +19,8 @@ import { ReportsOverview } from "@/features/reports/ReportsOverview";
 import { LocationsOverview } from "@/features/locations/LocationsOverview";
 import { VehiclesOverview } from "@/features/vehicles/VehiclesOverview";
 import { VehicleDetail } from "@/features/vehicles/VehicleDetail";
+import { FleetsOverview } from "@/features/fleet/FleetsOverview";
+import { FleetDetail } from "@/features/fleet/FleetDetail";
 
 export const router = createBrowserRouter([
   {
@@ -51,6 +53,14 @@ export const router = createBrowserRouter([
           {
             path: "vehicles/:vehicleId",
             element: <VehicleDetail />,
+          },
+          {
+            path: "fleet",
+            element: <FleetsOverview />,
+          },
+          {
+            path: "fleet/:id",
+            element: <FleetDetail />,
           },
           {
             path: "chargers/:chargerId",

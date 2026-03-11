@@ -67,13 +67,74 @@ export interface Transaction {
 export interface MeterValue {
   value: number;
   context:
+  | "Sample.Periodic"
+  | "Sample.Clock"
+  | "Transaction.Begin"
+  | "Transaction.End"
+  | "Other";
+  format: "Raw" | "SignedData";
+  measurand:
+  | "Energy.Active.Export.Register"
+  | "Energy.Active.Import.Register"
+  | "Energy.Reactive.Export.Register"
+  | "Energy.Reactive.Import.Register"
+  | "Energy.Active.Export.Interval"
+  | "Energy.Active.Import.Interval"
+  | "Energy.Reactive.Export.Interval"
+  | "Energy.Reactive.Import.Interval"
+  | "Power.Active.Export"
+  | "Power.Active.Import"
+  | "Power.Offered"
+  | "Power.Reactive.Export"
+  | "Power.Reactive.Import"
+  | "Power.Factor"
+  | "Current.Import"
+  | "Current.Export"
+  | "Current.Offered"
+  | "Voltage"
+  | "Frequency"
+  | "Temperature"
+  | "SoC"
+  | "RPM";
+  location: "Cable" | "EV" | "Inlet" | "Outlet" | "Body";
+  unit:
+  | "Wh"
+  | "kWh"
+  | "varh"
+  | "kvarh"
+  | "W"
+  | "kW"
+  | "VA"
+  | "kVA"
+  | "var"
+  | "kvar"
+  | "A"
+  | "V"
+  | "K"
+  | "Celcius"
+  | "Fahrenheit"
+  | "Percent";
+  phase:
+  | "L1"
+  | "L2"
+  | "L3"
+  | "N"
+  | "L1-N"
+  | "L2-N"
+  | "L3-N"
+  | "L1-L2"
+  | "L2-L3"
+  | "L3-L1";
+  sampledValue: {
+    value: string;
+    context:
     | "Sample.Periodic"
     | "Sample.Clock"
     | "Transaction.Begin"
     | "Transaction.End"
     | "Other";
-  format: "Raw" | "SignedData";
-  measurand:
+    format: "Raw" | "SignedData";
+    measurand:
     | "Energy.Active.Export.Register"
     | "Energy.Active.Import.Register"
     | "Energy.Reactive.Export.Register"
@@ -96,8 +157,8 @@ export interface MeterValue {
     | "Temperature"
     | "SoC"
     | "RPM";
-  location: "Cable" | "EV" | "Inlet" | "Outlet" | "Body";
-  unit:
+    location: "Cable" | "EV" | "Inlet" | "Outlet" | "Body";
+    unit:
     | "Wh"
     | "kWh"
     | "varh"
@@ -114,7 +175,7 @@ export interface MeterValue {
     | "Celcius"
     | "Fahrenheit"
     | "Percent";
-  phase:
+    phase:
     | "L1"
     | "L2"
     | "L3"
@@ -125,67 +186,6 @@ export interface MeterValue {
     | "L1-L2"
     | "L2-L3"
     | "L3-L1";
-  sampledValue: {
-    value: string;
-    context:
-      | "Sample.Periodic"
-      | "Sample.Clock"
-      | "Transaction.Begin"
-      | "Transaction.End"
-      | "Other";
-    format: "Raw" | "SignedData";
-    measurand:
-      | "Energy.Active.Export.Register"
-      | "Energy.Active.Import.Register"
-      | "Energy.Reactive.Export.Register"
-      | "Energy.Reactive.Import.Register"
-      | "Energy.Active.Export.Interval"
-      | "Energy.Active.Import.Interval"
-      | "Energy.Reactive.Export.Interval"
-      | "Energy.Reactive.Import.Interval"
-      | "Power.Active.Export"
-      | "Power.Active.Import"
-      | "Power.Offered"
-      | "Power.Reactive.Export"
-      | "Power.Reactive.Import"
-      | "Power.Factor"
-      | "Current.Import"
-      | "Current.Export"
-      | "Current.Offered"
-      | "Voltage"
-      | "Frequency"
-      | "Temperature"
-      | "SoC"
-      | "RPM";
-    location: "Cable" | "EV" | "Inlet" | "Outlet" | "Body";
-    unit:
-      | "Wh"
-      | "kWh"
-      | "varh"
-      | "kvarh"
-      | "W"
-      | "kW"
-      | "VA"
-      | "kVA"
-      | "var"
-      | "kvar"
-      | "A"
-      | "V"
-      | "K"
-      | "Celcius"
-      | "Fahrenheit"
-      | "Percent";
-    phase:
-      | "L1"
-      | "L2"
-      | "L3"
-      | "N"
-      | "L1-N"
-      | "L2-N"
-      | "L3-N"
-      | "L1-L2"
-      | "L2-L3"
-      | "L3-L1";
   }[];
 }
 
@@ -494,4 +494,150 @@ export interface UpdateLocationRequest {
   latitude?: number;
   longitude?: number;
   description?: string;
+}
+
+export interface Fleet {
+  id: string;
+  companyId: string;
+  name: string;
+  description?: string;
+  manager?: string;
+  managerEmail?: string;
+  managerPhone?: string;
+  status: "Active" | "Inactive";
+  vehicleCount: number;
+  driverCount: number;
+  totalEnergyConsumed?: number;
+  totalSessions?: number;
+  averageEfficiency?: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateFleetRequest {
+  name: string;
+  description?: string;
+  manager?: string;
+  managerEmail?: string;
+  managerPhone?: string;
+  status?: "Active" | "Inactive";
+}
+
+export interface UpdateFleetRequest {
+  name?: string;
+  description?: string;
+  manager?: string;
+  managerEmail?: string;
+  managerPhone?: string;
+  status?: "Active" | "Inactive";
+}
+
+export interface FleetVehicle {
+  id: string;
+  fleetId: string;
+  carId: string;
+  assignedDriverId?: string;
+  assignedDriverName?: string;
+  status: "Available" | "In Use" | "Maintenance" | "Charging";
+  currentLocation?: string;
+  lastChargeAt?: string;
+  batteryLevel?: number;
+  odometer?: number;
+  totalEnergyConsumed?: number;
+  totalSessions?: number;
+  assignedAt: string;
+  createdAt: string;
+  updatedAt: string;
+  car?: Car;
+}
+
+export interface AssignVehicleToFleetRequest {
+  carId: string;
+  assignedDriverId?: string;
+  status?: "Available" | "In Use" | "Maintenance" | "Charging";
+}
+
+export interface UpdateFleetVehicleRequest {
+  assignedDriverId?: string;
+  status?: "Available" | "In Use" | "Maintenance" | "Charging";
+  currentLocation?: string;
+  batteryLevel?: number;
+  odometer?: number;
+}
+
+export interface FleetDriver {
+  id: string;
+  fleetId: string;
+  userId: string;
+  userName: string;
+  userEmail: string;
+  licenseNumber?: string;
+  licenseExpiry?: string;
+  assignedVehicleId?: string;
+  assignedVehicleName?: string;
+  status: "Active" | "Inactive" | "On Leave";
+  totalSessions?: number;
+  totalEnergyConsumed?: number;
+  assignedAt: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AssignDriverToFleetRequest {
+  userId: string;
+  licenseNumber?: string;
+  licenseExpiry?: string;
+  status?: "Active" | "Inactive" | "On Leave";
+}
+
+export interface UpdateFleetDriverRequest {
+  licenseNumber?: string;
+  licenseExpiry?: string;
+  assignedVehicleId?: string;
+  status?: "Active" | "Inactive" | "On Leave";
+}
+
+export interface FleetStats {
+  totalFleets: number;
+  activeFleets: number;
+  totalVehicles: number;
+  availableVehicles: number;
+  vehiclesInUse: number;
+  vehiclesCharging: number;
+  vehiclesInMaintenance: number;
+  totalDrivers: number;
+  activeDrivers: number;
+  totalEnergyConsumed: number;
+  totalSessions: number;
+  averageEfficiency: number;
+}
+
+export interface FleetAnalytics {
+  fleetId: string;
+  period: "1W" | "1M" | "3M" | "1Y";
+  energyConsumption: Array<{
+    date: string;
+    energyKwh: number;
+    sessions: number;
+  }>;
+  vehicleUtilization: Array<{
+    vehicleId: string;
+    vehicleName: string;
+    utilizationPercent: number;
+    sessions: number;
+    energyKwh: number;
+  }>;
+  driverPerformance: Array<{
+    driverId: string;
+    driverName: string;
+    sessions: number;
+    energyKwh: number;
+    efficiency: number;
+  }>;
+  costAnalysis: {
+    totalCost: number;
+    costPerKwh: number;
+    costPerSession: number;
+    costPerVehicle: number;
+  };
 }

@@ -9,6 +9,7 @@ import {
   MapPin,
   Settings,
   TrendingUp,
+  Truck,
   Users,
   Zap,
 } from "lucide-react";
@@ -23,6 +24,7 @@ const menuItems = [
   { path: "/reservation", label: "Reservation", icon: Calendar },
   { path: "/chargers", label: "Chargers", icon: Zap },
   { path: "/vehicles", label: "Vehicles", icon: Car },
+  { path: "/fleet", label: "Fleet Management", icon: Truck },
   { path: "/locations", label: "Locations", icon: MapPin },
   { path: "/users", label: "Users", icon: Users },
   //{ path: "/user-groups", label: "User Groups", icon: UserCog },
