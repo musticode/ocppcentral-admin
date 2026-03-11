@@ -23,6 +23,17 @@ import type {
   ValidateReservationRequest,
   ValidateReservationResponse,
   OCPPResponse,
+  Fleet,
+  CreateFleetRequest,
+  UpdateFleetRequest,
+  FleetVehicle,
+  AssignVehicleToFleetRequest,
+  UpdateFleetVehicleRequest,
+  FleetDriver,
+  AssignDriverToFleetRequest,
+  UpdateFleetDriverRequest,
+  FleetStats,
+  FleetAnalytics,
 } from "@/types/api";
 import type {
   ChargePoint,
@@ -866,6 +877,282 @@ export const demoConsumptionApi = {
     if (!found) throw new Error("Demo consumption not found");
     return found;
   },
+};
+
+const demoFleets: Fleet[] = [
+  {
+    id: "fleet-1",
+    companyId: demoCompany.id,
+    name: "Corporate Fleet",
+    description: "Main corporate vehicle fleet for executive and sales teams",
+    manager: "Sarah Johnson",
+    managerEmail: "sarah.johnson@demo-fleet.co",
+    managerPhone: "+1 555 0201",
+    status: "Active",
+    vehicleCount: 12,
+    driverCount: 15,
+    totalEnergyConsumed: 4850,
+    totalSessions: 342,
+    averageEfficiency: 4.2,
+    createdAt: "2024-01-15T10:00:00Z",
+    updatedAt: nowIso(),
+  },
+  {
+    id: "fleet-2",
+    companyId: demoCompany.id,
+    name: "Delivery Fleet",
+    description: "Last-mile delivery vehicles for urban operations",
+    manager: "Mike Chen",
+    managerEmail: "mike.chen@demo-fleet.co",
+    managerPhone: "+1 555 0202",
+    status: "Active",
+    vehicleCount: 25,
+    driverCount: 30,
+    totalEnergyConsumed: 8920,
+    totalSessions: 756,
+    averageEfficiency: 3.8,
+    createdAt: "2024-02-01T10:00:00Z",
+    updatedAt: nowIso(),
+  },
+  {
+    id: "fleet-3",
+    companyId: demoCompany.id,
+    name: "Service Fleet",
+    description: "Field service and maintenance vehicles",
+    manager: "Lisa Park",
+    managerEmail: "lisa.park@demo-fleet.co",
+    managerPhone: "+1 555 0203",
+    status: "Active",
+    vehicleCount: 8,
+    driverCount: 10,
+    totalEnergyConsumed: 2340,
+    totalSessions: 198,
+    averageEfficiency: 4.5,
+    createdAt: "2024-03-10T10:00:00Z",
+    updatedAt: nowIso(),
+  },
+];
+
+const demoFleetVehicles: FleetVehicle[] = [
+  {
+    id: "fv-1",
+    fleetId: "fleet-1",
+    carId: "car-1",
+    assignedDriverId: "user-1",
+    assignedDriverName: "Alex Morgan",
+    status: "Available",
+    currentLocation: "Downtown Station",
+    lastChargeAt: "2024-03-11T14:30:00Z",
+    batteryLevel: 85,
+    odometer: 12450,
+    totalEnergyConsumed: 450,
+    totalSessions: 32,
+    assignedAt: "2024-01-15T10:00:00Z",
+    createdAt: "2024-01-15T10:00:00Z",
+    updatedAt: nowIso(),
+  },
+  {
+    id: "fv-2",
+    fleetId: "fleet-1",
+    carId: "car-2",
+    assignedDriverId: "user-2",
+    assignedDriverName: "Sam Lee",
+    status: "In Use",
+    currentLocation: "Airport Hub",
+    lastChargeAt: "2024-03-11T08:00:00Z",
+    batteryLevel: 62,
+    odometer: 8920,
+    totalEnergyConsumed: 380,
+    totalSessions: 28,
+    assignedAt: "2024-01-20T10:00:00Z",
+    createdAt: "2024-01-20T10:00:00Z",
+    updatedAt: nowIso(),
+  },
+  {
+    id: "fv-3",
+    fleetId: "fleet-2",
+    carId: "car-3",
+    status: "Charging",
+    currentLocation: "Warehouse District",
+    lastChargeAt: nowIso(),
+    batteryLevel: 45,
+    odometer: 15680,
+    totalEnergyConsumed: 620,
+    totalSessions: 45,
+    assignedAt: "2024-02-01T10:00:00Z",
+    createdAt: "2024-02-01T10:00:00Z",
+    updatedAt: nowIso(),
+  },
+];
+
+const demoFleetDrivers: FleetDriver[] = [
+  {
+    id: "fd-1",
+    fleetId: "fleet-1",
+    userId: "user-1",
+    userName: "Alex Morgan",
+    userEmail: "alex@demo-fleet.co",
+    licenseNumber: "D1234567",
+    licenseExpiry: "2026-12-31",
+    assignedVehicleId: "fv-1",
+    assignedVehicleName: "Tesla Model 3 - ABC123",
+    status: "Active",
+    totalSessions: 32,
+    totalEnergyConsumed: 450,
+    assignedAt: "2024-01-15T10:00:00Z",
+    createdAt: "2024-01-15T10:00:00Z",
+    updatedAt: nowIso(),
+  },
+  {
+    id: "fd-2",
+    fleetId: "fleet-1",
+    userId: "user-2",
+    userName: "Sam Lee",
+    userEmail: "sam@demo-fleet.co",
+    licenseNumber: "D7654321",
+    licenseExpiry: "2025-08-15",
+    assignedVehicleId: "fv-2",
+    assignedVehicleName: "Nissan Leaf - XYZ789",
+    status: "Active",
+    totalSessions: 28,
+    totalEnergyConsumed: 380,
+    assignedAt: "2024-01-20T10:00:00Z",
+    createdAt: "2024-01-20T10:00:00Z",
+    updatedAt: nowIso(),
+  },
+];
+
+export const demoFleetApi = {
+  getAllFleets: async (_companyId: string): Promise<Fleet[]> => demoFleets,
+  getFleetById: async (id: string): Promise<Fleet> => {
+    const found = demoFleets.find((f) => f.id === id);
+    if (!found) throw new Error("Demo fleet not found");
+    return found;
+  },
+  createFleet: async (_companyId: string, data: CreateFleetRequest): Promise<Fleet> => {
+    const fleet: Fleet = {
+      id: `fleet-${demoFleets.length + 1}`,
+      companyId: demoCompany.id,
+      name: data.name,
+      description: data.description,
+      manager: data.manager,
+      managerEmail: data.managerEmail,
+      managerPhone: data.managerPhone,
+      status: data.status ?? "Active",
+      vehicleCount: 0,
+      driverCount: 0,
+      totalEnergyConsumed: 0,
+      totalSessions: 0,
+      averageEfficiency: 0,
+      createdAt: nowIso(),
+      updatedAt: nowIso(),
+    };
+    demoFleets.unshift(fleet);
+    return fleet;
+  },
+  updateFleet: async (id: string, data: UpdateFleetRequest): Promise<Fleet> => {
+    const idx = demoFleets.findIndex((f) => f.id === id);
+    if (idx === -1) throw new Error("Demo fleet not found");
+    demoFleets[idx] = { ...demoFleets[idx]!, ...data, updatedAt: nowIso() };
+    return demoFleets[idx]!;
+  },
+  deleteFleet: async (_id: string): Promise<void> => { },
+  getFleetVehicles: async (fleetId: string): Promise<FleetVehicle[]> => {
+    return demoFleetVehicles.filter((v) => v.fleetId === fleetId);
+  },
+  assignVehicleToFleet: async (fleetId: string, data: AssignVehicleToFleetRequest): Promise<FleetVehicle> => {
+    const vehicle: FleetVehicle = {
+      id: `fv-${demoFleetVehicles.length + 1}`,
+      fleetId,
+      carId: data.carId,
+      assignedDriverId: data.assignedDriverId,
+      status: data.status ?? "Available",
+      batteryLevel: 100,
+      odometer: 0,
+      totalEnergyConsumed: 0,
+      totalSessions: 0,
+      assignedAt: nowIso(),
+      createdAt: nowIso(),
+      updatedAt: nowIso(),
+    };
+    demoFleetVehicles.unshift(vehicle);
+    return vehicle;
+  },
+  updateFleetVehicle: async (_fleetId: string, vehicleId: string, data: UpdateFleetVehicleRequest): Promise<FleetVehicle> => {
+    const idx = demoFleetVehicles.findIndex((v) => v.id === vehicleId);
+    if (idx === -1) throw new Error("Demo fleet vehicle not found");
+    demoFleetVehicles[idx] = { ...demoFleetVehicles[idx]!, ...data, updatedAt: nowIso() };
+    return demoFleetVehicles[idx]!;
+  },
+  removeVehicleFromFleet: async (_fleetId: string, _vehicleId: string): Promise<void> => { },
+  getFleetDrivers: async (fleetId: string): Promise<FleetDriver[]> => {
+    return demoFleetDrivers.filter((d) => d.fleetId === fleetId);
+  },
+  assignDriverToFleet: async (fleetId: string, data: AssignDriverToFleetRequest): Promise<FleetDriver> => {
+    const driver: FleetDriver = {
+      id: `fd-${demoFleetDrivers.length + 1}`,
+      fleetId,
+      userId: data.userId,
+      userName: "Demo Driver",
+      userEmail: "driver@demo-fleet.co",
+      licenseNumber: data.licenseNumber,
+      licenseExpiry: data.licenseExpiry,
+      status: data.status ?? "Active",
+      totalSessions: 0,
+      totalEnergyConsumed: 0,
+      assignedAt: nowIso(),
+      createdAt: nowIso(),
+      updatedAt: nowIso(),
+    };
+    demoFleetDrivers.unshift(driver);
+    return driver;
+  },
+  updateFleetDriver: async (_fleetId: string, driverId: string, data: UpdateFleetDriverRequest): Promise<FleetDriver> => {
+    const idx = demoFleetDrivers.findIndex((d) => d.id === driverId);
+    if (idx === -1) throw new Error("Demo fleet driver not found");
+    demoFleetDrivers[idx] = { ...demoFleetDrivers[idx]!, ...data, updatedAt: nowIso() };
+    return demoFleetDrivers[idx]!;
+  },
+  removeDriverFromFleet: async (_fleetId: string, _driverId: string): Promise<void> => { },
+  getFleetStats: async (_companyId: string): Promise<FleetStats> => ({
+    totalFleets: demoFleets.length,
+    activeFleets: demoFleets.filter((f) => f.status === "Active").length,
+    totalVehicles: demoFleetVehicles.length,
+    availableVehicles: demoFleetVehicles.filter((v) => v.status === "Available").length,
+    vehiclesInUse: demoFleetVehicles.filter((v) => v.status === "In Use").length,
+    vehiclesCharging: demoFleetVehicles.filter((v) => v.status === "Charging").length,
+    vehiclesInMaintenance: demoFleetVehicles.filter((v) => v.status === "Maintenance").length,
+    totalDrivers: demoFleetDrivers.length,
+    activeDrivers: demoFleetDrivers.filter((d) => d.status === "Active").length,
+    totalEnergyConsumed: demoFleets.reduce((sum, f) => sum + (f.totalEnergyConsumed ?? 0), 0),
+    totalSessions: demoFleets.reduce((sum, f) => sum + (f.totalSessions ?? 0), 0),
+    averageEfficiency: 4.1,
+  }),
+  getFleetAnalytics: async (fleetId: string, period: "1W" | "1M" | "3M" | "1Y"): Promise<FleetAnalytics> => ({
+    fleetId,
+    period,
+    energyConsumption: [
+      { date: "2024-03-01", energyKwh: 450, sessions: 32 },
+      { date: "2024-03-02", energyKwh: 520, sessions: 38 },
+      { date: "2024-03-03", energyKwh: 480, sessions: 35 },
+      { date: "2024-03-04", energyKwh: 510, sessions: 37 },
+      { date: "2024-03-05", energyKwh: 490, sessions: 36 },
+    ],
+    vehicleUtilization: [
+      { vehicleId: "fv-1", vehicleName: "Tesla Model 3", utilizationPercent: 85, sessions: 32, energyKwh: 450 },
+      { vehicleId: "fv-2", vehicleName: "Nissan Leaf", utilizationPercent: 72, sessions: 28, energyKwh: 380 },
+    ],
+    driverPerformance: [
+      { driverId: "fd-1", driverName: "Alex Morgan", sessions: 32, energyKwh: 450, efficiency: 4.2 },
+      { driverId: "fd-2", driverName: "Sam Lee", sessions: 28, energyKwh: 380, efficiency: 4.0 },
+    ],
+    costAnalysis: {
+      totalCost: 1245.50,
+      costPerKwh: 0.25,
+      costPerSession: 3.85,
+      costPerVehicle: 103.79,
+    },
+  }),
 };
 
 export const demoCentralSystemApi = {
