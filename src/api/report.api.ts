@@ -1,4 +1,5 @@
 import { apiClient } from "./axios";
+import { isDemoMode } from "@/demo/demoMode";
 
 export type ReportPeriod = "1W" | "1M" | "3M" | "1Y" | "ALL";
 
@@ -43,6 +44,9 @@ export const reportApi = {
     period: ReportPeriod,
     locationId?: string,
   ): Promise<ReportStats> => {
+    if (isDemoMode) {
+      return getMockReportStats(period);
+    }
     try {
       const params: Record<string, string> = { period };
       if (locationId) params.locationId = locationId;
@@ -60,6 +64,9 @@ export const reportApi = {
     period: ReportPeriod,
     locationId?: string,
   ): Promise<EnergyConsumptionDataPoint[]> => {
+    if (isDemoMode) {
+      return getMockEnergyData(period);
+    }
     try {
       const params: Record<string, string> = { period };
       if (locationId) params.locationId = locationId;
@@ -77,6 +84,9 @@ export const reportApi = {
     period: ReportPeriod,
     locationId?: string,
   ): Promise<UsageDataPoint[]> => {
+    if (isDemoMode) {
+      return getMockUsageData(period);
+    }
     try {
       const params: Record<string, string> = { period };
       if (locationId) params.locationId = locationId;
@@ -92,6 +102,9 @@ export const reportApi = {
   getConsumptionByLocation: async (
     period: ReportPeriod,
   ): Promise<ConsumptionByLocation[]> => {
+    if (isDemoMode) {
+      return getMockConsumptionByLocation();
+    }
     try {
       const response = await apiClient.get<ConsumptionByLocation[]>(
         "/reports/consumption-by-location",
@@ -107,6 +120,9 @@ export const reportApi = {
     period: ReportPeriod,
     locationId?: string,
   ): Promise<HourlyUsageDataPoint[]> => {
+    if (isDemoMode) {
+      return getMockHourlyUsage();
+    }
     try {
       const params: Record<string, string> = { period };
       if (locationId) params.locationId = locationId;
@@ -150,19 +166,19 @@ function getMockEnergyData(period: ReportPeriod): EnergyConsumptionDataPoint[] {
       : period === "1M"
         ? Array.from({ length: 30 }, (_, i) => `Day ${i + 1}`)
         : [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
-          ].slice(0, points);
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ].slice(0, points);
 
   return labels.map((date, i) => ({
     date,
@@ -176,22 +192,22 @@ function getMockUsageData(period: ReportPeriod): UsageDataPoint[] {
     period === "1W"
       ? ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
       : [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec",
-        ].slice(
-          0,
-          period === "1M" ? 4 : period === "3M" ? 3 : period === "1Y" ? 12 : 12,
-        );
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ].slice(
+        0,
+        period === "1M" ? 4 : period === "3M" ? 3 : period === "1Y" ? 12 : 12,
+      );
 
   return labels.map((period_label, i) => ({
     period: period_label,

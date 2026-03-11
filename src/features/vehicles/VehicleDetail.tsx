@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
-import { EditVehicleModal } from "@/features/vehicles/EditVehicleModal";
+import { EditVehicleModal } from "./EditVehicleModal";
 
 export const VehicleDetail = () => {
   const { vehicleId } = useParams<{ vehicleId: string }>();

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { reportApi, type ReportPeriod } from "@/api/report.api";
+import type { ReportPeriod } from "@/api/report.api";
+import { reportApi } from "@/api";
 import { ReportSummaryCards } from "./components/ReportSummaryCards";
 import { EnergyConsumptionChart } from "./components/EnergyConsumptionChart";
 import { UsageChart } from "./components/UsageChart";
