@@ -14,7 +14,7 @@ import { SessionOverview } from "@/features/sessions/SessionOverview";
 import { UserOverview } from "@/features/user/UserOverview";
 import { UserProfile } from "@/features/user/UserProfile";
 import { NotificationsPage } from "@/features/notifications/NotificationsPage";
-import { CompanySettingsPage } from "@/features/settings/CompanySettingsPage";
+import { SettingsPage } from "@/features/settings/SettingsPage";
 import { ReservationOverview } from "@/features/reservations/ReservationOverview";
 import { ActivityOverview } from "@/features/activity/ActivityOverview";
 import { ReportsOverview } from "@/features/reports/ReportsOverview";
@@ -122,7 +122,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "settings",
-            element: <CompanySettingsPage />,
+            element: <SettingsPage />,
           },
           {
             index: true,

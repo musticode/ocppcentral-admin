@@ -138,3 +138,23 @@ The platform expects a REST API with the following endpoints:
 ## License
 
 Private - Internal use only
+
+
+
+## Language support
+
+```jsx
+import { useTranslation } from 'react-i18next';
+
+function MyComponent() {
+  const { t } = useTranslation();
+  
+  return (
+    <div>
+      <h1>{t('chargePoints.title')}</h1>
+      <button>{t('common.save')}</button>
+      <p>{t('activity.showingLatest', { sessions: 50, logs: 80 })}</p>
+    </div>
+  );
+}
+```

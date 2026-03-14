@@ -85,6 +85,8 @@ export interface Connector {
   powerKw?: number;
   lastMeterValue?: MeterValue;
   transactionId?: string;
+  tariffId?: string;
+  tariffName?: string;
 }
 
 export interface Location {

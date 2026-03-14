@@ -20,13 +20,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Search, RefreshCw, Eye } from "lucide-react";
+import { Search, RefreshCw, Eye, Edit } from "lucide-react";
 import type { User } from "@/types/api";
 import { Link } from "react-router-dom";
+import { EditUserModal } from "./EditUserModal";
 
 export const UserList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState<string>("all");
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   const {
     data: users,
@@ -69,6 +72,11 @@ export const UserList = () => {
     if (r === "operator") return "secondary";
     if (r === "manager") return "default";
     return "outline";
+  };
+
+  const handleEditUser = (user: User) => {
+    setSelectedUser(user);
+    setEditModalOpen(true);
   };
 
   return (
@@ -135,11 +143,21 @@ export const UserList = () => {
                     </TableCell>
                     <TableCell>{user.companyName ?? user.companyId ?? "-"}</TableCell>
                     <TableCell className="text-right">
-                      <Button asChild variant="ghost" size="sm">
-                        <Link to={`/users/${user.id}`}>
-                          <Eye className="h-4 w-4" />
-                        </Link>
-                      </Button>
+                      <div className="flex items-center justify-end gap-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleEditUser(user)}
+                          title="Edit User"
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button asChild variant="ghost" size="sm" title="View User">
+                          <Link to={`/users/${user.id}`}>
+                            <Eye className="h-4 w-4" />
+                          </Link>
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -154,6 +172,16 @@ export const UserList = () => {
           </div>
         </div>
       </CardContent>
+
+      <EditUserModal
+        open={editModalOpen}
+        onOpenChange={setEditModalOpen}
+        user={selectedUser}
+        onSuccess={() => {
+          setEditModalOpen(false);
+          refetch();
+        }}
+      />
     </Card>
   );
 };

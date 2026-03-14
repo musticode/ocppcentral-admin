@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Eye, Search, RefreshCw } from "lucide-react";
+import { Search, RefreshCw } from "lucide-react";
 import type { Event } from "@/types/ocpp";
 
 export const ActivityList = () => {
@@ -127,7 +127,7 @@ export const ActivityList = () => {
                 <TableHead>Charge Point</TableHead>
                 <TableHead>Connector</TableHead>
                 <TableHead>Message</TableHead>
-                <TableHead>Actions</TableHead>
+                {/* <TableHead>Actions</TableHead> */}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -148,9 +148,9 @@ export const ActivityList = () => {
                     <div className="max-w-xl truncate text-sm text-gray-700">{event.message}</div>
                   </TableCell>
                   <TableCell>
-                    <Button variant="ghost" size="icon">
+                    {/* <Button variant="ghost" size="icon">
                       <Eye className="w-4 h-4" />
-                    </Button>
+                    </Button> */}
                   </TableCell>
                 </TableRow>
               ))}

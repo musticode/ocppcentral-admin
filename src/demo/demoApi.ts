@@ -120,13 +120,16 @@ const demoApiLocations: ApiLocation[] = [
 ];
 
 function makeConnector(chargePointId: string, connectorId: number, status: ConnectorStatus): Connector {
+  const isDC = connectorId % 2 === 0;
   return {
     id: `${chargePointId}-conn-${connectorId}`,
     connectorId,
     chargePointId,
     status,
-    type: connectorId % 2 === 0 ? "CCS" : "Type 2",
-    powerKw: connectorId % 2 === 0 ? 60 : 22,
+    type: isDC ? "CCS" : "Type 2",
+    powerKw: isDC ? 60 : 22,
+    tariffId: isDC ? "tariff-2" : "tariff-1",
+    tariffName: isDC ? "Fast DC" : "Standard AC",
   };
 }
 
@@ -703,6 +706,115 @@ const demoEvents: Event[] = [
   },
 ];
 
+const demoRemoteCommands: RemoteCommand[] = [
+  {
+    id: "cmd-1",
+    chargePointId: "CP-DEMO-0001",
+    command: "RemoteStartTransaction",
+    status: "Accepted",
+    payload: { connectorId: 1, idTag: "RFID-1001" },
+    createdAt: new Date(Date.now() - 1000 * 60 * 120).toISOString(),
+    result: { status: "Accepted" },
+  },
+  {
+    id: "cmd-2",
+    chargePointId: "CP-DEMO-0002",
+    command: "RemoteStopTransaction",
+    status: "Accepted",
+    payload: { transactionId: 5002 },
+    createdAt: new Date(Date.now() - 1000 * 60 * 90).toISOString(),
+    result: { status: "Accepted" },
+  },
+  {
+    id: "cmd-3",
+    chargePointId: "CP-DEMO-0003",
+    command: "Reset",
+    status: "Accepted",
+    payload: { type: "Soft" },
+    createdAt: new Date(Date.now() - 1000 * 60 * 180).toISOString(),
+    result: { status: "Accepted" },
+  },
+  {
+    id: "cmd-4",
+    chargePointId: "CP-DEMO-0001",
+    command: "ChangeAvailability",
+    status: "Accepted",
+    payload: { connectorId: 2, type: "Operative" },
+    createdAt: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
+    result: { status: "Accepted" },
+  },
+  {
+    id: "cmd-5",
+    chargePointId: "CP-DEMO-0004",
+    command: "UnlockConnector",
+    status: "Accepted",
+    payload: { connectorId: 1 },
+    createdAt: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
+    result: { status: "Accepted" },
+  },
+  {
+    id: "cmd-6",
+    chargePointId: "CP-DEMO-0002",
+    command: "RemoteStartTransaction",
+    status: "Rejected",
+    payload: { connectorId: 1, idTag: "RFID-INVALID" },
+    createdAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
+    result: { status: "Rejected", reason: "Invalid RFID tag" },
+  },
+  {
+    id: "cmd-7",
+    chargePointId: "CP-DEMO-0003",
+    command: "ChangeAvailability",
+    status: "Accepted",
+    payload: { connectorId: 1, type: "Inoperative" },
+    createdAt: new Date(Date.now() - 1000 * 60 * 150).toISOString(),
+    result: { status: "Accepted" },
+  },
+  {
+    id: "cmd-8",
+    chargePointId: "CP-DEMO-0001",
+    command: "Reset",
+    status: "Pending",
+    payload: { type: "Hard" },
+    createdAt: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
+  },
+  {
+    id: "cmd-9",
+    chargePointId: "CP-DEMO-0004",
+    command: "RemoteStopTransaction",
+    status: "Timeout",
+    payload: { transactionId: 5003 },
+    createdAt: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
+  },
+  {
+    id: "cmd-10",
+    chargePointId: "CP-DEMO-0002",
+    command: "UnlockConnector",
+    status: "Rejected",
+    payload: { connectorId: 2 },
+    createdAt: new Date(Date.now() - 1000 * 60 * 8).toISOString(),
+    result: { status: "Rejected", reason: "Connector in use" },
+  },
+  {
+    id: "cmd-11",
+    chargePointId: "CP-DEMO-0001",
+    command: "RemoteStartTransaction",
+    status: "Accepted",
+    payload: { connectorId: 2, idTag: "RFID-1002" },
+    createdAt: new Date(Date.now() - 1000 * 60 * 40).toISOString(),
+    result: { status: "Accepted" },
+  },
+  {
+    id: "cmd-12",
+    chargePointId: "CP-DEMO-0003",
+    command: "Reset",
+    status: "Accepted",
+    payload: { type: "Hard" },
+    createdAt: new Date(Date.now() - 1000 * 60 * 240).toISOString(),
+    result: { status: "Accepted" },
+  },
+];
+
 const demoReservations: Reservation[] = [
   {
     reservationId: 9001,
@@ -1084,11 +1196,53 @@ export const demoChargePointApi = {
       createdAt: nowIso(),
     };
   },
+  unlockConnector: async (chargePointId: string, connectorId: number): Promise<RemoteCommand> => {
+    return {
+      id: `cmd-unlock-${Date.now()}`,
+      chargePointId,
+      command: "UnlockConnector",
+      status: "Accepted",
+      payload: { connectorId },
+      createdAt: nowIso(),
+      result: { status: "Accepted" },
+    };
+  },
+  getRemoteCommands: async (params?: {
+    chargePointId?: string;
+    status?: "Pending" | "Accepted" | "Rejected" | "Timeout";
+    limit?: number;
+  }): Promise<RemoteCommand[]> => {
+    let commands = [...demoRemoteCommands];
+
+    if (params?.chargePointId) {
+      commands = commands.filter((cmd) => cmd.chargePointId === params.chargePointId);
+    }
+
+    if (params?.status) {
+      commands = commands.filter((cmd) => cmd.status === params.status);
+    }
+
+    commands.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+    if (params?.limit != null) {
+      commands = commands.slice(0, params.limit);
+    }
+
+    return commands;
+  },
+  getChargePointCommands: async (chargePointId: string, limit = 50): Promise<RemoteCommand[]> => {
+    return demoChargePointApi.getRemoteCommands({ chargePointId, limit });
+  },
 };
 
 export const demoTransactionApi = {
-  getTransactions: async (params?: { page?: number; limit?: number }): Promise<PaginatedResponse<Transaction>> => {
-    const tx: Transaction[] = demoSessions.map((s) => ({
+  getTransactions: async (params?: {
+    chargePointId?: string;
+    status?: "Active" | "Completed";
+    page?: number;
+    limit?: number;
+  }): Promise<PaginatedResponse<Transaction>> => {
+    let tx: Transaction[] = demoSessions.map((s) => ({
       id: s.id,
       transactionId: s.transactionId,
       chargePointId: s.chargePointId,
@@ -1102,6 +1256,14 @@ export const demoTransactionApi = {
       userId: s.userId,
       userName: s.userName,
     }));
+
+    if (params?.chargePointId) {
+      tx = tx.filter((t) => t.chargePointId === params.chargePointId);
+    }
+    if (params?.status) {
+      tx = tx.filter((t) => t.status === params.status);
+    }
+
     return paginate(tx, params?.page ?? 1, params?.limit ?? 20);
   },
   getTransaction: async (transactionId: string): Promise<Transaction> => {
@@ -1116,8 +1278,31 @@ export const demoTransactionApi = {
     }
     return paginate(tx, 1, 50);
   },
-  getSessions: async (params?: { page?: number; limit?: number }): Promise<PaginatedResponse<Session>> => {
-    return paginate(demoSessions, params?.page ?? 1, params?.limit ?? 20);
+  getSessions: async (params?: {
+    locationId?: string;
+    chargePointId?: string;
+    startDate?: string;
+    endDate?: string;
+    page?: number;
+    limit?: number;
+  }): Promise<PaginatedResponse<Session>> => {
+    let list = [...demoSessions];
+
+    if (params?.chargePointId) {
+      list = list.filter((s) => s.chargePointId === params.chargePointId);
+    }
+
+    if (params?.startDate) {
+      const start = new Date(params.startDate).getTime();
+      list = list.filter((s) => new Date(s.startTimestamp).getTime() >= start);
+    }
+
+    if (params?.endDate) {
+      const end = new Date(params.endDate).getTime();
+      list = list.filter((s) => new Date(s.startTimestamp).getTime() <= end);
+    }
+
+    return paginate(list, params?.page ?? 1, params?.limit ?? 20);
   },
   getLocationStats: async (_locationId: string, _period: "1W" | "1M" | "3M" | "1Y" | "ALL"): Promise<{ activeSessions: number; totalSessions: number; totalKwh: number; totalRevenue: number; }> => {
     return { activeSessions: 2, totalSessions: 92, totalKwh: 12450, totalRevenue: 6234 };
@@ -1125,7 +1310,17 @@ export const demoTransactionApi = {
   getLocationSessionsChart: async (_locationId: string, _period: "1W" | "1M" | "3M" | "1Y" | "ALL"): Promise<Array<{ time: string; activeSessions: number }>> => {
     return Array.from({ length: 12 }, (_, i) => ({ time: `T-${11 - i}`, activeSessions: Math.max(0, Math.round(10 + Math.sin(i) * 6)) }));
   },
-  getEvents: async (_params?: { chargePointId?: string; limit?: number }): Promise<Event[]> => demoEvents,
+  getEvents: async (params?: { chargePointId?: string; limit?: number }): Promise<Event[]> => {
+    let list = [...demoEvents];
+    if (params?.chargePointId) {
+      list = list.filter((e) => e.chargePointId === params.chargePointId);
+    }
+    list.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    if (params?.limit != null) {
+      list = list.slice(0, params.limit);
+    }
+    return list;
+  },
 };
 
 export const demoReservationApi = {
