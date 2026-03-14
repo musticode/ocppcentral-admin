@@ -23,7 +23,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Link } from "react-router-dom";
-import { Search, Eye } from "lucide-react";
+import { Search, Eye, Edit } from "lucide-react";
+import { EditRFIDTagModal } from "./EditRFIDTagModal";
 
 export const RFIDTagsList = () => {
   const companyId = useCompanyStore((s) => s.companyId);
@@ -31,6 +32,8 @@ export const RFIDTagsList = () => {
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">(
     "all"
   );
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [selectedTag, setSelectedTag] = useState<any>(null);
 
   const { data: users } = useQuery({
     queryKey: ["users"],
@@ -123,6 +126,11 @@ export const RFIDTagsList = () => {
     });
   }, [tags, searchTerm, statusFilter]);
 
+  const handleEditTag = (tag: any) => {
+    setSelectedTag(tag);
+    setEditModalOpen(true);
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -200,17 +208,27 @@ export const RFIDTagsList = () => {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
-                    {t.user ? (
-                      <Button asChild variant="ghost" size="sm">
-                        <Link to={`/users/${t.user.id}`}>
+                    <div className="flex items-center justify-end gap-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleEditTag(t)}
+                        title="Edit RFID Tag"
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                      {t.user ? (
+                        <Button asChild variant="ghost" size="sm" title="View User">
+                          <Link to={`/users/${t.user.id}`}>
+                            <Eye className="h-4 w-4" />
+                          </Link>
+                        </Button>
+                      ) : (
+                        <Button variant="ghost" size="sm" disabled>
                           <Eye className="h-4 w-4" />
-                        </Link>
-                      </Button>
-                    ) : (
-                      <Button variant="ghost" size="sm" disabled>
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                    )}
+                        </Button>
+                      )}
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
@@ -224,6 +242,16 @@ export const RFIDTagsList = () => {
           </div>
         </div>
       </CardContent>
+
+      <EditRFIDTagModal
+        open={editModalOpen}
+        onOpenChange={setEditModalOpen}
+        tag={selectedTag}
+        onSuccess={() => {
+          setEditModalOpen(false);
+          // Refetch data if needed
+        }}
+      />
     </Card>
   );
 };

@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Eye, Search, RefreshCw } from "lucide-react";
+import { Search, RefreshCw } from "lucide-react";
 import type { Event } from "@/types/ocpp";
 
 export const ActivityList = () => {
