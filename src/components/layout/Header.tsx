@@ -3,6 +3,7 @@ import { Bell, User } from "lucide-react";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "@/store/auth.store";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useState } from "react";
 
 export const Header = () => {
@@ -16,6 +17,7 @@ export const Header = () => {
         <span className="text-sm font-medium text-gray-700">{companyName}</span>
       </div>
       <div className="flex items-center gap-4">
+        <LanguageSwitcher />
         <Link to="/notifications">
           <Button variant="ghost" size="icon" className="relative">
             <Bell className="h-5 w-5 text-gray-600" />

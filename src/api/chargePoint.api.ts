@@ -147,4 +147,38 @@ export const chargePointApi = {
     );
     return response.data;
   },
+
+  unlockConnector: async (
+    chargePointId: string,
+    connectorId: number
+  ): Promise<RemoteCommand> => {
+    const response = await apiClient.post<RemoteCommand>(
+      `/charge-points/${chargePointId}/unlock`,
+      { connectorId }
+    );
+    return response.data;
+  },
+
+  getRemoteCommands: async (params?: {
+    chargePointId?: string;
+    status?: "Pending" | "Accepted" | "Rejected" | "Timeout";
+    limit?: number;
+  }): Promise<RemoteCommand[]> => {
+    const response = await apiClient.get<RemoteCommand[]>(
+      "/charge-points/commands",
+      { params }
+    );
+    return response.data;
+  },
+
+  getChargePointCommands: async (
+    chargePointId: string,
+    limit = 50
+  ): Promise<RemoteCommand[]> => {
+    const response = await apiClient.get<RemoteCommand[]>(
+      `/charge-points/${chargePointId}/commands`,
+      { params: { limit } }
+    );
+    return response.data;
+  },
 };
