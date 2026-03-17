@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  ocppcentral-admin:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ocppcentral-admin
+    ports:
+      - "8080:80"
+    environment:
+      # These will be baked into the build, but listed here for reference
+      - VITE_API_BASE_URL=${VITE_API_BASE_URL:-https://api.ocppcentral.com/api}
+      - VITE_APP_NAME=${VITE_APP_NAME:-OCPP Central Admin}
+      - VITE_APP_ENV=${VITE_APP_ENV:-production}
+      - VITE_ENABLE_DEMO_MODE=${VITE_ENABLE_DEMO_MODE:-false}
+      - VITE_ENABLE_DEBUG=${VITE_ENABLE_DEBUG:-false}
+      - VITE_DEFAULT_LANGUAGE=${VITE_DEFAULT_LANGUAGE:-en}
+      - VITE_ENABLE_ANALYTICS=${VITE_ENABLE_ANALYTICS:-true}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    networks:
+      - ocpp-network
+
+networks:
+  ocpp-network:
+    driver: bridge
