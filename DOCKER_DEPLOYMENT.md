@@ -97,8 +97,8 @@ VITE_ENABLE_ANALYTICS=true
 
 #### 4. Configure Port Mapping
 
-- **Container Port**: 80
-- **Public Port**: 80 (or your preferred port)
+- **Container Port**: 3000
+- **Public Port**: 3000 (or your preferred port)
 - Coolify will handle SSL/TLS automatically if you configure a domain
 
 #### 5. Configure Domain (Optional)
@@ -122,7 +122,7 @@ Alternatively, you can use a `coolify.json` configuration:
   "name": "ocppcentral-admin",
   "type": "dockerfile",
   "dockerfile": "Dockerfile",
-  "port": 80,
+  "port": 3000,
   "healthcheck": {
     "path": "/health",
     "interval": 30,
