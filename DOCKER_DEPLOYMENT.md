@@ -217,6 +217,14 @@ Docker health checks run automatically every 30 seconds.
 
 ### Build Fails
 
+**Issue**: TypeScript error - "Property 'env' does not exist on type 'ImportMeta'"
+```bash
+# Solution: Ensure all dependencies are installed (not just production)
+# The Dockerfile uses: npm ci --silent (includes devDependencies)
+# NOT: npm ci --only=production (excludes TypeScript, Vite, etc.)
+```
+This error occurs when devDependencies like TypeScript and Vite are not installed during the build stage.
+
 **Issue**: Build fails during npm install
 ```bash
 # Check Node version compatibility
