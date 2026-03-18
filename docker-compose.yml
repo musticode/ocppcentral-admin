@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: ocppcentral-admin
     ports:
-      - "8080:80"
+      - "8080:3000"
     environment:
       # These will be baked into the build, but listed here for reference
       - VITE_API_BASE_URL=${VITE_API_BASE_URL:-https://api.ocppcentral.com/api}
@@ -19,7 +19,7 @@ services:
       - VITE_ENABLE_ANALYTICS=${VITE_ENABLE_ANALYTICS:-true}
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80/health"]
+      test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/health" ]
       interval: 30s
       timeout: 3s
       retries: 3

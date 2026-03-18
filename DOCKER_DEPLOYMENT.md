@@ -97,8 +97,8 @@ VITE_ENABLE_ANALYTICS=true
 
 #### 4. Configure Port Mapping
 
-- **Container Port**: 80
-- **Public Port**: 80 (or your preferred port)
+- **Container Port**: 3000
+- **Public Port**: 3000 (or your preferred port)
 - Coolify will handle SSL/TLS automatically if you configure a domain
 
 #### 5. Configure Domain (Optional)
@@ -122,7 +122,7 @@ Alternatively, you can use a `coolify.json` configuration:
   "name": "ocppcentral-admin",
   "type": "dockerfile",
   "dockerfile": "Dockerfile",
-  "port": 80,
+  "port": 3000,
   "healthcheck": {
     "path": "/health",
     "interval": 30,
@@ -216,6 +216,14 @@ Docker health checks run automatically every 30 seconds.
 ## Troubleshooting
 
 ### Build Fails
+
+**Issue**: TypeScript error - "Property 'env' does not exist on type 'ImportMeta'"
+```bash
+# Solution: Ensure all dependencies are installed (not just production)
+# The Dockerfile uses: npm ci --silent (includes devDependencies)
+# NOT: npm ci --only=production (excludes TypeScript, Vite, etc.)
+```
+This error occurs when devDependencies like TypeScript and Vite are not installed during the build stage.
 
 **Issue**: Build fails during npm install
 ```bash
