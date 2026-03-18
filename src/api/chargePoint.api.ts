@@ -1,14 +1,22 @@
-import { apiClient } from "./axios";
 import type {
   ChargePoint,
-  Location,
   Connector,
+  Location,
   RemoteCommand,
   ResetType,
 } from "@/types/ocpp";
+
 import type { PaginatedResponse } from "@/types/api";
+import { apiClient } from "./axios";
 
 export const chargePointApi = {
+  listAllChargePoints: async (): Promise<ChargePoint[]> => {
+    const response = await apiClient.get<ChargePoint[]>(
+      "/charge-points/listAllChargePoints"
+    );
+    return response.data;
+  },
+
   getLocations: async (): Promise<Location[]> => {
     const response = await apiClient.get<Location[]>(
       "/charge-points/locations"
@@ -50,7 +58,10 @@ export const chargePointApi = {
     ocppVersion?: string;
     connectorCount?: number;
   }): Promise<ChargePoint> => {
-    const response = await apiClient.post<ChargePoint>("/charge-points", data);
+    const response = await apiClient.post<ChargePoint>(
+      "/charge-points/createChargePoint",
+      data
+    );
     return response.data;
   },
 
@@ -61,10 +72,9 @@ export const chargePointApi = {
     limit?: number;
   }): Promise<PaginatedResponse<ChargePoint>> => {
     const response = await apiClient.get<PaginatedResponse<ChargePoint>>(
-      `/charge-points/listAllChargePoints${params?.companyId}`,
-      { params: { companyId: params?.companyId } }
+      "/charge-points/listAllChargePoints",
+      { params }
     );
-    console.log(response.data);
     return response.data;
   },
 
@@ -85,9 +95,24 @@ export const chargePointApi = {
       ocppVersion: string;
     }>
   ): Promise<ChargePoint> => {
-    const response = await apiClient.patch<ChargePoint>(
+    const response = await apiClient.put<ChargePoint>(
       `/charge-points/${chargePointId}`,
       data
+    );
+    return response.data;
+  },
+
+  deleteChargePoint: async (chargePointId: string): Promise<void> => {
+    await apiClient.delete(`/charge-points/${chargePointId}`);
+  },
+
+  updateChargePointLocation: async (
+    chargePointId: string,
+    locationId: string | null
+  ): Promise<ChargePoint> => {
+    const response = await apiClient.put<ChargePoint>(
+      `/charge-points/${chargePointId}/location`,
+      { locationId }
     );
     return response.data;
   },

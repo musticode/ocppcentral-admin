@@ -641,3 +641,108 @@ export interface FleetAnalytics {
     costPerVehicle: number;
   };
 }
+
+export type PaymentMethodStatus =
+  | "active"
+  | "inactive"
+  | "expired"
+  | "failed"
+  | "pending";
+
+export type PaymentMethodType =
+  | "credit_card"
+  | "debit_card"
+  | "bank_account"
+  | "paypal"
+  | "stripe"
+  | "other";
+
+export type PaymentProvider = "stripe" | "paypal" | "square" | "manual" | "other";
+
+export type CardBrand = "visa" | "mastercard" | "amex" | "discover" | "other";
+
+export interface BillingAddress {
+  street?: string;
+  city?: string;
+  state?: string;
+  zipCode?: string;
+  country?: string;
+}
+
+export interface PaymentMethod {
+  id: string;
+  userId: string;
+  type: PaymentMethodType;
+  provider: PaymentProvider;
+  status: PaymentMethodStatus;
+  isActive: boolean;
+  isVerified?: boolean;
+  isDefault?: boolean;
+  cardLast4?: string;
+  cardBrand?: CardBrand;
+  cardExpMonth?: number;
+  cardExpYear?: number;
+  bankAccountLast4?: string;
+  bankName?: string;
+  paypalEmail?: string;
+  externalId?: string;
+  externalCustomerId?: string;
+  billingAddress?: BillingAddress;
+  metadata?: Record<string, any>;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface PaymentMethodFilters {
+  userId?: string;
+  isActive?: boolean;
+  status?: PaymentMethodStatus;
+  type?: PaymentMethodType;
+  provider?: string;
+}
+
+export interface CreatePaymentMethodRequest {
+  userId?: string;
+  type: PaymentMethodType;
+  provider: PaymentProvider;
+  cardLast4?: string;
+  cardBrand?: CardBrand;
+  cardExpMonth?: number;
+  cardExpYear?: number;
+  bankAccountLast4?: string;
+  bankName?: string;
+  paypalEmail?: string;
+  externalId?: string;
+  externalCustomerId?: string;
+  isActive?: boolean;
+  isVerified?: boolean;
+  isDefault?: boolean;
+  billingAddress?: BillingAddress;
+  metadata?: Record<string, any>;
+}
+
+export interface UpdatePaymentMethodRequest {
+  cardExpMonth?: number;
+  cardExpYear?: number;
+  billingAddress?: BillingAddress;
+  isDefault?: boolean;
+  metadata?: Record<string, any>;
+  status?: PaymentMethodStatus;
+}
+
+export interface PaymentMethodStats {
+  total: number;
+  active: number;
+  inactive: number;
+  expired: number;
+  failed: number;
+  pending: number;
+  byType: Record<string, number>;
+  byProvider: Record<string, number>;
+}
+
+export interface PaymentEligibility {
+  hasActivePaymentMethod: boolean;
+  eligibleToCharge: boolean;
+  message?: string;
+}

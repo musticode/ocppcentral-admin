@@ -1,39 +1,42 @@
 import type {
+  Location as ApiLocation,
+  AssignDriverToFleetRequest,
+  AssignVehicleToFleetRequest,
   Car,
   CarStats,
   Company,
   Consumption,
   CreateCarRequest,
+  CreateFleetRequest,
   CreateLocationRequest,
   CreateReservationRequest,
   CreateTariffRequest,
   CreateUserRequest,
-  Location as ApiLocation,
+  Fleet,
+  FleetAnalytics,
+  FleetDriver,
+  FleetStats,
+  FleetVehicle,
   LoginRequest,
   LoginResponse,
+  OCPPResponse,
   PaginatedResponse,
+  PaymentEligibility,
+  PaymentMethod,
+  PaymentMethodStats,
   Reservation,
   ReservationFilters,
   SignupRequest,
   Tariff,
   TariffFilters,
   UpdateCarRequest,
+  UpdateFleetDriverRequest,
+  UpdateFleetRequest,
+  UpdateFleetVehicleRequest,
   UpdateLocationRequest,
   User,
   ValidateReservationRequest,
   ValidateReservationResponse,
-  OCPPResponse,
-  Fleet,
-  CreateFleetRequest,
-  UpdateFleetRequest,
-  FleetVehicle,
-  AssignVehicleToFleetRequest,
-  UpdateFleetVehicleRequest,
-  FleetDriver,
-  AssignDriverToFleetRequest,
-  UpdateFleetDriverRequest,
-  FleetStats,
-  FleetAnalytics,
 } from "@/types/api";
 import type {
   ChargePoint,
@@ -1752,4 +1755,50 @@ export const demoCentralSystemApi = {
   cancelReservation: async (): Promise<OCPPResponse> => ({ status: "Accepted" }),
   triggerMessage: async (): Promise<OCPPResponse> => ({ status: "Accepted" }),
   getTriggerMessageTypes: async (): Promise<string[]> => ["BootNotification", "Heartbeat", "StatusNotification"],
+};
+
+export const demoHealthApi = {
+  check: async (): Promise<{ status: string }> => ({ status: "ok" }),
+};
+
+export const demoPaymentMethodsApi = {
+  getPaymentMethods: async (): Promise<PaymentMethod[]> => [],
+  createPaymentMethod: async (): Promise<PaymentMethod> => {
+    throw new Error("Demo payment methods not implemented");
+  },
+  getMyPaymentMethods: async (): Promise<PaymentMethod[]> => [],
+  getActivePaymentMethod: async (): Promise<PaymentMethod | null> => null,
+  checkPaymentEligibility: async (): Promise<PaymentEligibility> => ({
+    hasActivePaymentMethod: false,
+    eligibleToCharge: false,
+    message: "No active payment method in demo",
+  }),
+  getPaymentMethodStats: async (): Promise<PaymentMethodStats> => ({
+    total: 0,
+    active: 0,
+    inactive: 0,
+    expired: 0,
+    failed: 0,
+    pending: 0,
+    byType: {},
+    byProvider: {},
+  }),
+  getPaymentMethodsByUser: async (): Promise<PaymentMethod[]> => [],
+  expireOldPaymentMethods: async (): Promise<{ count: number }> => ({ count: 0 }),
+  getPaymentMethodById: async (): Promise<PaymentMethod> => {
+    throw new Error("Demo payment method not found");
+  },
+  updatePaymentMethod: async (): Promise<PaymentMethod> => {
+    throw new Error("Demo payment methods not implemented");
+  },
+  deletePaymentMethod: async (): Promise<void> => {},
+  setActive: async (): Promise<PaymentMethod> => {
+    throw new Error("Demo payment methods not implemented");
+  },
+  verify: async (): Promise<PaymentMethod> => {
+    throw new Error("Demo payment methods not implemented");
+  },
+  deactivate: async (): Promise<PaymentMethod> => {
+    throw new Error("Demo payment methods not implemented");
+  },
 };

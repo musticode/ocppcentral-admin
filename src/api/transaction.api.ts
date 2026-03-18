@@ -1,8 +1,26 @@
-import { apiClient } from "./axios";
-import type { Transaction, Session, Event } from "@/types/ocpp";
+import type { Event, Session, Transaction } from "@/types/ocpp";
+
 import type { PaginatedResponse } from "@/types/api";
+import { apiClient } from "./axios";
 
 export const transactionApi = {
+  listAllTransactions: async (): Promise<Transaction[]> => {
+    const response = await apiClient.get<Transaction[]>(
+      "/transactions/listAllTransactions"
+    );
+    return response.data;
+  },
+
+  fetchTransactionsByCompanyName: async (
+    companyName: string
+  ): Promise<Transaction[]> => {
+    const response = await apiClient.get<Transaction[]>(
+      "/transactions/fetchTransactionsByCompanyName",
+      { params: { companyName } }
+    );
+    return response.data;
+  },
+
   getTransactions: async (params?: {
     chargePointId?: string;
     status?: "Active" | "Completed";
