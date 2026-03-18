@@ -32,6 +32,20 @@ const getCompanyIdFromUser = (user: User): string | null => {
   return id && typeof id === "string" ? id : null;
 };
 
+const getCompanyNameFromUser = (user: User): string | null => {
+  const name =
+    (user as User & { companyName?: string }).companyName ??
+    (user as User & { company_name?: string }).company_name;
+  return name && typeof name === "string" ? name : null;
+};
+
+const getCompanyEmailFromUser = (user: User): string | null => {
+  const email =
+    (user as User & { companyEmail?: string }).companyEmail ??
+    (user as User & { company_email?: string }).company_email;
+  return email && typeof email === "string" ? email : null;
+};
+
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   token: null,
@@ -61,6 +75,16 @@ export const useAuthStore = create<AuthState>((set) => ({
       console.warn("No companyId found in user object:", user);
     }
 
+    const companyName = getCompanyNameFromUser(user);
+    if (companyName) {
+      useCompanyStore.getState().setCompanyName(companyName);
+    }
+
+    const companyEmail = getCompanyEmailFromUser(user);
+    if (companyEmail) {
+      useCompanyStore.getState().setEmail(companyEmail);
+    }
+
     set({ user, token, isAuthenticated: true });
     console.log("Auth state updated. localStorage keys:", {
       auth_token: localStorage.getItem(AUTH_TOKEN_KEY) ? "✓" : "✗",
@@ -79,8 +103,19 @@ export const useAuthStore = create<AuthState>((set) => ({
     const token = localStorage.getItem(AUTH_TOKEN_KEY);
     const user = getStoredUser();
     if (token && user) {
-      if (user.companyId) {
-        useCompanyStore.getState().setCompanyId(user.companyId);
+      const companyId = getCompanyIdFromUser(user);
+      if (companyId) {
+        useCompanyStore.getState().setCompanyId(companyId);
+      }
+
+      const companyName = getCompanyNameFromUser(user);
+      if (companyName) {
+        useCompanyStore.getState().setCompanyName(companyName);
+      }
+
+      const companyEmail = getCompanyEmailFromUser(user);
+      if (companyEmail) {
+        useCompanyStore.getState().setEmail(companyEmail);
       }
       set({ user, token, isAuthenticated: true });
     }

@@ -9,10 +9,33 @@ import { apiClient } from "./axios";
 
 export const locationApi = {
   getLocations: async (): Promise<ApiLocation[]> => {
-    const response = await apiClient.get<ApiLocation[]>(
-      "/locations/listAllLocations"
-    );
-    return response.data;
+    const response = await apiClient.get<unknown>("/locations/listAllLocations");
+
+    const payload = response.data as unknown;
+
+    if (Array.isArray(payload)) return payload as ApiLocation[];
+
+    if (payload && typeof payload === "object") {
+      const maybeData = (payload as { data?: unknown }).data;
+      if (Array.isArray(maybeData)) return maybeData as ApiLocation[];
+    }
+
+    return [];
+  },
+
+  getLocationsByCompanyId: async (companyId: string): Promise<ApiLocation[]> => {
+    const response = await apiClient.get<unknown>(`/fetchCompanyLocations?companyId=${companyId}`);
+
+    const payload = response.data as unknown;
+
+    if (Array.isArray(payload)) return payload as ApiLocation[];
+
+    if (payload && typeof payload === "object") {
+      const maybeData = (payload as { data?: unknown }).data;
+      if (Array.isArray(maybeData)) return maybeData as ApiLocation[];
+    }
+
+    return [];
   },
 
   getLocation: async (locationId: string): Promise<OcppLocation> => {

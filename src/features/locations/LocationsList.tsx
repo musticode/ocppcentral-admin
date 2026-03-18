@@ -14,13 +14,16 @@ import {
 import { locationApi } from "@/api";
 import type { Location } from "@/types/api";
 import { Search } from "lucide-react";
+import { useCompanyStore } from "@/store/company.store";
 
 export const LocationsList = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const companyStore = useCompanyStore();
 
   const { data: locations = [], isLoading } = useQuery({
     queryKey: ["locations"],
-    queryFn: () => locationApi.getLocations(),
+    // queryFn: () => locationApi.getLocations(),
+    queryFn: () => locationApi.getLocationsByCompanyId(companyStore.getCompanyId() || "")
   });
 
   const filtered = useMemo(() => {

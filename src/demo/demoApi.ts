@@ -1013,6 +1013,7 @@ export const demoCarsApi = {
 
 export const demoLocationApi = {
   getLocations: async (): Promise<ApiLocation[]> => demoApiLocations,
+  getLocationsByCompanyId: async (_companyId: string): Promise<ApiLocation[]> => demoApiLocations,
   getLocation: async (locationId: string): Promise<OcppLocation> => {
     const loc = demoOcppLocations.find((l) => l.id === locationId);
     if (!loc) throw new Error("Demo location not found");
@@ -1791,7 +1792,7 @@ export const demoPaymentMethodsApi = {
   updatePaymentMethod: async (): Promise<PaymentMethod> => {
     throw new Error("Demo payment methods not implemented");
   },
-  deletePaymentMethod: async (): Promise<void> => {},
+  deletePaymentMethod: async (): Promise<void> => { },
   setActive: async (): Promise<PaymentMethod> => {
     throw new Error("Demo payment methods not implemented");
   },
