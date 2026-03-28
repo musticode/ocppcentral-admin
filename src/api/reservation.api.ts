@@ -9,16 +9,24 @@ import type {
 } from "@/types/api";
 
 import { apiClient } from "./axios";
+import { extractArray } from "./utils";
 
 export const reservationApi = {
   getReservations: async (
     filters?: ReservationFilters
   ): Promise<PaginatedResponse<Reservation>> => {
-    const response = await apiClient.get<PaginatedResponse<Reservation>>(
+    const response = await apiClient.get<unknown>(
       "/reservations",
       { params: filters }
     );
-    return response.data;
+    const payload = response.data;
+    if (Array.isArray(payload)) {
+      return { data: payload as Reservation[], total: payload.length, page: 1, limit: payload.length, totalPages: 1 };
+    }
+    if (payload && typeof payload === "object" && Array.isArray((payload as any).data)) {
+      return payload as PaginatedResponse<Reservation>;
+    }
+    return { data: extractArray<Reservation>(payload), total: 0, page: 1, limit: 20, totalPages: 0 };
   },
 
   getReservation: async (reservationId: number): Promise<Reservation> => {
@@ -51,17 +59,17 @@ export const reservationApi = {
   getReservationsByChargePoint: async (
     chargePointId: string
   ): Promise<Reservation[]> => {
-    const response = await apiClient.get<Reservation[]>(
+    const response = await apiClient.get<unknown>(
       `/reservations/charge-point/${chargePointId}`
     );
-    return response.data;
+    return extractArray<Reservation>(response.data);
   },
 
   getReservationsByIdTag: async (idTag: string): Promise<Reservation[]> => {
-    const response = await apiClient.get<Reservation[]>(
+    const response = await apiClient.get<unknown>(
       `/reservations/id-tag/${idTag}`
     );
-    return response.data;
+    return extractArray<Reservation>(response.data);
   },
 
   validateReservation: async (

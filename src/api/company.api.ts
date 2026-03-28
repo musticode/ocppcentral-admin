@@ -1,5 +1,6 @@
 import type { Company } from "@/types/api";
 import { apiClient } from "./axios";
+import { extractArray } from "./utils";
 
 export interface CreateCompanyRequest {
   name: string;
@@ -14,8 +15,8 @@ export interface CreateCompanyRequest {
 
 export const companyApi = {
   getAllCompanies: async (): Promise<Company[]> => {
-    const response = await apiClient.get<Company[]>("/companies/listAllCompanies");
-    return response.data;
+    const response = await apiClient.get<unknown>("/companies/listAllCompanies");
+    return extractArray<Company>(response.data);
   },
 
   getCompanyByName: async (name: string): Promise<Company> => {

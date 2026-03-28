@@ -1,4 +1,5 @@
 import { apiClient } from "./axios";
+import { extractArray } from "./utils";
 import type {
   Car,
   CreateCarRequest,
@@ -9,15 +10,15 @@ import type {
 
 export const carsApi = {
   getCars: async (filters?: CarFilters): Promise<Car[]> => {
-    const response = await apiClient.get<Car[]>("/cars", {
+    const response = await apiClient.get<unknown>("/cars", {
       params: filters,
     });
-    return response.data;
+    return extractArray<Car>(response.data);
   },
 
   getMyCars: async (): Promise<Car[]> => {
-    const response = await apiClient.get<Car[]>("/cars/my-cars");
-    return response.data;
+    const response = await apiClient.get<unknown>("/cars/my-cars");
+    return extractArray<Car>(response.data);
   },
 
   getCarStats: async (filters?: {
@@ -31,13 +32,13 @@ export const carsApi = {
   },
 
   getCarsByUser: async (userId: string): Promise<Car[]> => {
-    const response = await apiClient.get<Car[]>(`/cars/user/${userId}`);
-    return response.data;
+    const response = await apiClient.get<unknown>(`/cars/user/${userId}`);
+    return extractArray<Car>(response.data);
   },
 
   getCarsByCompany: async (companyId: string): Promise<Car[]> => {
-    const response = await apiClient.get<Car[]>(`/cars/company/${companyId}`);
-    return response.data;
+    const response = await apiClient.get<unknown>(`/cars/company/${companyId}`);
+    return extractArray<Car>(response.data);
   },
 
   getCarByLicensePlate: async (licensePlate: string): Promise<Car> => {

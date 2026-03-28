@@ -1,4 +1,5 @@
 import { apiClient } from "./axios";
+import { extractArray } from "./utils";
 import { isDemoMode } from "@/demo/demoMode";
 import type {
   Fleet,
@@ -20,10 +21,10 @@ export const fleetApi = {
     if (isDemoMode) {
       return [];
     }
-    const response = await apiClient.get<Fleet[]>(`/fleets`, {
+    const response = await apiClient.get<unknown>(`/fleets`, {
       params: { companyId },
     });
-    return response.data;
+    return extractArray<Fleet>(response.data);
   },
 
   getFleetById: async (id: string): Promise<Fleet> => {
@@ -68,10 +69,10 @@ export const fleetApi = {
     if (isDemoMode) {
       return [];
     }
-    const response = await apiClient.get<FleetVehicle[]>(
+    const response = await apiClient.get<unknown>(
       `/fleets/${fleetId}/vehicles`,
     );
-    return response.data;
+    return extractArray<FleetVehicle>(response.data);
   },
 
   assignVehicleToFleet: async (
@@ -118,10 +119,10 @@ export const fleetApi = {
     if (isDemoMode) {
       return [];
     }
-    const response = await apiClient.get<FleetDriver[]>(
+    const response = await apiClient.get<unknown>(
       `/fleets/${fleetId}/drivers`,
     );
-    return response.data;
+    return extractArray<FleetDriver>(response.data);
   },
 
   assignDriverToFleet: async (
