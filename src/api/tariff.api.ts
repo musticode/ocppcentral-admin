@@ -5,13 +5,14 @@ import type {
 } from "@/types/api";
 
 import { apiClient } from "./axios";
+import { extractArray } from "./utils";
 
 export const tariffApi = {
   getTariffs: async (filters?: TariffFilters): Promise<Tariff[]> => {
-    const response = await apiClient.get<Tariff[]>("/tariff", {
+    const response = await apiClient.get<unknown>("/tariff", {
       params: filters,
     });
-    return response.data;
+    return extractArray<Tariff>(response.data);
   },
 
   getTariffById: async (id: string): Promise<Tariff> => {
@@ -23,11 +24,11 @@ export const tariffApi = {
     companyId: string,
     filters?: Omit<TariffFilters, "companyId">
   ): Promise<Tariff[]> => {
-    const response = await apiClient.get<Tariff[]>(
+    const response = await apiClient.get<unknown>(
       `/tariff/company/${companyId}`,
       { params: filters }
     );
-    return response.data;
+    return extractArray<Tariff>(response.data);
   },
 
   getActiveTariffForConnector: async (

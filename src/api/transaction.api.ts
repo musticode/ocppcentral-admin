@@ -2,23 +2,24 @@ import type { Event, Session, Transaction } from "@/types/ocpp";
 
 import type { PaginatedResponse } from "@/types/api";
 import { apiClient } from "./axios";
+import { extractArray } from "./utils";
 
 export const transactionApi = {
   listAllTransactions: async (): Promise<Transaction[]> => {
-    const response = await apiClient.get<Transaction[]>(
+    const response = await apiClient.get<unknown>(
       "/transactions/listAllTransactions"
     );
-    return response.data;
+    return extractArray<Transaction>(response.data);
   },
 
   fetchTransactionsByCompanyName: async (
     companyName: string
   ): Promise<Transaction[]> => {
-    const response = await apiClient.get<Transaction[]>(
+    const response = await apiClient.get<unknown>(
       "/transactions/fetchTransactionsByCompanyName",
       { params: { companyName } }
     );
-    return response.data;
+    return extractArray<Transaction>(response.data);
   },
 
   getTransactions: async (params?: {
@@ -29,11 +30,18 @@ export const transactionApi = {
     startDate?: string;
     endDate?: string;
   }): Promise<PaginatedResponse<Transaction>> => {
-    const response = await apiClient.get<PaginatedResponse<Transaction>>(
-      "/transactions",
+    const response = await apiClient.get<unknown>(
+      "/transactions/listAllTransactions",
       { params }
     );
-    return response.data;
+    const payload = response.data;
+    if (Array.isArray(payload)) {
+      return { data: payload as Transaction[], total: payload.length, page: 1, limit: payload.length, totalPages: 1 };
+    }
+    if (payload && typeof payload === "object" && Array.isArray((payload as any).data)) {
+      return payload as PaginatedResponse<Transaction>;
+    }
+    return { data: extractArray<Transaction>(payload), total: 0, page: 1, limit: 20, totalPages: 0 };
   },
 
   getTransaction: async (transactionId: string): Promise<Transaction> => {
@@ -47,11 +55,44 @@ export const transactionApi = {
     companyId: string,
     signal?: AbortSignal
   ): Promise<PaginatedResponse<Transaction>> => {
-    const response = await apiClient.get<PaginatedResponse<Transaction>>(
-      `/transactions/listAllSessions`,
-      { params: { companyId }, signal }
+    const response = await apiClient.get<unknown>(
+      `/transactions/fetchTransactionsByCompanyName`,
+      { params: { companyName: companyId }, signal }
     );
-    return response.data;
+
+    const payload = response.data;
+
+    // Backend may return a plain array or a paginated wrapper
+    if (Array.isArray(payload)) {
+      return {
+        data: payload as Transaction[],
+        total: payload.length,
+        page: 1,
+        limit: payload.length,
+        totalPages: 1,
+      };
+    }
+
+    if (payload && typeof payload === "object") {
+      const obj = payload as Record<string, unknown>;
+      // Already a paginated response
+      if (Array.isArray(obj.data)) {
+        return payload as PaginatedResponse<Transaction>;
+      }
+      // Some APIs nest under a different key
+      if (Array.isArray(obj.sessions)) {
+        const sessions = obj.sessions as Transaction[];
+        return {
+          data: sessions,
+          total: sessions.length,
+          page: 1,
+          limit: sessions.length,
+          totalPages: 1,
+        };
+      }
+    }
+
+    return { data: [], total: 0, page: 1, limit: 20, totalPages: 0 };
   },
 
   getSessions: async (params?: {
@@ -62,11 +103,18 @@ export const transactionApi = {
     page?: number;
     limit?: number;
   }): Promise<PaginatedResponse<Session>> => {
-    const response = await apiClient.get<PaginatedResponse<Session>>(
-      "/transactions/sessions",
+    const response = await apiClient.get<unknown>(
+      "/transactions/listAllTransactions",
       { params }
     );
-    return response.data;
+    const payload = response.data;
+    if (Array.isArray(payload)) {
+      return { data: payload as Session[], total: payload.length, page: 1, limit: payload.length, totalPages: 1 };
+    }
+    if (payload && typeof payload === "object" && Array.isArray((payload as any).data)) {
+      return payload as PaginatedResponse<Session>;
+    }
+    return { data: extractArray<Session>(payload), total: 0, page: 1, limit: 20, totalPages: 0 };
   },
 
   getLocationStats: async (
@@ -104,9 +152,9 @@ export const transactionApi = {
     chargePointId?: string;
     limit?: number;
   }): Promise<Event[]> => {
-    const response = await apiClient.get<Event[]>("/transactions/events", {
+    const response = await apiClient.get<unknown>("/transactions/events", {
       params,
     });
-    return response.data;
+    return extractArray<Event>(response.data);
   },
 };

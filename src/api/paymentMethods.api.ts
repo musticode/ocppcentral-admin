@@ -1,4 +1,5 @@
 import { apiClient } from "./axios";
+import { extractArray } from "./utils";
 import type {
   PaymentMethod,
   PaymentMethodFilters,
@@ -12,10 +13,10 @@ export const paymentMethodsApi = {
   getPaymentMethods: async (
     filters?: PaymentMethodFilters
   ): Promise<PaymentMethod[]> => {
-    const response = await apiClient.get<PaymentMethod[]>("/payment-methods", {
+    const response = await apiClient.get<unknown>("/payment-methods", {
       params: filters,
     });
-    return response.data;
+    return extractArray<PaymentMethod>(response.data);
   },
 
   createPaymentMethod: async (
@@ -29,10 +30,10 @@ export const paymentMethodsApi = {
   },
 
   getMyPaymentMethods: async (): Promise<PaymentMethod[]> => {
-    const response = await apiClient.get<PaymentMethod[]>(
+    const response = await apiClient.get<unknown>(
       "/payment-methods/my-methods"
     );
-    return response.data;
+    return extractArray<PaymentMethod>(response.data);
   },
 
   getActivePaymentMethod: async (): Promise<PaymentMethod | null> => {
@@ -60,10 +61,10 @@ export const paymentMethodsApi = {
   },
 
   getPaymentMethodsByUser: async (userId: string): Promise<PaymentMethod[]> => {
-    const response = await apiClient.get<PaymentMethod[]>(
+    const response = await apiClient.get<unknown>(
       `/payment-methods/user/${userId}`
     );
-    return response.data;
+    return extractArray<PaymentMethod>(response.data);
   },
 
   expireOldPaymentMethods: async (): Promise<{ count: number }> => {

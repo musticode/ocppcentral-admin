@@ -81,30 +81,30 @@ export const FleetsTable = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {fleets.map((fleet) => (
+            {fleets?.map((fleet) => (
               <TableRow
-                key={fleet.id}
+                key={fleet?.id}
                 className="cursor-pointer hover:bg-gray-50"
-                onClick={() => navigate(`/fleet/${fleet.id}`)}
+                onClick={() => navigate(`/fleet/${fleet?.id}`)}
               >
                 <TableCell>
                   <div>
-                    <div className="font-medium">{fleet.name}</div>
-                    {fleet.description && (
+                    <div className="font-medium">{fleet?.name}</div>
+                    {fleet?.description && (
                       <div className="text-sm text-gray-500">
-                        {fleet.description}
+                        {fleet?.description}
                       </div>
                     )}
                   </div>
                 </TableCell>
                 <TableCell>
                   <div>
-                    {fleet.manager && (
-                      <div className="text-sm">{fleet.manager}</div>
+                    {fleet?.manager && (
+                      <div className="text-sm">{fleet?.manager}</div>
                     )}
-                    {fleet.managerEmail && (
+                    {fleet?.managerEmail && (
                       <div className="text-xs text-gray-500">
-                        {fleet.managerEmail}
+                        {fleet?.managerEmail}
                       </div>
                     )}
                   </div>

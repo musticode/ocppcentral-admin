@@ -6,13 +6,14 @@ import type {
 
 import type { ChargePoint, Location as OcppLocation } from "@/types/ocpp";
 import { apiClient } from "./axios";
+import { extractArray } from "./utils";
 
 export const locationApi = {
   getLocations: async (): Promise<ApiLocation[]> => {
-    const response = await apiClient.get<ApiLocation[]>(
+    const response = await apiClient.get<unknown>(
       "/locations/listAllLocations"
     );
-    return response.data;
+    return extractArray<ApiLocation>(response.data);
   },
 
   getLocation: async (locationId: string): Promise<OcppLocation> => {
