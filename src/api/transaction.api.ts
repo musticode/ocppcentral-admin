@@ -150,6 +150,7 @@ export const transactionApi = {
 
   getEvents: async (params?: {
     chargePointId?: string;
+    companyId?: string;
     limit?: number;
   }): Promise<Event[]> => {
     const response = await apiClient.get<unknown>("/transactions/events", {
