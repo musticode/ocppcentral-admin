@@ -4,9 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertTriangle, Activity, Info, XCircle } from "lucide-react";
 
 export const ActivityStatsCards = () => {
+  const companyId = localStorage.getItem("company_id") || undefined;
+
   const { data: events, isLoading } = useQuery({
     queryKey: ["events", "activity-overview"],
-    queryFn: () => transactionApi.getEvents({ limit: 200 }),
+    queryFn: () => transactionApi.getEvents({ companyId, limit: 200 }),
   });
 
   const list = events ?? [];

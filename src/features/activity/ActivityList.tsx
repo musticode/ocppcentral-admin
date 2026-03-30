@@ -24,6 +24,7 @@ import { Search, RefreshCw } from "lucide-react";
 import type { Event } from "@/types/ocpp";
 
 export const ActivityList = () => {
+  const companyId = localStorage.getItem("company_id") || undefined;
   const [searchTerm, setSearchTerm] = useState("");
   const [severityFilter, setSeverityFilter] = useState<"all" | "info" | "warning" | "error">("all");
   const [typeFilter, setTypeFilter] = useState<"all" | Event["type"]>("all");
@@ -35,7 +36,7 @@ export const ActivityList = () => {
     isFetching,
   } = useQuery({
     queryKey: ["events", "activity-list"],
-    queryFn: () => transactionApi.getEvents({ limit: 200 }),
+    queryFn: () => transactionApi.getEvents({ companyId: companyId || undefined, limit: 200 }),
   });
 
   const list = (events ?? [])
