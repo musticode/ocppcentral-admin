@@ -21,6 +21,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { Mail, Shield, User as UserIcon, Building2 } from "lucide-react";
 import type { User } from "@/types/api";
+import { usersApi } from "@/api";
 
 interface EditUserModalProps {
   open: boolean;
@@ -81,8 +82,10 @@ export const EditUserModal = ({
     setIsSubmitting(true);
 
     try {
-      // TODO: Implement actual API call to update user
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await usersApi.updateUser(user.id, {
+        email: formData.email,
+        role: formData.role,
+      });
 
       toast({
         title: t("common.success"),
@@ -93,7 +96,10 @@ export const EditUserModal = ({
     } catch (error) {
       toast({
         title: t("common.error"),
-        description: t("errors.somethingWentWrong"),
+        description:
+          error instanceof Error
+            ? error.message
+            : t("errors.somethingWentWrong"),
         variant: "destructive",
       });
     } finally {

@@ -32,7 +32,7 @@ export const ChargerListTable = ({ location }: ChargerListTableProps) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {location.chargePoints.map(
+            {(location.chargePoints ?? []).map(
               (chargePoint: ChargePoint & { connectors: Connector[] }) => (
                 <TableRow key={chargePoint.id}>
                   <TableCell>
@@ -48,7 +48,7 @@ export const ChargerListTable = ({ location }: ChargerListTableProps) => {
                   </TableCell>
                   <TableCell>
                     <div className="flex gap-1">
-                      {chargePoint.connectors.map((connector: Connector) => (
+                      {(chargePoint.connectors ?? [])?.map((connector: Connector) => (
                         <ConnectorStatusBadge
                           key={connector.id}
                           status={connector.status}

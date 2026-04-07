@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/utils/cn";
 import { chargePointApi } from "@/api";
+import { safeAddress } from "@/api/utils";
 import { ResetType } from "@/types/ocpp";
 
 interface Connector {
@@ -94,7 +95,7 @@ export const ChargerDetailsPanel = ({ charger }: ChargerDetailsPanelProps) => {
           </div>
           <div className="flex items-center justify-between">
             <span className="text-sm text-gray-600">Address:</span>
-            <span className="text-sm font-medium">{charger.address}</span>
+            <span className="text-sm font-medium">{safeAddress(charger.address)}</span>
           </div>
         </CardContent>
       </Card>

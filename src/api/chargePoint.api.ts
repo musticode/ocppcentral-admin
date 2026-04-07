@@ -8,28 +8,35 @@ import type {
 
 import type { PaginatedResponse } from "@/types/api";
 import { apiClient } from "./axios";
-import { extractArray } from "./utils";
+import { extractArray, normalizeChargePoint, normalizeLocation } from "./utils";
 
 export const chargePointApi = {
   listAllChargePoints: async (): Promise<ChargePoint[]> => {
     const response = await apiClient.get<unknown>(
       "/charge-points/listAllChargePoints"
     );
-    return extractArray<ChargePoint>(response.data);
+    return extractArray<ChargePoint>(response.data).map(normalizeChargePoint);
+  },
+
+  listAllChargePointsByLocationId: async (locationId: string): Promise<ChargePoint[]> => {
+    const response = await apiClient.get<unknown>(
+      `/charge-points/listAllChargePointsWithLocationId/${locationId}`
+    );
+    return extractArray<ChargePoint>(response.data).map(normalizeChargePoint);
   },
 
   getLocations: async (): Promise<Location[]> => {
     const response = await apiClient.get<unknown>(
       "/locations/listAllLocations"
     );
-    return extractArray<Location>(response.data);
+    return extractArray<Location>(response.data).map(normalizeLocation);
   },
 
   getLocation: async (locationId: string): Promise<Location> => {
     const response = await apiClient.get<Location>(
       `/locations/${locationId}`
     );
-    return response.data;
+    return normalizeLocation(response.data);
   },
 
   resetChargePoint: async (
@@ -47,7 +54,7 @@ export const chargePointApi = {
     const response = await apiClient.get<ChargePoint>(
       `/charge-points/${chargePointId}`
     );
-    return response.data;
+    return normalizeChargePoint(response.data);
   },
 
   createChargePoint: async (data: {
@@ -63,7 +70,7 @@ export const chargePointApi = {
       "/charge-points/createChargePoint",
       data
     );
-    return response.data;
+    return normalizeChargePoint(response.data);
   },
 
   getChargePoints: async (params?: {
@@ -78,19 +85,20 @@ export const chargePointApi = {
     );
     const payload = response.data;
     if (Array.isArray(payload)) {
-      return { data: payload as ChargePoint[], total: payload.length, page: 1, limit: payload.length, totalPages: 1 };
+      return { data: payload.map(normalizeChargePoint), total: payload.length, page: 1, limit: payload.length, totalPages: 1 };
     }
     if (payload && typeof payload === "object" && Array.isArray((payload as any).data)) {
-      return payload as PaginatedResponse<ChargePoint>;
+      const paginated = payload as PaginatedResponse<ChargePoint>;
+      return { ...paginated, data: paginated.data.map(normalizeChargePoint) };
     }
-    return { data: extractArray<ChargePoint>(payload), total: 0, page: 1, limit: 20, totalPages: 0 };
+    return { data: extractArray<ChargePoint>(payload).map(normalizeChargePoint), total: 0, page: 1, limit: 20, totalPages: 0 };
   },
 
   getChargePoint: async (chargePointId: string): Promise<ChargePoint> => {
     const response = await apiClient.get<ChargePoint>(
       `/charge-points/${chargePointId}`
     );
-    return response.data;
+    return normalizeChargePoint(response.data);
   },
 
   updateChargePoint: async (
@@ -107,7 +115,7 @@ export const chargePointApi = {
       `/charge-points/${chargePointId}`,
       data
     );
-    return response.data;
+    return normalizeChargePoint(response.data);
   },
 
   deleteChargePoint: async (chargePointId: string): Promise<void> => {
@@ -122,7 +130,7 @@ export const chargePointApi = {
       `/charge-points/${chargePointId}/location`,
       { locationId }
     );
-    return response.data;
+    return normalizeChargePoint(response.data);
   },
 
   getConnector: async (

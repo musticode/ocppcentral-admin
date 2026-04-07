@@ -12,6 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { locationApi } from "@/api";
+import { safeAddress } from "@/api/utils";
 import type { Location } from "@/types/api";
 import { Search } from "lucide-react";
 
@@ -29,7 +30,7 @@ export const LocationsList = () => {
         const q = searchTerm.toLowerCase();
         return (
           loc.name.toLowerCase().includes(q) ||
-          loc.address.toLowerCase().includes(q) ||
+          safeAddress(loc.address).toLowerCase().includes(q) ||
           (loc.description?.toLowerCase().includes(q) ?? false)
         );
       })
@@ -101,7 +102,7 @@ export const LocationsList = () => {
                       </Link>
                     </TableCell>
                     <TableCell className="max-w-[200px] truncate text-gray-600">
-                      {loc.address}
+                      {safeAddress(loc.address)}
                     </TableCell>
                     <TableCell className="max-w-[240px] truncate text-gray-600">
                       {loc.description ?? "-"}

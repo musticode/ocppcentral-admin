@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { usersApi } from "@/api";
+import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -31,6 +33,7 @@ export const CreateUserModal = ({
   onSuccess,
 }: CreateUserModalProps) => {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -49,10 +52,20 @@ export const CreateUserModal = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
       toast({
         title: "Error",
-        description: "Passwords do not match.",
+        description: "Please enter a valid email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!formData.name.trim()) {
+      toast({
+        title: "Error",
+        description: "Name is required.",
         variant: "destructive",
       });
       return;
@@ -60,26 +73,44 @@ export const CreateUserModal = ({
 
     setIsSubmitting(true);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      await usersApi.createUser({
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        password: formData.password || "defaultPassword123",
+        role: formData.role,
+      });
 
-    setIsSubmitting(false);
-    toast({
-      title: "User created",
-      description: "The user has been created successfully.",
-    });
-    onSuccess?.();
-    onOpenChange(false);
-    // Reset form
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      role: "User",
-      company: "",
-      password: "",
-      confirmPassword: "",
-    });
+      await queryClient.invalidateQueries({ queryKey: ["users"] });
+
+      toast({
+        title: "User created",
+        description: "The user has been created successfully.",
+      });
+      onSuccess?.();
+      onOpenChange(false);
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        role: "User",
+        company: "",
+        password: "",
+        confirmPassword: "",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Something went wrong while creating the user.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

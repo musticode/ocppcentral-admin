@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { locationApi } from "@/api";
+import { safeAddress } from "@/api/utils";
 import type { Location } from "@/types/ocpp";
 
 interface EditLocationModalProps {
@@ -43,7 +44,7 @@ export const EditLocationModal = ({
     if (location && open) {
       setFormData({
         name: location.name,
-        address: location.address,
+        address: safeAddress(location.address),
         city: location.city,
         country: location.country,
         zipCode: location.zipCode,
