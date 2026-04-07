@@ -468,6 +468,14 @@ export interface CreateUserRequest {
   companyName?: string;
 }
 
+export interface UpdateUserRequest {
+  email?: string;
+  role?: string;
+  name?: string;
+  companyId?: string;
+  companyName?: string;
+}
+
 export interface Location {
   id: string;
   name: string;
@@ -499,17 +507,39 @@ export interface UpdateLocationRequest {
 export interface Fleet {
   id: string;
   companyId: string;
+  managerId?: string;
   name: string;
   description?: string;
-  manager?: string;
-  managerEmail?: string;
-  managerPhone?: string;
+  fleetType?: string;
   status: "Active" | "Inactive";
-  vehicleCount: number;
-  driverCount: number;
+  totalVehicles?: number;
+  activeVehicles?: number;
+  vehicleCount?: number;
+  driverCount?: number;
   totalEnergyConsumed?: number;
   totalSessions?: number;
   averageEfficiency?: number;
+  location?: {
+    address?: string | { address?: string; lastUpdated?: string };
+    city?: string;
+    state?: string;
+    country?: string;
+  };
+  contactInfo?: {
+    email?: string;
+    phone?: string;
+  };
+  settings?: {
+    autoAssignment?: boolean;
+    maintenanceAlerts?: boolean;
+    chargingAlerts?: boolean;
+    lowBatteryThreshold?: number;
+  };
+  metadata?: Record<string, any>;
+  // Legacy fields for backward compatibility
+  manager?: string;
+  managerEmail?: string;
+  managerPhone?: string;
   createdAt: string;
   updatedAt: string;
 }

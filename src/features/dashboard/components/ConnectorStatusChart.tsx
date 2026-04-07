@@ -26,8 +26,8 @@ export const ConnectorStatusChart = ({
   location,
 }: ConnectorStatusChartProps) => {
   // Count connectors by status
-  const statusCounts = location.chargePoints.reduce((acc, cp) => {
-    cp.connectors.forEach((connector) => {
+  const statusCounts = (location.chargePoints ?? []).reduce((acc, cp) => {
+    (cp.connectors ?? []).forEach((connector) => {
       acc[connector.status] = (acc[connector.status] || 0) + 1;
     });
     return acc;

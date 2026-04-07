@@ -1385,6 +1385,11 @@ export const demoCompanyApi = {
 
 export const demoUsersApi = {
   getAllUsers: async (): Promise<User[]> => demoUsers,
+  getUserById: async (id: string): Promise<User> => {
+    const found = demoUsers.find((u) => u.id === id);
+    if (!found) throw new Error("Demo user not found");
+    return found;
+  },
   createUser: async (data: CreateUserRequest): Promise<User> => {
     const user: User = {
       id: `user-${demoUsers.length + 1}`,
@@ -1395,6 +1400,13 @@ export const demoUsersApi = {
     };
     demoUsers.unshift(user);
     return user;
+  },
+  updateUser: async (id: string, data: Partial<User>): Promise<User> => {
+    const idx = demoUsers.findIndex((u) => u.id === id);
+    if (idx === -1) throw new Error("Demo user not found");
+    const updated: User = { ...demoUsers[idx]!, ...data, id };
+    demoUsers[idx] = updated;
+    return updated;
   },
 };
 
@@ -1791,7 +1803,7 @@ export const demoPaymentMethodsApi = {
   updatePaymentMethod: async (): Promise<PaymentMethod> => {
     throw new Error("Demo payment methods not implemented");
   },
-  deletePaymentMethod: async (): Promise<void> => {},
+  deletePaymentMethod: async (): Promise<void> => { },
   setActive: async (): Promise<PaymentMethod> => {
     throw new Error("Demo payment methods not implemented");
   },

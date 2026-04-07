@@ -5,16 +5,19 @@ import { Link } from "react-router-dom";
 import { useAuthStore } from "@/store/auth.store";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useState } from "react";
+import { useCompanyStore } from "@/store/company.store";
 
 export const Header = () => {
   useAuthStore();
-  const [companyName] = useState("Energy Management Company");
+  //useCompanyStore();
+  //const [companyName] = useState("Energy Management Company");
+  const company = useCompanyStore();
   const [unreadCount] = useState(3); // Dummy unread count
 
   return (
     <header className="flex h-16 items-center justify-between border-b bg-white px-6 shadow-sm">
       <div className="flex items-center gap-2">
-        <span className="text-sm font-medium text-gray-700">{companyName}</span>
+        <span className="text-sm font-medium text-gray-700">{company.companyName ? company.companyName : "Energy Management Company"}</span>
       </div>
       <div className="flex items-center gap-4">
         <LanguageSwitcher />

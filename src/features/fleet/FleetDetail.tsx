@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fleetApi } from "@/api";
+import { safeAddress } from "@/api/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -83,9 +84,9 @@ export const FleetDetail = () => {
             <Truck className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{fleet.vehicleCount}</div>
+            <div className="text-2xl font-bold">{fleet.totalVehicles ?? 0}</div>
             <p className="text-xs text-muted-foreground">
-              Fleet vehicles
+              {fleet.activeVehicles ?? 0} active
             </p>
           </CardContent>
         </Card>
@@ -96,7 +97,7 @@ export const FleetDetail = () => {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{fleet.driverCount}</div>
+            <div className="text-2xl font-bold">{fleet.driverCount ?? 0}</div>
             <p className="text-xs text-muted-foreground">
               Assigned drivers
             </p>
@@ -132,33 +133,119 @@ export const FleetDetail = () => {
         </Card>
       </div>
 
-      {fleet.manager && (
-        <Card className="mb-6">
+      <div className="grid gap-4 md:grid-cols-2 mb-6">
+        <Card>
           <CardHeader>
-            <CardTitle>Fleet Manager</CardTitle>
+            <CardTitle>Fleet Information</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="grid gap-4 md:grid-cols-3">
-              <div>
-                <div className="text-sm font-medium text-gray-500">Name</div>
-                <div className="mt-1">{fleet.manager}</div>
+          <CardContent className="space-y-3">
+            <div>
+              <div className="text-sm font-medium text-gray-500">Fleet Type</div>
+              <div className="mt-1">{fleet.fleetType ?? '-'}</div>
+            </div>
+            <div>
+              <div className="text-sm font-medium text-gray-500">Status</div>
+              <div className="mt-1">
+                <Badge variant={fleet.status === 'Active' ? 'default' : 'secondary'}>
+                  {fleet.status}
+                </Badge>
               </div>
-              {fleet.managerEmail && (
-                <div>
-                  <div className="text-sm font-medium text-gray-500">Email</div>
-                  <div className="mt-1">{fleet.managerEmail}</div>
-                </div>
-              )}
-              {fleet.managerPhone && (
-                <div>
-                  <div className="text-sm font-medium text-gray-500">Phone</div>
-                  <div className="mt-1">{fleet.managerPhone}</div>
-                </div>
-              )}
+            </div>
+            <div>
+              <div className="text-sm font-medium text-gray-500">Created</div>
+              <div className="mt-1">
+                {fleet.createdAt ? new Date(fleet.createdAt).toLocaleString() : '-'}
+              </div>
             </div>
           </CardContent>
         </Card>
-      )}
+
+        {fleet.location && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Location</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div>
+                <div className="text-sm font-medium text-gray-500">Address</div>
+                <div className="mt-1">{safeAddress(fleet.location.address) || '-'}</div>
+              </div>
+              <div>
+                <div className="text-sm font-medium text-gray-500">City</div>
+                <div className="mt-1">{fleet.location.city ?? '-'}</div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-sm font-medium text-gray-500">State</div>
+                  <div className="mt-1">{fleet.location.state ?? '-'}</div>
+                </div>
+                <div>
+                  <div className="text-sm font-medium text-gray-500">Country</div>
+                  <div className="mt-1">{fleet.location.country ?? '-'}</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {fleet.contactInfo && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Contact Information</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div>
+                <div className="text-sm font-medium text-gray-500">Email</div>
+                <div className="mt-1">{fleet.contactInfo.email ?? '-'}</div>
+              </div>
+              <div>
+                <div className="text-sm font-medium text-gray-500">Phone</div>
+                <div className="mt-1">{fleet.contactInfo.phone ?? '-'}</div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {fleet.settings && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Settings</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-sm font-medium text-gray-500">Auto Assignment</div>
+                  <div className="mt-1">
+                    <Badge variant={fleet.settings.autoAssignment ? 'default' : 'secondary'}>
+                      {fleet.settings.autoAssignment ? 'Enabled' : 'Disabled'}
+                    </Badge>
+                  </div>
+                </div>
+                <div>
+                  <div className="text-sm font-medium text-gray-500">Maintenance Alerts</div>
+                  <div className="mt-1">
+                    <Badge variant={fleet.settings.maintenanceAlerts ? 'default' : 'secondary'}>
+                      {fleet.settings.maintenanceAlerts ? 'Enabled' : 'Disabled'}
+                    </Badge>
+                  </div>
+                </div>
+                <div>
+                  <div className="text-sm font-medium text-gray-500">Charging Alerts</div>
+                  <div className="mt-1">
+                    <Badge variant={fleet.settings.chargingAlerts ? 'default' : 'secondary'}>
+                      {fleet.settings.chargingAlerts ? 'Enabled' : 'Disabled'}
+                    </Badge>
+                  </div>
+                </div>
+                <div>
+                  <div className="text-sm font-medium text-gray-500">Low Battery Threshold</div>
+                  <div className="mt-1">{fleet.settings.lowBatteryThreshold ?? 20}%</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
 
       <Tabs defaultValue="vehicles" className="space-y-4">
         <TabsList>

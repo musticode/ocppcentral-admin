@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft } from "lucide-react";
 import { chargePointApi, transactionApi } from "@/api";
+import { safeAddress } from "@/api/utils";
 import { LocationStatsCard } from "./LocationStatsCard";
 import { ConnectorStatusChart } from "./ConnectorStatusChart";
 import { SessionsChart } from "./SessionsChart";
@@ -23,6 +24,12 @@ export const LocationDetail = () => {
   const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ["location-stats", locationId, period],
     queryFn: () => transactionApi.getLocationStats(locationId!, period),
+    enabled: !!locationId,
+  });
+
+  const { data: chargePoints, isLoading: chargePointsLoading } = useQuery({
+    queryKey: ["location-charge-points", locationId],
+    queryFn: () => chargePointApi.listAllChargePointsByLocationId(locationId!),
     enabled: !!locationId,
   });
 
@@ -58,7 +65,7 @@ export const LocationDetail = () => {
         </p>
         <p className="mt-1 text-sm text-gray-500">
           Address: {location.country}, {location.city}, {location.zipCode},{" "}
-          {location.address}
+          {safeAddress(location.address)}
         </p>
       </div>
 
@@ -82,7 +89,7 @@ export const LocationDetail = () => {
       {/* Bottom Section */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <LastEvents locationId={locationId!} />
-        <ChargerListTable location={location} />
+        {chargePoints && <ChargerListTable location={location} chargePoints={chargePoints} />}
       </div>
     </div>
   );

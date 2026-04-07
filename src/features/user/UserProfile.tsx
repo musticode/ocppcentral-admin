@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { carsApi, fleetApi, transactionApi, usersApi } from "@/api";
 import { isDemoMode } from "@/demo/demoMode";
 import { useCompanyStore } from "@/store/company.store";
@@ -25,21 +25,22 @@ import {
   Battery,
   DollarSign,
   Users,
+  Edit,
 } from "lucide-react";
+import { EditUserModal } from "./EditUserModal";
 
 export const UserProfile = () => {
   const { userId } = useParams<{ userId: string }>();
   const companyId = useCompanyStore((s) => s.companyId);
+  const queryClient = useQueryClient();
   const [sessionsLimit, setSessionsLimit] = useState(100);
+  const [editModalOpen, setEditModalOpen] = useState(false);
 
-  const { data: users, isLoading: userLoading } = useQuery({
-    queryKey: ["users"],
-    queryFn: () => usersApi.getAllUsers(),
+  const { data: user, isLoading: userLoading } = useQuery({
+    queryKey: ["user", userId],
+    queryFn: () => usersApi.getUserById(userId!),
+    enabled: !!userId,
   });
-
-  const user = useMemo(() => {
-    return (users ?? []).find((u) => u.id === userId) ?? null;
-  }, [users, userId]);
 
   const { data: vehicles, isLoading: vehiclesLoading } = useQuery({
     queryKey: ["user-vehicles", userId],
@@ -176,6 +177,14 @@ export const UserProfile = () => {
         </div>
 
         <div className="flex flex-wrap gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setEditModalOpen(true)}
+          >
+            <Edit className="mr-2 h-4 w-4" />
+            Edit User
+          </Button>
           <Button asChild variant="outline" size="sm">
             <Link to="/rfid-tags">
               <CreditCard className="mr-2 h-4 w-4" />
@@ -341,21 +350,21 @@ export const UserProfile = () => {
                     const durationMin =
                       s.startTimestamp && s.stopTimestamp
                         ? Math.max(
-                            0,
-                            Math.floor(
-                              (new Date(s.stopTimestamp).getTime() -
-                                new Date(s.startTimestamp).getTime()) /
-                                (1000 * 60)
-                            )
+                          0,
+                          Math.floor(
+                            (new Date(s.stopTimestamp).getTime() -
+                              new Date(s.startTimestamp).getTime()) /
+                            (1000 * 60)
                           )
+                        )
                         : s.startTimestamp && s.status === "Active"
                           ? Math.max(
-                              0,
-                              Math.floor(
-                                (Date.now() - new Date(s.startTimestamp).getTime()) /
-                                  (1000 * 60)
-                              )
+                            0,
+                            Math.floor(
+                              (Date.now() - new Date(s.startTimestamp).getTime()) /
+                              (1000 * 60)
                             )
+                          )
                           : null;
 
                     const kwh =
@@ -432,6 +441,17 @@ export const UserProfile = () => {
           )}
         </CardContent>
       </Card>
+
+      <EditUserModal
+        open={editModalOpen}
+        onOpenChange={setEditModalOpen}
+        user={user ?? null}
+        onSuccess={() => {
+          setEditModalOpen(false);
+          queryClient.invalidateQueries({ queryKey: ["user", userId] });
+          queryClient.invalidateQueries({ queryKey: ["users"] });
+        }}
+      />
     </div>
   );
 };

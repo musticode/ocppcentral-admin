@@ -1,6 +1,7 @@
 import { apiClient } from "./axios";
-import { extractArray } from "./utils";
+import { extractArray, normalizeFleet } from "./utils";
 import { isDemoMode } from "@/demo/demoMode";
+
 import type {
   Fleet,
   CreateFleetRequest,
@@ -24,7 +25,7 @@ export const fleetApi = {
     const response = await apiClient.get<unknown>(`/fleets`, {
       params: { companyId },
     });
-    return extractArray<Fleet>(response.data);
+    return extractArray<Fleet>(response.data).map(normalizeFleet);
   },
 
   getFleetById: async (id: string): Promise<Fleet> => {
@@ -32,7 +33,12 @@ export const fleetApi = {
       throw new Error("Fleet not found");
     }
     const response = await apiClient.get<Fleet>(`/fleets/${id}`);
-    return response.data;
+
+    //    const response = await apiClient.get<Car>(`/cars/${carId}`);
+    //return normalizeCar(response.data);
+
+    return normalizeFleet(response.data);
+    //return response.data;
   },
 
   createFleet: async (
@@ -46,7 +52,7 @@ export const fleetApi = {
       ...data,
       companyId,
     });
-    return response.data;
+    return normalizeFleet(response.data);
   },
 
   updateFleet: async (id: string, data: UpdateFleetRequest): Promise<Fleet> => {
@@ -54,7 +60,7 @@ export const fleetApi = {
       throw new Error("Cannot update fleet in demo mode");
     }
     const response = await apiClient.put<Fleet>(`/fleets/${id}`, data);
-    return response.data;
+    return normalizeFleet(response.data);
   },
 
   deleteFleet: async (id: string): Promise<void> => {

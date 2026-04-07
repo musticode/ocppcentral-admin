@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import { locationApi, chargePointApi, transactionApi } from "@/api";
+import { safeAddress } from "@/api/utils";
 import { LocationStatsCard } from "@/features/dashboard/components/LocationStatsCard";
 import { ConnectorStatusChart } from "@/features/dashboard/components/ConnectorStatusChart";
 import { SessionsChart } from "@/features/dashboard/components/SessionsChart";
@@ -128,7 +129,7 @@ export const LocationDetail = () => {
           </p>
           <p className="mt-1 text-sm text-gray-500">
             {location.country}, {location.city}, {location.zipCode},{" "}
-            {location.address}
+            {safeAddress(location.address)}
           </p>
         </div>
         <div className="flex gap-2">

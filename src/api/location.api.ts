@@ -6,28 +6,28 @@ import type {
 
 import type { ChargePoint, Location as OcppLocation } from "@/types/ocpp";
 import { apiClient } from "./axios";
-import { extractArray } from "./utils";
+import { extractArray, normalizeLocation, normalizeChargePoint } from "./utils";
 
 export const locationApi = {
   getLocations: async (): Promise<ApiLocation[]> => {
     const response = await apiClient.get<unknown>(
       "/locations/listAllLocations"
     );
-    return extractArray<ApiLocation>(response.data);
+    return extractArray<ApiLocation>(response.data).map(normalizeLocation);
   },
 
   getLocation: async (locationId: string): Promise<OcppLocation> => {
     const response = await apiClient.get<OcppLocation>(
       `/locations/${locationId}`
     );
-    return response.data;
+    return normalizeLocation(response.data);
   },
 
   getChargePointsForLocation: async (locationId: string): Promise<ChargePoint[]> => {
-    const response = await apiClient.get<ChargePoint[]>(
+    const response = await apiClient.get<unknown>(
       `/locations/${locationId}/charge-points`
     );
-    return response.data;
+    return extractArray<ChargePoint>(response.data).map(normalizeChargePoint);
   },
 
   createLocation: async (data: CreateLocationRequest): Promise<OcppLocation> => {
@@ -35,7 +35,7 @@ export const locationApi = {
       "/locations/createLocation",
       data
     );
-    return response.data;
+    return normalizeLocation(response.data);
   },
 
   updateLocation: async (
@@ -46,7 +46,7 @@ export const locationApi = {
       `/locations/${locationId}`,
       data
     );
-    return response.data;
+    return normalizeLocation(response.data);
   },
 
   deleteLocation: async (locationId: string): Promise<void> => {
