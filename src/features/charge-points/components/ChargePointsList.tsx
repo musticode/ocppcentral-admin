@@ -88,15 +88,15 @@ export const ChargePointsList = () => {
   };
 
   return (
-    <div className="p-6">
-      <div className="mb-6 flex items-center justify-between">
+    <div className="p-3 sm:p-6">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Charge Points</h1>
+          <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">Charge Points</h1>
           <p className="mt-1 text-sm text-gray-500">
             Manage chargers, connector health, and operational status
           </p>
         </div>
-        <Button onClick={() => setCreateModalOpen(true)}>
+        <Button onClick={() => setCreateModalOpen(true)} className="w-full sm:w-auto">
           <Plus className="mr-2 h-4 w-4" />
           Create Charge Point
         </Button>
@@ -110,7 +110,7 @@ export const ChargePointsList = () => {
       />
       <Card>
         <CardContent>
-          <div className="mb-4 flex gap-4 pt-4">
+          <div className="mb-4 flex flex-col gap-3 pt-4 sm:flex-row sm:gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
               <Input
@@ -122,8 +122,7 @@ export const ChargePointsList = () => {
             </div>
 
             <Select value={statusFilter} onValueChange={(v: any) => setStatusFilter(v)}>
-              <SelectTrigger className="w-[220px]">
-                <SelectValue placeholder="Status" />
+              <SelectTrigger className="w-full sm:w-[220px]">                <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All statuses</SelectItem>
@@ -138,82 +137,84 @@ export const ChargePointsList = () => {
             </Select>
           </div>
 
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Charge Point ID</TableHead>
-                <TableHead>Location</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Connectors</TableHead>
-                <TableHead>Vendor / Model</TableHead>
-                <TableHead>OCPP</TableHead>
-                <TableHead>Last Heartbeat</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredChargePoints.map((cp) => (
-                <TableRow key={cp.id}>
-                  <TableCell>
-                    <Link
-                      to={`/chargers/${cp.id}`}
-                      className="font-medium text-primary hover:underline"
-                    >
-                      {cp.name}
-                    </Link>
-                  </TableCell>
-                  <TableCell className="font-mono text-sm">
-                    {cp.chargePointId}
-                  </TableCell>
-                  <TableCell>
-                    <Link
-                      to={`/locations/${cp.locationId}`}
-                      className="text-primary hover:underline"
-                    >
-                      {cp.locationName}
-                    </Link>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={getStatusBadgeVariant(cp.status)}>
-                      {cp.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm text-gray-600">
-                        {(cp.connectors ?? []).length}
-                      </span>
-                      <div className="flex gap-1">
-                        {(cp.connectors ?? []).map((connector) => (
-                          <ConnectorStatusIndicator
-                            key={connector.id}
-                            status={connector.status}
-                            size="sm"
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="text-sm">
-                      <div className="font-medium text-gray-900">
-                        {cp.vendor ?? "-"}
-                      </div>
-                      <div className="text-gray-500">{cp.model ?? "-"}</div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="outline">{cp.ocppVersion ?? "-"}</Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="text-sm text-gray-600">
-                      {cp.lastHeartbeat ? new Date(cp.lastHeartbeat).toLocaleString() : "-"}
-                    </div>
-                  </TableCell>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Charge Point ID</TableHead>
+                  <TableHead>Location</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Connectors</TableHead>
+                  <TableHead>Vendor / Model</TableHead>
+                  <TableHead>OCPP</TableHead>
+                  <TableHead>Last Heartbeat</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {filteredChargePoints.map((cp) => (
+                  <TableRow key={cp.id}>
+                    <TableCell>
+                      <Link
+                        to={`/chargers/${cp.id}`}
+                        className="font-medium text-primary hover:underline"
+                      >
+                        {cp.name}
+                      </Link>
+                    </TableCell>
+                    <TableCell className="font-mono text-sm">
+                      {cp.chargePointId}
+                    </TableCell>
+                    <TableCell>
+                      <Link
+                        to={`/locations/${cp.locationId}`}
+                        className="text-primary hover:underline"
+                      >
+                        {cp.locationName}
+                      </Link>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={getStatusBadgeVariant(cp.status)}>
+                        {cp.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-gray-600">
+                          {(cp.connectors ?? []).length}
+                        </span>
+                        <div className="flex gap-1">
+                          {(cp.connectors ?? []).map((connector) => (
+                            <ConnectorStatusIndicator
+                              key={connector.id}
+                              status={connector.status}
+                              size="sm"
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="text-sm">
+                        <div className="font-medium text-gray-900">
+                          {cp.vendor ?? "-"}
+                        </div>
+                        <div className="text-gray-500">{cp.model ?? "-"}</div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline">{cp.ocppVersion ?? "-"}</Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="text-sm text-gray-600">
+                        {cp.lastHeartbeat ? new Date(cp.lastHeartbeat).toLocaleString() : "-"}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
 
           <div className="mt-4 flex items-center justify-between text-sm text-gray-500 pb-4">
             <div>

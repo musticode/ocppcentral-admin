@@ -23,9 +23,9 @@ export const ChargersSummaryCard = ({
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <CardTitle>Chargers</CardTitle>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {periods.map((p) => (
               <Button
                 key={p}
@@ -43,7 +43,7 @@ export const ChargersSummaryCard = ({
         </div>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           <div>
             <p className="text-sm text-gray-600">Active sessions</p>
             <p className="text-2xl font-bold text-gray-900">

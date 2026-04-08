@@ -154,7 +154,7 @@ export const UserProfile = () => {
   }
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 p-3 sm:p-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <Link
@@ -167,7 +167,7 @@ export const UserProfile = () => {
 
           <div className="flex items-start gap-3">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">{user.name}</h1>
+              <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">{user.name}</h1>
               <p className="mt-1 text-gray-600">{user.email}</p>
             </div>
             <Badge variant="outline" className="capitalize">
@@ -331,7 +331,7 @@ export const UserProfile = () => {
           {sessions.length === 0 ? (
             <p className="text-sm text-gray-500">No sessions found for this user.</p>
           ) : (
-            <div className="rounded-md border">
+            <div className="overflow-x-auto rounded-md border">
               <Table>
                 <TableHeader>
                   <TableRow>

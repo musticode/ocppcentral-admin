@@ -112,7 +112,7 @@ export const SessionList = () => {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="mb-4 flex gap-4">
+          <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
               <Input
@@ -123,7 +123,7 @@ export const SessionList = () => {
               />
             </div>
             <Select value={statusFilter} onValueChange={(value: any) => setStatusFilter(value)}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full sm:w-[180px]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -140,7 +140,7 @@ export const SessionList = () => {
               No sessions found matching your criteria.
             </div>
           ) : (
-            <div className="rounded-md border">
+            <div className="overflow-x-auto rounded-md border">
               <Table>
                 <TableHeader>
                   <TableRow>
