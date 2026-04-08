@@ -3,7 +3,7 @@ import { ReservationList } from "./ReservationList";
 
 export const ReservationOverview = () => {
   return (
-    <div className="p-6">
+    <div className="p-3 sm:p-6">
       <Card>
         <CardHeader>
           <CardTitle>Reservation Overview</CardTitle>

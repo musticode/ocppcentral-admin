@@ -31,5 +31,15 @@
   }
   body {
     @apply bg-background text-foreground;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@layer utilities {
+  .table-responsive {
+    @apply -mx-3 overflow-x-auto sm:-mx-0;
+  }
+  .table-responsive > table {
+    @apply min-w-[640px];
   }
 }
