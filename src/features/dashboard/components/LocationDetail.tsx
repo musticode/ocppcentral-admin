@@ -27,12 +27,6 @@ export const LocationDetail = () => {
     enabled: !!locationId,
   });
 
-  const { data: chargePoints, isLoading: chargePointsLoading } = useQuery({
-    queryKey: ["location-charge-points", locationId],
-    queryFn: () => chargePointApi.listAllChargePointsByLocationId(locationId!),
-    enabled: !!locationId,
-  });
-
   const { data: sessionsChart, isLoading: chartLoading } = useQuery({
     queryKey: ["location-sessions-chart", locationId, period],
     queryFn: () => transactionApi.getLocationSessionsChart(locationId!, period),
@@ -89,7 +83,7 @@ export const LocationDetail = () => {
       {/* Bottom Section */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <LastEvents locationId={locationId!} />
-        {chargePoints && <ChargerListTable location={location} chargePoints={chargePoints} />}
+        <ChargerListTable location={location} />
       </div>
     </div>
   );

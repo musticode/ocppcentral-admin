@@ -158,3 +158,21 @@ function MyComponent() {
   );
 }
 ```
+
+#### Responsive Design
+
+The application is fully responsive and adapts to different screen sizes:
+
+Layout Infrastructure
+sidebar.store.ts — Zustand store for sidebar open/close state
+Sidebar.tsx — Hidden off-screen on mobile (<lg), slides in with overlay backdrop, auto-closes on navigation
+Header.tsx — Hamburger menu button visible on mobile, tighter padding/gaps on small screens
+**CSS Utilities**
+index.css — Added -webkit-overflow-scrolling: touch and a .table-responsive utility class
+**Feature Pages Fixed (20+ files)**
+* Page padding — p-6 → p-3 sm:p-6 on all pages
+* Headings — text-3xl → text-2xl sm:text-3xl everywhere
+* Page headers — Stacked vertically on mobile with flex-col → sm:flex-row, buttons go full-width
+* Filter bars — Search + select dropdowns stack on mobile, selects become full-width
+* Tables — All wrapped in overflow-x-auto for horizontal scrolling
+* Dashboard grids — grid-cols-4 → grid-cols-2 sm:grid-cols-4
