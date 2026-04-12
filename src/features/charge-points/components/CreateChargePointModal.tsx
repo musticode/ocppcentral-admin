@@ -20,6 +20,21 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { chargePointApi } from "@/api";
 import { useQuery } from "@tanstack/react-query";
+import { CheckCircle2, Copy } from "lucide-react";
+
+const getOcppWsUrl = (chargePointId: string): string => {
+  const envWsUrl = import.meta.env.VITE_OCPP_WS_URL as string | undefined;
+  if (envWsUrl) {
+    return `${envWsUrl.replace(/\/$/, "")}/${chargePointId}`;
+  }
+  // Derive from API base URL as fallback
+  const apiBase = (import.meta.env.VITE_API_BASE_URL as string) || "";
+  const wsBase = apiBase
+    .replace(/\/api$/, "")
+    .replace(/^https:/, "wss:")
+    .replace(/^http:/, "ws:");
+  return `${wsBase}/ocpp/${chargePointId}`;
+};
 
 interface CreateChargePointModalProps {
   open: boolean;
@@ -34,6 +49,7 @@ export const CreateChargePointModal = ({
 }: CreateChargePointModalProps) => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [createdWsUrl, setCreatedWsUrl] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     chargePointId: "",
@@ -68,21 +84,13 @@ export const CreateChargePointModal = ({
         ocppVersion: formData.ocppVersion,
         connectorCount: parseInt(formData.connectorCount, 10),
       });
+      const wsUrl = getOcppWsUrl(formData.chargePointId);
+      setCreatedWsUrl(wsUrl);
       toast({
         title: "Charge point created",
         description: "The charge point has been created successfully.",
       });
       onSuccess?.();
-      onOpenChange(false);
-      setFormData({
-        name: "",
-        chargePointId: "",
-        locationId: "",
-        model: "",
-        vendor: "",
-        ocppVersion: "1.6",
-        connectorCount: "1",
-      });
     } catch (error) {
       toast({
         title: "Error",
@@ -97,8 +105,77 @@ export const CreateChargePointModal = ({
     }
   };
 
+  const handleClose = (openState: boolean) => {
+    if (!openState) {
+      setCreatedWsUrl(null);
+      setFormData({
+        name: "",
+        chargePointId: "",
+        locationId: "",
+        model: "",
+        vendor: "",
+        ocppVersion: "1.6",
+        connectorCount: "1",
+      });
+    }
+    onOpenChange(openState);
+  };
+
+  const handleCopyWsUrl = async () => {
+    if (!createdWsUrl) return;
+    await navigator.clipboard.writeText(createdWsUrl);
+    toast({ title: "Copied", description: "WebSocket URL copied to clipboard." });
+  };
+
+  if (createdWsUrl) {
+    return (
+      <Dialog open={open} onOpenChange={handleClose}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <CheckCircle2 className="h-5 w-5 text-green-600" />
+              Charge Point Created
+            </DialogTitle>
+            <DialogDescription>
+              Configure your charger to connect to the WebSocket address below.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>WebSocket URL</Label>
+              <div className="flex items-center gap-2">
+                <Input
+                  readOnly
+                  value={createdWsUrl}
+                  className="font-mono text-sm bg-muted"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={handleCopyWsUrl}
+                  title="Copy to clipboard"
+                >
+                  <Copy className="h-4 w-4" />
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Enter this URL in your charger&apos;s OCPP central system configuration.
+              </p>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button onClick={() => handleClose(false)}>Done</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Create New Charge Point</DialogTitle>

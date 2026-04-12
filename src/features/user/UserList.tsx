@@ -38,7 +38,8 @@ export const UserList = () => {
     isFetching,
   } = useQuery({
     queryKey: ["users"],
-    queryFn: () => usersApi.getAllUsers(),
+    //queryFn: () => usersApi.getAllUsers(),
+    queryFn: () => usersApi.fetchCompanyUsers()
   });
 
   const roles = useMemo(() => {

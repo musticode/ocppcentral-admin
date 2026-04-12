@@ -776,3 +776,33 @@ export interface PaymentEligibility {
   eligibleToCharge: boolean;
   message?: string;
 }
+
+export interface RFIDTag {
+  id: string;
+  idTag: string;
+  companyId?: string;
+  userId?: string;
+  parentIdTag?: string;
+  expiryDate?: string;
+  status: "active" | "inactive" | "blocked";
+  blocked?: boolean;
+  description?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface CompanySettings {
+  id: string;
+  companyId: string;
+  paymentNeeded?: boolean;
+  currency?: string;
+  timezone?: string;
+  language?: string;
+  autoStopEnabled?: boolean;
+  maxSessionDuration?: number;
+  notificationEmail?: string;
+  webhookUrl?: string;
+  metadata?: Record<string, any>;
+  createdAt?: string;
+  updatedAt?: string;
+}

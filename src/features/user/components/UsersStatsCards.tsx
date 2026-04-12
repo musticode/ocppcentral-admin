@@ -6,7 +6,7 @@ import { User, Shield, Briefcase, UserCog } from "lucide-react";
 export const UsersStatsCards = () => {
   const { data: users, isLoading } = useQuery({
     queryKey: ["users"],
-    queryFn: () => usersApi.getAllUsers(),
+    queryFn: () => usersApi.fetchCompanyUsers(),
   });
 
   const list = users ?? [];
