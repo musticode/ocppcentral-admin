@@ -23,7 +23,7 @@ import { ChargePoint, ChargePointStatus } from "@/types/ocpp";
 import { chargePointApi } from "@/api";
 import { useState, useEffect } from "react";
 import { Plus, Search } from "lucide-react";
-import { CreateChargePointModal } from "./CreateChargePointModal";
+import { AddChargerWizard } from "./add-charger";
 import { useCompanyStore } from "@/store/company.store";
 import { ChargePointsStatsCards } from "./ChargePointsStatsCards";
 
@@ -103,7 +103,7 @@ export const ChargePointsList = () => {
       </div>
 
       <ChargePointsStatsCards chargePoints={chargePoints} />
-      <CreateChargePointModal
+      <AddChargerWizard
         open={createModalOpen}
         onOpenChange={setCreateModalOpen}
       //onSuccess={fetchChargePoints}
