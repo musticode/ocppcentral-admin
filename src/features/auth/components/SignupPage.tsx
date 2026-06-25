@@ -115,7 +115,7 @@ export const SignupPage = () => {
     <div className="flex min-h-screen items-center justify-center bg-muted/30 py-12">
       <Card className="w-full max-w-2xl">
         <CardHeader>
-          <CardTitle>OCPP Central Admin</CardTitle>
+          <CardTitle>ChargeOPS</CardTitle>
           <CardDescription>
             Create your account and company to get started
           </CardDescription>

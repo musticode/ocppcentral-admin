@@ -53,7 +53,21 @@
     "forgotPassword": "Şifremi Unuttum?",
     "rememberMe": "Beni Hatırla",
     "dontHaveAccount": "Hesabınız yok mu?",
-    "alreadyHaveAccount": "Zaten hesabınız var mı?"
+    "alreadyHaveAccount": "Zaten hesabınız var mı?",
+    "signIn": "Giriş Yap",
+    "signInDesc": "Panelinize erişmek için bilgilerinizi girin",
+    "orContinueWith": "Veya şununla devam edin",
+    "signingIn": "Giriş yapılıyor...",
+    "verifyingGoogle": "Google ile doğrulanıyor...",
+    "continueWithGoogle": "Google ile Devam Et",
+    "loginTitle": "EV Şarj Ağları için Akıllı İşletim Sistemi",
+    "loginSubtitle": "Şarj noktalarınızı, şirket tarifelerinizi, filolarınızı ve müşteri oturumlarınızı tek bir birleşik çalışma alanında yönetin.",
+    "loginEnergyDelivered": "Aktarılan Enerji",
+    "loginActivePower": "Aktif Güç",
+    "loginEstimatedCost": "Tahmini Maliyet",
+    "loginBatterySoC": "Batarya Doluluk Oranı",
+    "loginPrivacy": "Gizlilik",
+    "loginTerms": "Şartlar"
   },
   "chargePoints": {
     "title": "Şarj İstasyonları",

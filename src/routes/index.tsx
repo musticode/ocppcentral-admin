@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { LoginPage } from "@/features/auth/components/LoginPage";
 import { SignupPage } from "@/features/auth/components/SignupPage";
+import { AuthCallbackPage } from "@/features/auth/components/AuthCallbackPage";
 import { LocationDetail } from "@/features/locations/LocationDetail";
 import { DashboardOverview } from "@/features/dashboard/components/DashboardOverview";
 import { ChargePointsList } from "@/features/charge-points/components/ChargePointsList";
@@ -32,6 +33,10 @@ export const router = createBrowserRouter([
   {
     path: "/signup",
     element: <SignupPage />,
+  },
+  {
+    path: "/auth/callback",
+    element: <AuthCallbackPage />,
   },
   {
     path: "/",

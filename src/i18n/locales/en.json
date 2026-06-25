@@ -53,7 +53,21 @@
     "forgotPassword": "Forgot Password?",
     "rememberMe": "Remember Me",
     "dontHaveAccount": "Don't have an account?",
-    "alreadyHaveAccount": "Already have an account?"
+    "alreadyHaveAccount": "Already have an account?",
+    "signIn": "Sign In",
+    "signInDesc": "Enter your credentials to access your dashboard",
+    "orContinueWith": "Or continue with",
+    "signingIn": "Signing in...",
+    "verifyingGoogle": "Verifying with Google...",
+    "continueWithGoogle": "Continue with Google",
+    "loginTitle": "The Intelligent OS for EV Charging Networks",
+    "loginSubtitle": "Manage your charging points, company tariffs, fleets, and customer sessions in one unified workspace.",
+    "loginEnergyDelivered": "Energy Delivered",
+    "loginActivePower": "Active Power",
+    "loginEstimatedCost": "Estimated Cost",
+    "loginBatterySoC": "Battery SoC",
+    "loginPrivacy": "Privacy",
+    "loginTerms": "Terms"
   },
   "chargePoints": {
     "title": "Charge Points",

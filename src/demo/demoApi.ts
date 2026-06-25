@@ -922,6 +922,20 @@ export const demoAuthApi = {
   },
   logout: async (): Promise<void> => { },
   getCurrentUser: async (): Promise<User> => demoUsers[0]!,
+  getGoogleConfig: async (): Promise<{ success: boolean; googleClientId: string }> => {
+    return {
+      success: true,
+      googleClientId: "demo-google-client-id",
+    };
+  },
+  loginWithGoogle: async (_token: string): Promise<LoginResponse> => {
+    return {
+      success: true,
+      message: "Demo Google login successful",
+      token: "demo-token",
+      user: demoUsers[0]!,
+    };
+  },
 };
 
 export const demoCarsApi = {
