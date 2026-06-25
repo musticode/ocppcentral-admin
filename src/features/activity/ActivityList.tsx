@@ -75,7 +75,7 @@ export const ActivityList = () => {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="mb-4 flex gap-4">
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:gap-4">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
             <Input
@@ -86,32 +86,34 @@ export const ActivityList = () => {
             />
           </div>
 
-          <Select value={severityFilter} onValueChange={(v: any) => setSeverityFilter(v)}>
-            <SelectTrigger className="w-[160px]">
-              <SelectValue placeholder="Severity" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All severity</SelectItem>
-              <SelectItem value="info">Info</SelectItem>
-              <SelectItem value="warning">Warning</SelectItem>
-              <SelectItem value="error">Error</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="flex gap-3">
+            <Select value={severityFilter} onValueChange={(v: any) => setSeverityFilter(v)}>
+              <SelectTrigger className="w-full sm:w-[160px]">
+                <SelectValue placeholder="Severity" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All severity</SelectItem>
+                <SelectItem value="info">Info</SelectItem>
+                <SelectItem value="warning">Warning</SelectItem>
+                <SelectItem value="error">Error</SelectItem>
+              </SelectContent>
+            </Select>
 
-          <Select value={typeFilter} onValueChange={(v: any) => setTypeFilter(v)}>
-            <SelectTrigger className="w-[220px]">
-              <SelectValue placeholder="Event type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All types</SelectItem>
-              <SelectItem value="StatusNotification">StatusNotification</SelectItem>
-              <SelectItem value="MeterValues">MeterValues</SelectItem>
-              <SelectItem value="StartTransaction">StartTransaction</SelectItem>
-              <SelectItem value="StopTransaction">StopTransaction</SelectItem>
-              <SelectItem value="Heartbeat">Heartbeat</SelectItem>
-              <SelectItem value="Error">Error</SelectItem>
-            </SelectContent>
-          </Select>
+            <Select value={typeFilter} onValueChange={(v: any) => setTypeFilter(v)}>
+              <SelectTrigger className="w-full sm:w-[220px]">
+                <SelectValue placeholder="Event type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All types</SelectItem>
+                <SelectItem value="StatusNotification">StatusNotification</SelectItem>
+                <SelectItem value="MeterValues">MeterValues</SelectItem>
+                <SelectItem value="StartTransaction">StartTransaction</SelectItem>
+                <SelectItem value="StopTransaction">StopTransaction</SelectItem>
+                <SelectItem value="Heartbeat">Heartbeat</SelectItem>
+                <SelectItem value="Error">Error</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         {isLoading ? (
@@ -119,44 +121,46 @@ export const ActivityList = () => {
         ) : list.length === 0 ? (
           <div className="text-center py-8 text-gray-500">No activity found.</div>
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Timestamp</TableHead>
-                <TableHead>Severity</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Charge Point</TableHead>
-                <TableHead>Connector</TableHead>
-                <TableHead>Message</TableHead>
-                {/* <TableHead>Actions</TableHead> */}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {list.map((event) => (
-                <TableRow key={event.id}>
-                  <TableCell>
-                    <div className="text-sm">{new Date(event.timestamp).toLocaleString()}</div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={getSeverityVariant(event.severity)}>{event.severity}</Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="outline">{event.type}</Badge>
-                  </TableCell>
-                  <TableCell className="font-mono text-sm">{event.chargePointId}</TableCell>
-                  <TableCell>{event.connectorId ?? "-"}</TableCell>
-                  <TableCell>
-                    <div className="max-w-xl truncate text-sm text-gray-700">{event.message}</div>
-                  </TableCell>
-                  <TableCell>
-                    {/* <Button variant="ghost" size="icon">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Timestamp</TableHead>
+                  <TableHead>Severity</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Charge Point</TableHead>
+                  <TableHead>Connector</TableHead>
+                  <TableHead>Message</TableHead>
+                  {/* <TableHead>Actions</TableHead> */}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {list.map((event) => (
+                  <TableRow key={event.id}>
+                    <TableCell>
+                      <div className="text-sm">{new Date(event.timestamp).toLocaleString()}</div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={getSeverityVariant(event.severity)}>{event.severity}</Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline">{event.type}</Badge>
+                    </TableCell>
+                    <TableCell className="font-mono text-sm">{event.chargePointId}</TableCell>
+                    <TableCell>{event.connectorId ?? "-"}</TableCell>
+                    <TableCell>
+                      <div className="max-w-xl truncate text-sm text-gray-700">{event.message}</div>
+                    </TableCell>
+                    <TableCell>
+                      {/* <Button variant="ghost" size="icon">
                       <Eye className="w-4 h-4" />
                     </Button> */}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         )}
       </CardContent>
     </Card>

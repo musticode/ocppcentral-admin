@@ -137,7 +137,7 @@ export const RFIDTagsList = () => {
         <CardTitle>RFID Tags</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="mb-4 flex gap-4">
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:gap-4">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
             <Input
@@ -149,7 +149,7 @@ export const RFIDTagsList = () => {
           </div>
 
           <Select value={statusFilter} onValueChange={(v: any) => setStatusFilter(v)}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full sm:w-[180px]">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
@@ -165,75 +165,77 @@ export const RFIDTagsList = () => {
         ) : filtered.length === 0 ? (
           <div className="text-center py-8 text-gray-500">No RFID tags found.</div>
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>RFID</TableHead>
-                <TableHead>User</TableHead>
-                <TableHead>Sessions</TableHead>
-                <TableHead>Energy</TableHead>
-                <TableHead>Last Seen</TableHead>
-                <TableHead>Last Charger</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filtered.map((t) => (
-                <TableRow key={t.idTag}>
-                  <TableCell className="font-mono text-sm">{t.idTag}</TableCell>
-                  <TableCell>
-                    {t.user ? (
-                      <Link to={`/users/${t.user.id}`} className="text-primary hover:underline">
-                        {t.user.name}
-                      </Link>
-                    ) : (
-                      <span className="text-gray-500">Unassigned</span>
-                    )}
-                    {t.user?.email && (
-                      <div className="text-xs text-gray-500">{t.user.email}</div>
-                    )}
-                  </TableCell>
-                  <TableCell>{t.sessions}</TableCell>
-                  <TableCell>{t.totalKwh.toFixed(2)} kWh</TableCell>
-                  <TableCell>
-                    {t.lastSeen ? new Date(t.lastSeen).toLocaleString() : "-"}
-                  </TableCell>
-                  <TableCell className="font-mono text-sm">
-                    {t.lastChargePointId ?? "-"}
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={t.status === "active" ? "default" : "secondary"}>
-                      {t.status === "active" ? "Active" : "Inactive"}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleEditTag(t)}
-                        title="Edit RFID Tag"
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      {t.user ? (
-                        <Button asChild variant="ghost" size="sm" title="View User">
-                          <Link to={`/users/${t.user.id}`}>
-                            <Eye className="h-4 w-4" />
-                          </Link>
-                        </Button>
-                      ) : (
-                        <Button variant="ghost" size="sm" disabled>
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                      )}
-                    </div>
-                  </TableCell>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>RFID</TableHead>
+                  <TableHead>User</TableHead>
+                  <TableHead>Sessions</TableHead>
+                  <TableHead>Energy</TableHead>
+                  <TableHead>Last Seen</TableHead>
+                  <TableHead>Last Charger</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {filtered.map((t) => (
+                  <TableRow key={t.idTag}>
+                    <TableCell className="font-mono text-sm">{t.idTag}</TableCell>
+                    <TableCell>
+                      {t.user ? (
+                        <Link to={`/users/${t.user.id}`} className="text-primary hover:underline">
+                          {t.user.name}
+                        </Link>
+                      ) : (
+                        <span className="text-gray-500">Unassigned</span>
+                      )}
+                      {t.user?.email && (
+                        <div className="text-xs text-gray-500">{t.user.email}</div>
+                      )}
+                    </TableCell>
+                    <TableCell>{t.sessions}</TableCell>
+                    <TableCell>{t.totalKwh.toFixed(2)} kWh</TableCell>
+                    <TableCell>
+                      {t.lastSeen ? new Date(t.lastSeen).toLocaleString() : "-"}
+                    </TableCell>
+                    <TableCell className="font-mono text-sm">
+                      {t.lastChargePointId ?? "-"}
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={t.status === "active" ? "default" : "secondary"}>
+                        {t.status === "active" ? "Active" : "Inactive"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleEditTag(t)}
+                          title="Edit RFID Tag"
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        {t.user ? (
+                          <Button asChild variant="ghost" size="sm" title="View User">
+                            <Link to={`/users/${t.user.id}`}>
+                              <Eye className="h-4 w-4" />
+                            </Link>
+                          </Button>
+                        ) : (
+                          <Button variant="ghost" size="sm" disabled>
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         )}
 
         <div className="mt-4 flex items-center justify-between text-sm text-gray-500">

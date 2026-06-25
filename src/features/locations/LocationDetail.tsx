@@ -111,7 +111,7 @@ export const LocationDetail = () => {
   }
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 p-3 sm:p-6">
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
@@ -122,7 +122,7 @@ export const LocationDetail = () => {
             <ArrowLeft className="h-4 w-4" />
             Back to Locations
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900">{location.name}</h1>
+          <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">{location.name}</h1>
           <p className="mt-1 text-gray-600">
             {location.totalStations} stations · {location.totalConnectors}{" "}
             connectors

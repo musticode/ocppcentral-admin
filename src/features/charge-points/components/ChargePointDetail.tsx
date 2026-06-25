@@ -135,7 +135,7 @@ export const ChargePointDetail = () => {
   const chargerTyped = charger as ChargePoint;
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 p-3 sm:p-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <Link
@@ -146,7 +146,7 @@ export const ChargePointDetail = () => {
             Back to Chargers
           </Link>
           <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-bold text-gray-900">{chargerTyped.name}</h1>
+            <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">{chargerTyped.name}</h1>
             <Badge variant={chargerTyped.status === "Available" ? "default" : "secondary"}>
               {chargerTyped.status}
             </Badge>
@@ -311,7 +311,7 @@ export const ChargePointDetail = () => {
         </CardHeader>
         <CardContent>
           <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)}>
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="flex w-full overflow-x-auto">
               <TabsTrigger value="sessions">Sessions</TabsTrigger>
               <TabsTrigger value="transactions">Transactions</TabsTrigger>
               <TabsTrigger value="reservations">Reservations</TabsTrigger>
@@ -322,7 +322,7 @@ export const ChargePointDetail = () => {
               {sessions.length === 0 ? (
                 <p className="text-sm text-gray-500">No sessions found.</p>
               ) : (
-                <div className="rounded-md border">
+                <div className="overflow-x-auto rounded-md border">
                   <Table>
                     <TableHeader>
                       <TableRow>
@@ -384,7 +384,7 @@ export const ChargePointDetail = () => {
               {transactions.length === 0 ? (
                 <p className="text-sm text-gray-500">No transactions found.</p>
               ) : (
-                <div className="rounded-md border">
+                <div className="overflow-x-auto rounded-md border">
                   <Table>
                     <TableHeader>
                       <TableRow>
@@ -423,7 +423,7 @@ export const ChargePointDetail = () => {
               {!reservations || reservations.length === 0 ? (
                 <p className="text-sm text-gray-500">No reservations found.</p>
               ) : (
-                <div className="rounded-md border">
+                <div className="overflow-x-auto rounded-md border">
                   <Table>
                     <TableHeader>
                       <TableRow>
@@ -464,7 +464,7 @@ export const ChargePointDetail = () => {
               {logs.length === 0 ? (
                 <p className="text-sm text-gray-500">No logs found.</p>
               ) : (
-                <div className="rounded-md border">
+                <div className="overflow-x-auto rounded-md border">
                   <Table>
                     <TableHeader>
                       <TableRow>

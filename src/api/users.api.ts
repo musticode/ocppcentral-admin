@@ -1,11 +1,24 @@
 import { apiClient } from "./axios";
 import { extractArray, normalizeUser } from "./utils";
 import type { User, CreateUserRequest, UpdateUserRequest } from "@/types/api";
+import { useCompanyStore } from "@/store/company.store";
 
 // Swagger serves /users/* outside the /api prefix
 const usersBaseURL = (apiClient.defaults.baseURL || "").replace(/\/?api\/?$/, "") || "/";
 
 export const usersApi = {
+  fetchCompanyUsers: async (): Promise<User[]> => {
+    let companyId = useCompanyStore.getState().companyId;
+    if (!companyId) {
+      companyId = localStorage.getItem("companyId") || "";
+    }
+
+    const response = await apiClient.get<unknown>("/users/fetchCompanyUsers", {
+      baseURL: usersBaseURL,
+      params: { companyId },
+    });
+    return extractArray<User>(response.data).map(normalizeUser);
+  },
   getAllUsers: async (): Promise<User[]> => {
     const response = await apiClient.get<unknown>("/users/listAllUsers", {
       baseURL: usersBaseURL,

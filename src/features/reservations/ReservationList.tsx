@@ -101,10 +101,10 @@ export const ReservationList = () => {
   }
 
   return (
-    <div className="p-6">
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900">Reservations</h1>
-        <Button onClick={() => setCreateModalOpen(true)}>
+    <div className="p-3 sm:p-6">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">Reservations</h1>
+        <Button onClick={() => setCreateModalOpen(true)} className="w-full sm:w-auto">
           <Plus className="mr-2 h-4 w-4" />
           Create Reservation
         </Button>
@@ -134,91 +134,93 @@ export const ReservationList = () => {
           </div>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>ID</TableHead>
-                <TableHead>Charge Point</TableHead>
-                <TableHead>Connector</TableHead>
-                <TableHead>ID Tag</TableHead>
-                <TableHead>Expiry Date</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Created</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {reservations.length === 0 ? (
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={8} className="text-center text-muted-foreground">
-                    No reservations found
-                  </TableCell>
+                  <TableHead>ID</TableHead>
+                  <TableHead>Charge Point</TableHead>
+                  <TableHead>Connector</TableHead>
+                  <TableHead>ID Tag</TableHead>
+                  <TableHead>Expiry Date</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Created</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
-              ) : (
-                reservations.map((reservation) => (
-                  <TableRow key={reservation.reservationId}>
-                    <TableCell className="font-mono text-sm">
-                      {reservation.reservationId}
+              </TableHeader>
+              <TableBody>
+                {reservations.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={8} className="text-center text-muted-foreground">
+                      No reservations found
                     </TableCell>
-                    <TableCell>
-                      <div>
-                        <div className="font-medium">{reservation.chargePointName || reservation.chargePointId}</div>
-                        {reservation.locationName && (
-                          <div className="text-sm text-muted-foreground">{reservation.locationName}</div>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>{reservation.connectorId}</TableCell>
-                    <TableCell className="font-mono text-sm">{reservation.idTag}</TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1">
-                        <Calendar className="h-4 w-4 text-muted-foreground" />
-                        {new Date(reservation.expiryDate).toLocaleString("en-US", {
+                  </TableRow>
+                ) : (
+                  reservations.map((reservation) => (
+                    <TableRow key={reservation.reservationId}>
+                      <TableCell className="font-mono text-sm">
+                        {reservation.reservationId}
+                      </TableCell>
+                      <TableCell>
+                        <div>
+                          <div className="font-medium">{reservation.chargePointName || reservation.chargePointId}</div>
+                          {reservation.locationName && (
+                            <div className="text-sm text-muted-foreground">{reservation.locationName}</div>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell>{reservation.connectorId}</TableCell>
+                      <TableCell className="font-mono text-sm">{reservation.idTag}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-1">
+                          <Calendar className="h-4 w-4 text-muted-foreground" />
+                          {new Date(reservation.expiryDate).toLocaleString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge className={statusColors[reservation.status]}>
+                          {reservation.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-sm text-muted-foreground">
+                        {new Date(reservation.createdAt).toLocaleDateString("en-US", {
                           month: "short",
                           day: "numeric",
                           year: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
                         })}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge className={statusColors[reservation.status]}>
-                        {reservation.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-sm text-muted-foreground">
-                      {new Date(reservation.createdAt).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                      })}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end gap-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleViewDetails(reservation)}
-                        >
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                        {reservation.status === "Active" && (
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-2">
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => handleCancelReservation(reservation.reservationId)}
+                            onClick={() => handleViewDetails(reservation)}
                           >
-                            <X className="h-4 w-4" />
+                            <Eye className="h-4 w-4" />
                           </Button>
-                        )}
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                          {reservation.status === "Active" && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleCancelReservation(reservation.reservationId)}
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          )}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
 
           {totalPages > 1 && (
             <div className="mt-4 flex items-center justify-between">

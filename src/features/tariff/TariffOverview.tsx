@@ -9,15 +9,15 @@ export const TariffOverview = () => {
   const [createTariffModalOpen, setCreateTariffModalOpen] = useState(false);
 
   return (
-    <div className="p-6">
-      <div className="mb-6 flex items-center justify-between">
+    <div className="p-3 sm:p-6">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Tariff Management</h1>
+          <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">Tariff Management</h1>
           <p className="mt-1 text-sm text-gray-500">
             Manage pricing plans and tariffs for charging services
           </p>
         </div>
-        <Button onClick={() => setCreateTariffModalOpen(true)}>
+        <Button onClick={() => setCreateTariffModalOpen(true)} className="w-full sm:w-auto">
           <Plus className="mr-2 h-4 w-4" />
           Create Tariff
         </Button>

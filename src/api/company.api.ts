@@ -1,4 +1,4 @@
-import type { Company } from "@/types/api";
+import type { Company, RFIDTag, Tariff, CompanySettings } from "@/types/api";
 import { apiClient } from "./axios";
 import { extractArray } from "./utils";
 
@@ -38,6 +38,27 @@ export const companyApi = {
     const response = await apiClient.put<Company>(
       `/companies/${companyId}`,
       data
+    );
+    return response.data;
+  },
+
+  fetchCompanyRfidTags: async (companyId: string): Promise<RFIDTag[]> => {
+    const response = await apiClient.get<unknown>(
+      `/companies/${companyId}/rfidTags`
+    );
+    return extractArray<RFIDTag>(response.data);
+  },
+
+  fetchCompanyTariffs: async (companyId: string): Promise<Tariff[]> => {
+    const response = await apiClient.get<unknown>(
+      `/companies/${companyId}/tariffs`
+    );
+    return extractArray<Tariff>(response.data);
+  },
+
+  fetchCompanySettings: async (companyId: string): Promise<CompanySettings> => {
+    const response = await apiClient.get<CompanySettings>(
+      `/companies/${companyId}/settings`
     );
     return response.data;
   },

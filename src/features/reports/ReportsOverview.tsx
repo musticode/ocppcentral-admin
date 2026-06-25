@@ -37,9 +37,9 @@ export const ReportsOverview = () => {
   });
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 p-3 sm:p-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Reports</h1>
+        <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">Reports</h1>
         <p className="mt-1 text-muted-foreground">
           Electric usage, consumption analytics, and performance metrics
         </p>
